@@ -1,0 +1,14 @@
+server:
+  ip: "your-vps-ip-address"
+  user: "root"
+  
+  # SSH Key authentication (recommended)
+  ssh_key: "~/.ssh/id_rsa"
+  
+  # Password authentication (alternative)
+  # password: "your-server-password"
+  
+  port: 22
+
+platform:
+  domain: "ezyindustries.my.id"

@@ -1,0 +1,16 @@
+app:
+  name: "my-app"
+
+service:
+  port: 3000
+
+database:
+  required: true
+
+# Multi-service example:
+# services:
+#   frontend:
+#     port: 3000
+#   backend:
+#     port: 3001
+#     path: "/api"

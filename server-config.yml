@@ -1,0 +1,11 @@
+server:
+  ip: "103.181.143.223"
+  user: "ezyindustries"
+  
+  # Password authentication
+  password: "!ndomi3 Halal"
+  
+  port: 22
+
+platform:
+  domain: "ezyindustries.my.id"

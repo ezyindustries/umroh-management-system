@@ -1,0 +1,12 @@
+app:
+  name: "umroh-management"
+
+service:
+  port: 5000
+  health_endpoint: "/api/health"
+
+database:
+  required: true
+
+health_check:
+  timeout: 60
