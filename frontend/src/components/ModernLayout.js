@@ -45,7 +45,8 @@ import {
   PersonAdd,
   ListAlt,
   Home,
-  Campaign
+  Campaign,
+  LocalAirport
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -161,6 +162,14 @@ const ModernLayout = () => {
       roles: ['Admin', 'Marketing'],
       color: '#EC4899',
       badge: 'Beta'
+    },
+    {
+      text: 'Ground Handling',
+      icon: <LocalAirport />,
+      path: '/ground-handling',
+      roles: ['Admin', 'Operator Keberangkatan', 'Tim Ticketing'],
+      color: '#3B82F6',
+      badge: 'New'
     },
     {
       text: 'Manajemen User',

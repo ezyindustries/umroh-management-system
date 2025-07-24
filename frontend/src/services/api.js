@@ -311,4 +311,63 @@ export const marketingAPI = {
     api.post('/marketing/packages', data)
 };
 
+// Ground Handling API
+export const groundHandlingAPI = {
+  getStatistics: () => 
+    api.get('/ground-handling/statistics'),
+  
+  getUpcoming: (params) => 
+    api.get('/ground-handling', { params }),
+  
+  getCalendarEvents: (params) => 
+    api.get('/ground-handling/calendar', { params }),
+  
+  create: (data) => 
+    api.post('/ground-handling', data),
+  
+  getById: (id) => 
+    api.get(`/ground-handling/${id}`),
+  
+  update: (id, data) => 
+    api.put(`/ground-handling/${id}`, data),
+  
+  updateStatus: (id, data) => 
+    api.patch(`/ground-handling/${id}/status`, data),
+  
+  // Lounge
+  addLounge: (data) => 
+    api.post('/ground-handling/lounges', data),
+  
+  // Hotel
+  addHotel: (data) => 
+    api.post('/ground-handling/hotels', data),
+  
+  // Meal
+  addMeal: (data) => 
+    api.post('/ground-handling/meals', data),
+  
+  // Schedule
+  addSchedule: (data) => 
+    api.post('/ground-handling/schedules', data),
+  
+  updateScheduleStatus: (id, data) => 
+    api.patch(`/ground-handling/schedules/${id}/status`, data),
+  
+  // Request
+  addRequest: (data) => 
+    api.post('/ground-handling/requests', data),
+  
+  updateRequestStatus: (id, data) => 
+    api.patch(`/ground-handling/requests/${id}/status`, data),
+  
+  // Document
+  uploadDocument: (formData) => 
+    api.post('/ground-handling/documents', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+  
+  deleteDocument: (id) => 
+    api.delete(`/ground-handling/documents/${id}`)
+};
+
 export default api;
