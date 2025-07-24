@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Ground Handling Card</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .flight-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Urgency indicator bar */
+        .urgency-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #EF4444;
+        }
+
+        /* Header Section */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .flight-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .flight-code {
+            font-size: 24px;
+            font-weight: 700;
+            color: #EF4444;
+            margin: 0;
+        }
+
+        .status-badges {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+
+        /* Compact Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .badge-urgent {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-primary {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-icon {
+            font-size: 14px !important;
+        }
+
+        /* Package Info */
+        .package-info {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+        }
+
+        /* Key Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* PIC Section - More Compact */
+        .pic-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pic-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3B82F6, #60A5FA);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .pic-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .pic-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .pic-phone {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #60A5FA;
+            font-size: 13px;
+        }
+
+        /* Service Indicators - Horizontal Layout */
+        .service-indicators {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .service-badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Expandable Details */
+        .details-section {
+            margin-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 16px;
+        }
+
+        .details-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .details-toggle:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .details-content {
+            display: none;
+            padding-top: 16px;
+        }
+
+        .details-open .details-content {
+            display: block;
+        }
+
+        .details-open .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            padding: 8px 0;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tab.active {
+            color: #3B82F6;
+            border-bottom-color: #3B82F6;
+        }
+
+        /* Timeline - Compact */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .timeline-icon.completed {
+            background: linear-gradient(135deg, #10B981, #34D399);
+        }
+
+        .timeline-icon.in-progress {
+            background: linear-gradient(135deg, #F59E0B, #FCD34D);
+        }
+
+        .timeline-icon.pending {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .timeline-subtitle {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Action Buttons - Compact */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #F59E0B, #FCD34D);
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+            border: none;
+        }
+
+        .btn .material-icons {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="flight-card">
+        <div class="urgency-bar"></div>
+        
+        <!-- Status Badges -->
+        <div class="status-badges">
+            <span class="badge badge-urgent">H-2</span>
+            <span class="badge badge-primary">Preparing</span>
+        </div>
+        
+        <!-- Header -->
+        <div class="card-header">
+            <div class="flight-info">
+                <h3 class="flight-code">GA-897</h3>
+                <span class="badge badge-primary">CGK-JED</span>
+                <span class="badge">Garuda</span>
+                <span class="badge">T3</span>
+            </div>
+        </div>
+        
+        <!-- Package Info -->
+        <div class="package-info">
+            Paket Umroh Eksekutif • Grup Al-Barokah
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-label">
+                    <span class="material-icons badge-icon">flight_takeoff</span>
+                    Departure
+                </div>
+                <div class="metric-value">26 Jul, 23:30</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">
+                    <span class="material-icons badge-icon">flight_land</span>
+                    Arrival
+                </div>
+                <div class="metric-value">27 Jul, 05:45</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">
+                    <span class="material-icons badge-icon">people</span>
+                    PAX
+                </div>
+                <div class="metric-value">225</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">
+                    <span class="material-icons badge-icon">luggage</span>
+                    Baggage
+                </div>
+                <div class="metric-value">450 pcs</div>
+            </div>
+        </div>
+        
+        <!-- PIC Section -->
+        <div class="pic-section">
+            <div class="pic-avatar">
+                <span class="material-icons" style="font-size: 20px;">person</span>
+            </div>
+            <div class="pic-info">
+                <div class="pic-name">Budi Santoso</div>
+                <div class="pic-phone">
+                    <span class="material-icons badge-icon">phone</span>
+                    +62 812-3456-7890
+                </div>
+            </div>
+        </div>
+        
+        <!-- Service Indicators -->
+        <div class="service-indicators">
+            <span class="service-badge">
+                <span class="material-icons badge-icon">event_seat</span>
+                2 Lounge
+            </span>
+            <span class="service-badge">
+                <span class="material-icons badge-icon">hotel</span>
+                1 Hotel
+            </span>
+            <span class="service-badge">
+                <span class="material-icons badge-icon">restaurant</span>
+                3 Meal
+            </span>
+            <span class="service-badge" style="color: #F59E0B;">
+                <span class="material-icons badge-icon">accessible</span>
+                5 Request
+            </span>
+        </div>
+        
+        <!-- Expandable Details -->
+        <div class="details-section" id="details">
+            <div class="details-toggle" onclick="toggleDetails()">
+                <span style="font-size: 14px; font-weight: 600;">View Details</span>
+                <span class="material-icons expand-icon">expand_more</span>
+            </div>
+            
+            <div class="details-content">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active">Schedule</div>
+                    <div class="tab">Reservations</div>
+                    <div class="tab">Requests</div>
+                    <div class="tab">Documents</div>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon completed">
+                            <span class="material-icons" style="font-size: 18px;">check</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">H-7: Tikum Jamaah</div>
+                            <div class="timeline-subtitle">Masjid Al-Azhar • Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-icon in-progress">
+                            <span class="material-icons" style="font-size: 18px;">schedule</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">H-2: Boarding Pass & Baggage</div>
+                            <div class="timeline-subtitle">Terminal 3 • In Progress</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-icon pending">
+                            <span class="material-icons" style="font-size: 18px;">pending</span>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">D-Day: Gathering Point</div>
+                            <div class="timeline-subtitle">Terminal 3, Counter GA • Pending</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-warning">
+                        <span class="material-icons">edit</span>
+                        Edit
+                    </button>
+                    <button class="btn btn-primary">
+                        <span class="material-icons">calendar_month</span>
+                        Calendar
+                    </button>
+                    <button class="btn">
+                        <span class="material-icons">description</span>
+                        Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails() {
+            const detailsSection = document.getElementById('details');
+            detailsSection.classList.toggle('details-open');
+        }
+    </script>
+</body>
+</html>
