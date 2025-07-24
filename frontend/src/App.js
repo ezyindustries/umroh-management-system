@@ -23,6 +23,7 @@ import DocumentsPage from './pages/DocumentsPage';
 import ReportsPage from './pages/ReportsPage';
 import MarketingPage from './pages/MarketingPage';
 import HotelPage from './pages/HotelPage';
+import InventoryPage from './pages/InventoryPage';
 import GroundHandlingPage from './pages/GroundHandlingPage';
 import TestingPanel from './components/testing/TestingPanel';
 
@@ -61,6 +62,7 @@ function App() {
             <Route path="backup" element={<BackupPage />} />
             <Route path="marketing" element={<MarketingPage />} />
             <Route path="hotels" element={<HotelPage />} />
+            <Route path="inventory" element={<InventoryPage />} />
             <Route path="ground-handling" element={<GroundHandlingPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="profile" element={<ProfilePage />} />

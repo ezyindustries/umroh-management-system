@@ -1716,6 +1716,12 @@
                 <span class="badge" style="background: #059669; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
             </div>
             
+            <div class="nav-item" onclick="showPage('inventory')">
+                <span class="material-icons">inventory</span>
+                <span>Perlengkapan</span>
+                <span class="badge" style="background: #7C3AED; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
+            </div>
+            
             <div class="nav-item" onclick="showPage('groundHandling')">
                 <span class="material-icons">flight_takeoff</span>
                 <span>Ground Handling</span>
@@ -2785,6 +2791,332 @@
                             <span class="material-icons">add_circle</span>
                             Add New Ground Handling
                         </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Inventory Page -->
+            <div id="inventory" class="page">
+                <div class="glass-card">
+                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px; color: #7C3AED;">inventory</span>Manajemen Perlengkapan</h2>
+                    <button class="btn btn-primary" onclick="openInventoryModal()">
+                        <span class="material-icons" style="vertical-align: middle; margin-right: 5px;">add</span>
+                        Tambah Item
+                    </button>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid" style="margin-top: 30px;">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #7C3AED, #A78BFA);">
+                                <span class="material-icons">inventory_2</span>
+                            </div>
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">Total Items</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #EF4444, #F87171);">
+                                <span class="material-icons">warning</span>
+                            </div>
+                            <div class="stat-value" style="color: #EF4444;">8</div>
+                            <div class="stat-label">Stok Kritis</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                                <span class="material-icons">local_shipping</span>
+                            </div>
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Transaksi Hari Ini</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #FCD34D);">
+                                <span class="material-icons">monetization_on</span>
+                            </div>
+                            <div class="stat-value">45.2M</div>
+                            <div class="stat-label">Total Penjualan</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Alert Section -->
+                    <div class="alert alert-warning" style="margin-top: 20px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #FCA5A5;">
+                        <h4 style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <span class="material-icons" style="margin-right: 10px;">warning</span>
+                            Peringatan Stok Rendah
+                        </h4>
+                        <div style="font-size: 14px;">
+                            • Slayer Hijau - Stok: 15 pcs (Minimum: 50 pcs)<br>
+                            • Tas Serut - Stok: 23 pcs (Minimum: 50 pcs)<br>
+                            • Mukenah Putih - Stok: 8 pcs (Minimum: 50 pcs)
+                        </div>
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="tabs" style="margin-top: 30px;">
+                        <button class="tab-btn active" onclick="switchInventoryTab('items')">Inventory</button>
+                        <button class="tab-btn" onclick="switchInventoryTab('transactions')">Transaksi</button>
+                        <button class="tab-btn" onclick="switchInventoryTab('slayer')">Slayer</button>
+                        <button class="tab-btn" onclick="switchInventoryTab('earphone')">Earphone</button>
+                        <button class="tab-btn" onclick="switchInventoryTab('checklist')">Checklist</button>
+                        <button class="tab-btn" onclick="switchInventoryTab('recap')">Recap Penjualan</button>
+                    </div>
+                    
+                    <!-- Items Tab Content -->
+                    <div id="inventoryItemsTab" class="tab-content active">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Item</th>
+                                    <th>Kategori</th>
+                                    <th>Stok</th>
+                                    <th>Min. Stok</th>
+                                    <th>Status</th>
+                                    <th>Harga Jual</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Slayer Hijau</td>
+                                    <td>Slayer</td>
+                                    <td>15 pcs</td>
+                                    <td>50 pcs</td>
+                                    <td><span class="status-badge status-critical">Kritis</span></td>
+                                    <td>Rp 150,000</td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary" onclick="recordTransaction(1)">
+                                            <span class="material-icons" style="font-size: 16px;">swap_horiz</span>
+                                            Transaksi
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tas Serut Premium</td>
+                                    <td>Tas Serut</td>
+                                    <td>125 pcs</td>
+                                    <td>50 pcs</td>
+                                    <td><span class="status-badge status-paid">Aman</span></td>
+                                    <td>Rp 75,000</td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary" onclick="recordTransaction(2)">
+                                            <span class="material-icons" style="font-size: 16px;">swap_horiz</span>
+                                            Transaksi
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Koper Cabin 20"</td>
+                                    <td>Koper</td>
+                                    <td>87 pcs</td>
+                                    <td>50 pcs</td>
+                                    <td><span class="status-badge status-paid">Aman</span></td>
+                                    <td>Rp 450,000</td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary" onclick="recordTransaction(3)">
+                                            <span class="material-icons" style="font-size: 16px;">swap_horiz</span>
+                                            Transaksi
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Transactions Tab Content -->
+                    <div id="inventoryTransactionsTab" class="tab-content" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3>Riwayat Transaksi</h3>
+                            <button class="btn btn-primary" onclick="openTransactionModal()">
+                                <span class="material-icons" style="vertical-align: middle; margin-right: 5px;">add</span>
+                                Catat Transaksi
+                            </button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Item</th>
+                                    <th>Tipe</th>
+                                    <th>Jumlah</th>
+                                    <th>Harga/Unit</th>
+                                    <th>Total</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>24/01/2025</td>
+                                    <td>Slayer Hijau</td>
+                                    <td><span class="status-badge status-critical">Keluar</span></td>
+                                    <td>10 pcs</td>
+                                    <td>Rp 150,000</td>
+                                    <td>Rp 1,500,000</td>
+                                    <td>Penjualan ke Grup UMR-2025-001</td>
+                                </tr>
+                                <tr>
+                                    <td>23/01/2025</td>
+                                    <td>Tas Serut Premium</td>
+                                    <td><span class="status-badge status-paid">Masuk</span></td>
+                                    <td>50 pcs</td>
+                                    <td>Rp 50,000</td>
+                                    <td>Rp 2,500,000</td>
+                                    <td>Pembelian dari supplier</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Slayer Tab Content -->
+                    <div id="inventorySlayerTab" class="tab-content" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3>Manajemen Warna Slayer</h3>
+                            <button class="btn btn-primary" onclick="openSlayerColorModal()">
+                                <span class="material-icons" style="vertical-align: middle; margin-right: 5px;">add</span>
+                                Tambah Warna
+                            </button>
+                        </div>
+                        <div class="cards-grid">
+                            <div class="card" style="padding: 20px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div style="width: 40px; height: 40px; background: #059669; border-radius: 8px; margin-right: 15px;"></div>
+                                    <div>
+                                        <h4 style="margin: 0;">Hijau Zamrud</h4>
+                                        <p style="margin: 0; font-size: 14px; color: rgba(255,255,255,0.6);">Stok: 45 pcs</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-small btn-secondary" style="width: 100%;">
+                                    Assign ke Grup
+                                </button>
+                            </div>
+                            <div class="card" style="padding: 20px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div style="width: 40px; height: 40px; background: #7C3AED; border-radius: 8px; margin-right: 15px;"></div>
+                                    <div>
+                                        <h4 style="margin: 0;">Ungu Royal</h4>
+                                        <p style="margin: 0; font-size: 14px; color: rgba(255,255,255,0.6);">Stok: 67 pcs</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-small btn-secondary" style="width: 100%;">
+                                    Assign ke Grup
+                                </button>
+                            </div>
+                            <div class="card" style="padding: 20px;">
+                                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                    <div style="width: 40px; height: 40px; background: #EC4899; border-radius: 8px; margin-right: 15px;"></div>
+                                    <div>
+                                        <h4 style="margin: 0;">Pink Fuchsia</h4>
+                                        <p style="margin: 0; font-size: 14px; color: rgba(255,255,255,0.6);">Stok: 23 pcs</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-small btn-secondary" style="width: 100%;">
+                                    Assign ke Grup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Earphone Tab Content -->
+                    <div id="inventoryEarphoneTab" class="tab-content" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3>Mapping Earphone ke Grup</h3>
+                            <button class="btn btn-primary" onclick="openEarphoneMappingModal()">
+                                <span class="material-icons" style="vertical-align: middle; margin-right: 5px;">add</span>
+                                Mapping Earphone
+                            </button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Grup</th>
+                                    <th>Tanggal Berangkat</th>
+                                    <th>Jumlah</th>
+                                    <th>Serial Numbers</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>UMR-2025-001</td>
+                                    <td>15/02/2025</td>
+                                    <td>45 pcs</td>
+                                    <td>EP001-EP045</td>
+                                    <td><span class="status-badge status-paid">Distributed</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary">Detail</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>UMR-2025-002</td>
+                                    <td>28/02/2025</td>
+                                    <td>40 pcs</td>
+                                    <td>EP046-EP085</td>
+                                    <td><span class="status-badge status-paid">Distributed</span></td>
+                                    <td>
+                                        <button class="btn btn-small btn-secondary">Detail</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Checklist Tab Content -->
+                    <div id="inventoryChecklistTab" class="tab-content" style="display: none;">
+                        <div class="info-box" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 20px; border-radius: 12px;">
+                            <h3 style="margin-bottom: 10px;">
+                                <span class="material-icons" style="vertical-align: middle; margin-right: 10px;">info</span>
+                                Checklist Perlengkapan
+                            </h3>
+                            <p style="margin: 0;">
+                                Fitur checklist perlengkapan jamaah dan Tour Leader dapat diakses melalui halaman detail grup keberangkatan.
+                                Silakan buka halaman Grup Keberangkatan dan pilih grup yang ingin Anda kelola checklistnya.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Sales Recap Tab Content -->
+                    <div id="inventoryRecapTab" class="tab-content" style="display: none;">
+                        <h3 style="margin-bottom: 20px;">Recap Penjualan Perlengkapan</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bulan</th>
+                                    <th>Item</th>
+                                    <th>Kategori</th>
+                                    <th>Transaksi</th>
+                                    <th>Qty Terjual</th>
+                                    <th>Total Revenue</th>
+                                    <th>Rata-rata</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Jan 2025</td>
+                                    <td>Slayer Hijau</td>
+                                    <td>Slayer</td>
+                                    <td>15</td>
+                                    <td>187 pcs</td>
+                                    <td>Rp 28,050,000</td>
+                                    <td>Rp 150,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Jan 2025</td>
+                                    <td>Tas Serut Premium</td>
+                                    <td>Tas Serut</td>
+                                    <td>23</td>
+                                    <td>156 pcs</td>
+                                    <td>Rp 11,700,000</td>
+                                    <td>Rp 75,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Jan 2025</td>
+                                    <td>Koper Cabin 20"</td>
+                                    <td>Koper</td>
+                                    <td>8</td>
+                                    <td>34 pcs</td>
+                                    <td>Rp 15,300,000</td>
+                                    <td>Rp 450,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -4194,6 +4526,9 @@
                     break;
                 case 'hotel':
                     // Hotel data will be loaded when implemented
+                    break;
+                case 'inventory':
+                    loadInventoryData();
                     break;
                 case 'reports':
                     loadReportCharts();
@@ -7310,6 +7645,50 @@
                 closeModal('specialRequestsModal');
             }
         });
+
+        // Inventory Functions
+        function loadInventoryData() {
+            // Load inventory stats and initial data
+            console.log('Loading inventory data...');
+        }
+
+        function switchInventoryTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('#inventory .tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('#inventory .tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById('inventory' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').style.display = 'block';
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function openInventoryModal() {
+            alert('Add new inventory item - Modal to be implemented');
+        }
+
+        function openTransactionModal() {
+            alert('Record new transaction - Modal to be implemented');
+        }
+
+        function openSlayerColorModal() {
+            alert('Add new slayer color - Modal to be implemented');
+        }
+
+        function openEarphoneMappingModal() {
+            alert('Map earphone to group - Modal to be implemented');
+        }
+
+        function recordTransaction(itemId) {
+            alert('Record transaction for item ID: ' + itemId + ' - Modal to be implemented');
+        }
     </script>
 </body>
 </html>

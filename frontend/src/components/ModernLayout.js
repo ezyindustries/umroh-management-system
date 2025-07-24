@@ -47,7 +47,8 @@ import {
   Home,
   Campaign,
   Hotel,
-  LocalAirport
+  LocalAirport,
+  Inventory
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -170,6 +171,14 @@ const ModernLayout = () => {
       path: '/hotels',
       roles: ['Admin', 'Marketing', 'Tim Hotel', 'Operator Keberangkatan'],
       color: '#059669',
+      badge: 'New'
+    },
+    {
+      text: 'Perlengkapan',
+      icon: <Inventory />,
+      path: '/inventory',
+      roles: ['Admin', 'Marketing', 'Operator Keberangkatan'],
+      color: '#7C3AED',
       badge: 'New'
     },
     {
