@@ -1710,6 +1710,12 @@
                 <span class="badge" style="background: #EC4899; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">AI</span>
             </div>
             
+            <div class="nav-item" onclick="showPage('hotel')">
+                <span class="material-icons">hotel</span>
+                <span>Hotel</span>
+                <span class="badge" style="background: #059669; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
+            </div>
+            
             <div class="nav-item" onclick="showPage('groundHandling')">
                 <span class="material-icons">flight_takeoff</span>
                 <span>Ground Handling</span>
@@ -2213,6 +2219,240 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Page -->
+            <div id="hotel" class="page">
+                <div class="glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px; color: #059669;">hotel</span>Manajemen Hotel</h2>
+                        <button class="btn btn-primary" onclick="openHotelModal()">
+                            <span class="material-icons">add</span>
+                            Tambah Hotel
+                        </button>
+                    </div>
+                    
+                    <!-- Summary Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(5, 150, 105, 0.15), rgba(16, 185, 129, 0.1)); border: 1px solid rgba(5, 150, 105, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #059669;">hotel</div>
+                            <div class="stat-number" style="color: #10B981;">12</div>
+                            <div class="stat-label">Total Hotels</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #10B981;">check_circle</div>
+                            <div class="stat-number" style="color: #34D399;">8</div>
+                            <div class="stat-label">Visa Approved</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(252, 211, 77, 0.1)); border: 1px solid rgba(245, 158, 11, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #F59E0B;">payment</div>
+                            <div class="stat-number" style="color: #FCD34D;">5</div>
+                            <div class="stat-label">Fully Paid</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #3B82F6;">single_bed</div>
+                            <div class="stat-number" style="color: #60A5FA;">245</div>
+                            <div class="stat-label">Total Rooms</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hotels Table -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hotel</th>
+                                    <th>Package</th>
+                                    <th>Check In/Out</th>
+                                    <th>Rooms</th>
+                                    <th>Visa Status</th>
+                                    <th>Payment</th>
+                                    <th>Provider</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Hilton Suites Makkah</div>
+                                            <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">
+                                                <span class="material-icons" style="font-size: 14px; vertical-align: middle;">location_city</span>
+                                                Makkah
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">UMR2025 - Umroh Ramadhan</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">
+                                            <div>In: 15 Mar 2025</div>
+                                            <div>Out: 20 Mar 2025</div>
+                                            <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6;">5 nights</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px; text-align: center;">
+                                            <div>Quad: 20</div>
+                                            <div>Double: 10</div>
+                                            <div style="font-weight: 600;">Total: 30</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">approved</span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">paid</span>
+                                            <div style="font-size: 11px; margin-top: 4px;">Rp 450.000.000</div>
+                                            <div class="progress-bar" style="margin-top: 4px; height: 4px;">
+                                                <div style="width: 100%; background: #10B981;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">
+                                            <div>Al-Haramain Tours</div>
+                                            <div style="color: rgba(255, 255, 255, 0.6);">+966 55 123 4567</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 5px;">
+                                            <button class="btn btn-sm btn-icon" title="View Details">
+                                                <span class="material-icons">visibility</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon" title="Edit">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon" style="color: #EF4444;" title="Delete">
+                                                <span class="material-icons">delete</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Swissotel Al Maqam</div>
+                                            <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">
+                                                <span class="material-icons" style="font-size: 14px; vertical-align: middle;">location_city</span>
+                                                Makkah
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">UMR2025V - Umroh VIP</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">
+                                            <div>In: 20 Apr 2025</div>
+                                            <div>Out: 25 Apr 2025</div>
+                                            <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6;">5 nights</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px; text-align: center;">
+                                            <div>Double: 15</div>
+                                            <div>Triple: 5</div>
+                                            <div style="font-weight: 600;">Total: 20</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">pending</span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">partial</span>
+                                            <div style="font-size: 11px; margin-top: 4px;">Rp 200M / 350M</div>
+                                            <div class="progress-bar" style="margin-top: 4px; height: 4px;">
+                                                <div style="width: 57%; background: #F59E0B;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">
+                                            <div>Makkah Hospitality</div>
+                                            <div style="color: rgba(255, 255, 255, 0.6);">+966 50 987 6543</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 5px;">
+                                            <button class="btn btn-sm btn-icon" title="Upload Document">
+                                                <span class="material-icons">upload</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon" title="Add Payment">
+                                                <span class="material-icons">payment</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon" title="Edit">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <div style="font-weight: 600;">Madinah Hilton</div>
+                                            <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">
+                                                <span class="material-icons" style="font-size: 14px; vertical-align: middle;">location_city</span>
+                                                Madinah
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">UMR2025 - Umroh Ramadhan</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">
+                                            <div>In: 20 Mar 2025</div>
+                                            <div>Out: 25 Mar 2025</div>
+                                            <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6;">5 nights</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px; text-align: center;">
+                                            <div>Quad: 20</div>
+                                            <div>Double: 10</div>
+                                            <div style="font-weight: 600;">Total: 30</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">approved</span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #EF4444;">pending</span>
+                                            <div style="font-size: 11px; margin-top: 4px;">Rp 0 / 380M</div>
+                                            <div class="progress-bar" style="margin-top: 4px; height: 4px;">
+                                                <div style="width: 0%; background: #EF4444;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 12px;">
+                                            <div>Al-Haramain Tours</div>
+                                            <div style="color: rgba(255, 255, 255, 0.6);">+966 55 123 4567</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 5px;">
+                                            <button class="btn btn-sm btn-icon" style="color: #F59E0B;" title="Payment Required">
+                                                <span class="material-icons">warning</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon" title="Add Payment">
+                                                <span class="material-icons">payment</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-icon" title="Edit">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -3951,6 +4191,9 @@
                     break;
                 case 'groups':
                     loadGroupCards();
+                    break;
+                case 'hotel':
+                    // Hotel data will be loaded when implemented
                     break;
                 case 'reports':
                     loadReportCharts();

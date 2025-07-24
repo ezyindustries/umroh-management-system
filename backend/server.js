@@ -49,6 +49,7 @@ const docsRoutes = require('./routes/docs');
 const brosurRoutes = require('./routes/brosur');
 const notificationsRoutes = require('./routes/notifications');
 const marketingRoutes = require('./routes/marketing');
+const hotelsRoutes = require('./routes/hotels');
 const groundHandlingRoutes = require('./routes/groundHandling');
 
 const app = express();
@@ -150,6 +151,7 @@ app.use('/api/docs', docsRoutes);
 app.use('/api/brosur', brosurRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/marketing', marketingRoutes);
+app.use('/api/hotels', hotelsRoutes);
 app.use('/api/ground-handling', groundHandlingRoutes);
 
 // Catch-all route for React SPA (must be after API routes)

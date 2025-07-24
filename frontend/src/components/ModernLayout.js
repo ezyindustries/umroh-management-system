@@ -46,6 +46,7 @@ import {
   ListAlt,
   Home,
   Campaign,
+  Hotel,
   LocalAirport
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -162,6 +163,14 @@ const ModernLayout = () => {
       roles: ['Admin', 'Marketing'],
       color: '#EC4899',
       badge: 'AI'
+    },
+    {
+      text: 'Hotel',
+      icon: <Hotel />,
+      path: '/hotels',
+      roles: ['Admin', 'Marketing', 'Tim Hotel', 'Operator Keberangkatan'],
+      color: '#059669',
+      badge: 'New'
     },
     {
       text: 'Ground Handling',
