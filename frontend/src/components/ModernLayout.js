@@ -156,14 +156,6 @@ const ModernLayout = () => {
       color: '#6B7280'
     },
     {
-      text: 'Marketing',
-      icon: <Campaign />,
-      path: '/marketing',
-      roles: ['Admin', 'Marketing'],
-      color: '#EC4899',
-      badge: 'Beta'
-    },
-    {
       text: 'Ground Handling',
       icon: <LocalAirport />,
       path: '/ground-handling',

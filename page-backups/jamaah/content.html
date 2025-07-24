@@ -1,0 +1,67 @@
+            <div id="jamaah" class="page">
+                <div class="glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">people</span>Manajemen Jamaah</h2>
+                        <button class="btn btn-primary" onclick="openModal('jamaahModal')">
+                            <span class="material-icons">add</span>
+                            Tambah Jamaah
+                        </button>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Cari Jamaah</label>
+                            <input type="text" id="searchJamaah" placeholder="Nama, NIK, atau No. Telepon">
+                        </div>
+                        <div class="filter-group">
+                            <label>Paket</label>
+                            <select id="filterPackage">
+                                <option value="">Semua Paket</option>
+                                <option value="1">Umroh Ramadhan 2024</option>
+                                <option value="2">Umroh Plus Turki</option>
+                                <option value="3">Umroh Keluarga</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Status</label>
+                            <select id="filterStatus">
+                                <option value="">Semua Status</option>
+                                <option value="verified">Terverifikasi</option>
+                                <option value="pending">Pending</option>
+                                <option value="rejected">Ditolak</option>
+                            </select>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="filterJamaah()">
+                                <span class="material-icons">search</span>
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Jamaah Table -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>NIK</th>
+                                    <th>No. Telepon</th>
+                                    <th>Paspor</th>
+                                    <th>Paket</th>
+                                    <th>Status</th>
+                                    <th>Total Bayar</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jamaahTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Packages Page -->

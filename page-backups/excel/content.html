@@ -1,0 +1,69 @@
+            <div id="excel" class="page">
+                <div class="glass-card">
+                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">table_chart</span>Excel Import & Export</h2>
+                    
+                    <!-- Import Section -->
+                    <div class="section">
+                        <h3>Import Data</h3>
+                        
+                        <div class="report-grid">
+                            <button class="btn btn-primary" onclick="downloadTemplate('jamaah')">
+                                <span class="material-icons">download</span>
+                                Template Jamaah
+                            </button>
+                            <button class="btn btn-primary" onclick="downloadTemplate('package')">
+                                <span class="material-icons">download</span>
+                                Template Paket
+                            </button>
+                            <button class="btn btn-primary" onclick="downloadTemplate('payment')">
+                                <span class="material-icons">download</span>
+                                Template Pembayaran
+                            </button>
+                        </div>
+                        
+                        <div class="file-upload" onclick="document.getElementById('excelUpload').click()">
+                            <span class="material-icons" style="font-size: 48px; color: rgba(255, 255, 255, 0.6); margin-bottom: 10px;">upload_file</span>
+                            <p style="color: white; margin-bottom: 10px;">Upload file Excel untuk import data</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">Format: .xlsx, .xls</p>
+                            <input type="file" id="excelUpload" accept=".xlsx,.xls" style="display: none;" onchange="handleExcelImport(event)">
+                        </div>
+                    </div>
+                    
+                    <!-- Export Section -->
+                    <div class="section">
+                        <h3>Export Data</h3>
+                        
+                        <div class="report-grid">
+                            <button class="btn btn-success" onclick="exportToExcel('jamaah')">
+                                <span class="material-icons">file_download</span>
+                                Export Jamaah
+                            </button>
+                            <button class="btn btn-success" onclick="exportToExcel('package')">
+                                <span class="material-icons">file_download</span>
+                                Export Paket
+                            </button>
+                            <button class="btn btn-success" onclick="exportToExcel('payment')">
+                                <span class="material-icons">file_download</span>
+                                Export Pembayaran
+                            </button>
+                            <button class="btn btn-success" onclick="exportToExcel('all')">
+                                <span class="material-icons">file_download</span>
+                                Export Semua Data
+                            </button>
+                            <button class="btn btn-primary" onclick="exportToExcel('manifest')">
+                                <span class="material-icons">description</span>
+                                Export Manifest
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Import Results -->
+                    <div id="importResults" style="margin-top: 30px; display: none;">
+                        <h3 style="color: white; margin-bottom: 15px;">Hasil Import</h3>
+                        <div id="importResultsContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

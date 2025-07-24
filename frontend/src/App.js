@@ -21,7 +21,6 @@ import PackagesPage from './pages/PackagesPage';
 import PaymentsPage from './pages/PaymentsPage';
 import DocumentsPage from './pages/DocumentsPage';
 import ReportsPage from './pages/ReportsPage';
-import MarketingPage from './pages/MarketingPage';
 import GroundHandlingPage from './pages/GroundHandlingPage';
 import TestingPanel from './components/testing/TestingPanel';
 
@@ -58,7 +57,6 @@ function App() {
             <Route path="reports" element={<ReportsPage />} />
             <Route path="groups" element={<GroupsPage />} />
             <Route path="backup" element={<BackupPage />} />
-            <Route path="marketing" element={<MarketingPage />} />
             <Route path="ground-handling" element={<GroundHandlingPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="profile" element={<ProfilePage />} />

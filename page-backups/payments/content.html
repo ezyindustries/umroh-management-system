@@ -1,0 +1,53 @@
+            <div id="payments" class="page">
+                <div class="glass-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">payment</span>Manajemen Pembayaran</h2>
+                        <button class="btn btn-primary" onclick="openModal('paymentModal')">
+                            <span class="material-icons">add</span>
+                            Catat Pembayaran
+                        </button>
+                    </div>
+                    
+                    <!-- Payment Stats -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div class="stat-card">
+                            <div class="stat-number">Rp 24.8B</div>
+                            <div class="stat-label">Total Pembayaran</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">Rp 22.1B</div>
+                            <div class="stat-label">Terverifikasi</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">Rp 2.7B</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">23</div>
+                            <div class="stat-label">Transaksi Pending</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Table -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Jamaah</th>
+                                    <th>Paket</th>
+                                    <th>Jumlah</th>
+                                    <th>Metode</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Page -->

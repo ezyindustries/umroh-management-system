@@ -1,0 +1,30 @@
+<div id="excel" class="page">
+                <div class="glass-card">
+                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">table_chart</span>Excel Import & Export</h2>
+                    
+                    <!-- Import Section -->
+                    <div class="section">
+                        <h3>Import Data</h3>
+                        
+                        <div class="report-grid">
+                            <button class="btn btn-primary" onclick="downloadTemplate('jamaah')">
+                                <span class="material-icons">download</span>
+                                Template Jamaah
+                            </button>
+                            <button class="btn btn-primary" onclick="downloadTemplate('package')">
+                                <span class="material-icons">download</span>
+                                Template Paket
+                            </button>
+                            <button class="btn btn-primary" onclick="downloadTemplate('payment')">
+                                <span class="material-icons">download</span>
+                                Template Pembayaran
+                            </button>
+                        </div>
+                        
+                        <div class="file-upload" onclick="document.getElementById('excelUpload').click()">
+                            <span class="material-icons" style="font-size: 48px; color: rgba(255, 255, 255, 0.6); margin-bottom: 10px;">upload_file</span>
+                            <p style="color: white; margin-bottom: 10px;">Upload file Excel untuk import data</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">Format: .xlsx, .xls</p>
+                            <input type="file" id="excelUpload" accept=".xlsx,.xls" style="display: none;" onchange="handleExcelImport(event)">
+                        </div>
+                    </div>

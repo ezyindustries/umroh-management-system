@@ -1,0 +1,44 @@
+            <div id="reports" class="page">
+                <div class="glass-card">
+                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">assessment</span>Laporan & Analytics</h2>
+                    
+                    <!-- Report Buttons -->
+                    <div class="report-grid">
+                        <button class="btn btn-primary" onclick="generateReport('jamaah')">
+                            <span class="material-icons">people</span>
+                            Laporan Jamaah
+                        </button>
+                        <button class="btn btn-success" onclick="generateReport('payment')">
+                            <span class="material-icons">payment</span>
+                            Laporan Keuangan
+                        </button>
+                        <button class="btn btn-warning" onclick="generateReport('package')">
+                            <span class="material-icons">card_travel</span>
+                            Laporan Paket
+                        </button>
+                        <button class="btn btn-primary" onclick="generateReport('departure')">
+                            <span class="material-icons">flight_takeoff</span>
+                            Laporan Keberangkatan
+                        </button>
+                    </div>
+                    
+                    <!-- Analytics Charts -->
+                    <div class="chart-container">
+                        <div class="glass-card">
+                            <div class="chart-wrapper" style="background: transparent; border: none; padding: 0;">
+                                <h3>Trend Registrasi 6 Bulan</h3>
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card">
+                            <div class="chart-wrapper" style="background: transparent; border: none; padding: 0;">
+                                <h3>Distribusi Status Jamaah</h3>
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Excel Page -->
