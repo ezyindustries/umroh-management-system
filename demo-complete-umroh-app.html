@@ -1704,6 +1704,12 @@
                 Grup Keberangkatan
             </div>
             
+            <div class="nav-item" onclick="showPage('marketing')">
+                <span class="material-icons">campaign</span>
+                <span>Marketing</span>
+                <span class="badge" style="background: #EC4899; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">AI</span>
+            </div>
+            
             <div class="nav-item" onclick="showPage('groundHandling')">
                 <span class="material-icons">flight_takeoff</span>
                 <span>Ground Handling</span>
@@ -1989,6 +1995,224 @@
                     <!-- Group Cards -->
                     <div class="cards-grid" id="groupGrid">
                         <!-- Group cards will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketing Page -->
+            <div id="marketing" class="page">
+                <div class="glass-card">
+                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px; background: linear-gradient(135deg, #EC4899, #F472B6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">campaign</span>Marketing Dashboard AI</h2>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 30px;">Kelola leads dengan AI auto-reply dan pipeline management</p>
+                    
+                    <!-- Statistics Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #3B82F6;">people</div>
+                            <div class="stat-number" style="color: #60A5FA;">3,248</div>
+                            <div class="stat-label">Leads Tahun Ini</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1)); border: 1px solid rgba(139, 92, 246, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #8B5CF6;">calendar_month</div>
+                            <div class="stat-number" style="color: #A78BFA;">342</div>
+                            <div class="stat-label">Leads Bulan Ini</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1)); border: 1px solid rgba(236, 72, 153, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #EC4899;">today</div>
+                            <div class="stat-number" style="color: #F472B6;">18</div>
+                            <div class="stat-label">Leads Hari Ini</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(252, 211, 77, 0.1)); border: 1px solid rgba(245, 158, 11, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #F59E0B;">schedule</div>
+                            <div class="stat-number" style="color: #FCD34D;">12</div>
+                            <div class="stat-label">Leads Kemarin</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #10B981;">attach_money</div>
+                            <div class="stat-number" style="color: #34D399;">45</div>
+                            <div class="stat-label">Closing Bulan Ini</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div class="stat-icon material-icons" style="color: #10B981;">check_circle</div>
+                            <div class="stat-number" style="color: #34D399;">3</div>
+                            <div class="stat-label">Closing Hari Ini</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pipeline Overview -->
+                    <div class="glass-card" style="margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 20px;">Pipeline Overview Tahun Ini</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                            <div style="text-align: center; padding: 20px; background: rgba(59, 130, 246, 0.1); border-radius: 12px;">
+                                <div style="font-size: 48px; font-weight: 700; color: #3B82F6;">1,847</div>
+                                <div style="color: rgba(255, 255, 255, 0.8);">Leads</div>
+                                <div class="progress-bar" style="background: rgba(59, 130, 246, 0.2); margin-top: 10px;">
+                                    <div style="width: 100%; background: #3B82F6;"></div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                                <div style="font-size: 48px; font-weight: 700; color: #F59E0B;">892</div>
+                                <div style="color: rgba(255, 255, 255, 0.8);">Interest</div>
+                                <div class="progress-bar" style="background: rgba(245, 158, 11, 0.2); margin-top: 10px;">
+                                    <div style="width: 48%; background: #F59E0B;"></div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 12px;">
+                                <div style="font-size: 48px; font-weight: 700; color: #10B981;">345</div>
+                                <div style="color: rgba(255, 255, 255, 0.8);">Booked</div>
+                                <div class="progress-bar" style="background: rgba(16, 185, 129, 0.2); margin-top: 10px;">
+                                    <div style="width: 19%; background: #10B981;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer List -->
+                    <div class="glass-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3>Customer Pipeline</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="search-box">
+                                    <span class="material-icons">search</span>
+                                    <input type="text" placeholder="Cari nama atau nomor...">
+                                </div>
+                                <button class="btn btn-outline" style="border-color: #3B82F6; color: #3B82F6;">Leads</button>
+                                <button class="btn btn-outline" style="border-color: #F59E0B; color: #F59E0B;">Interest</button>
+                                <button class="btn btn-outline" style="border-color: #10B981; color: #10B981;">Booked</button>
+                                <button class="btn btn-success">
+                                    <span class="material-icons">refresh</span>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>WhatsApp</th>
+                                        <th>Stage</th>
+                                        <th>Last Contact</th>
+                                        <th>Summary</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3B82F6, #60A5FA); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">AH</div>
+                                                <div>
+                                                    <div style="font-weight: 600;">Ahmad Hidayat</div>
+                                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">3 messages</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white;">
+                                                <span class="material-icons">chat</span>
+                                                +62 812-3456-7890
+                                            </button>
+                                        </td>
+                                        <td><span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6;">Leads</span></td>
+                                        <td>
+                                            <div style="font-size: 12px;">
+                                                <div>2 jam yang lalu</div>
+                                                <div style="color: rgba(255, 255, 255, 0.5);">Last: Customer</div>
+                                            </div>
+                                        </td>
+                                        <td style="max-width: 200px;">
+                                            <div style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tanya paket umroh bulan April, 15 hari</div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <button class="btn btn-sm btn-icon" title="Change Stage">
+                                                    <span class="material-icons">swap_horiz</span>
+                                                </button>
+                                                <button class="btn btn-sm btn-icon" title="View Details">
+                                                    <span class="material-icons">visibility</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #F59E0B, #FCD34D); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">SR</div>
+                                                <div>
+                                                    <div style="font-weight: 600;">Siti Rahmawati</div>
+                                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">15 messages</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white;">
+                                                <span class="material-icons">chat</span>
+                                                +62 819-8765-4321
+                                            </button>
+                                        </td>
+                                        <td><span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">Interest</span></td>
+                                        <td>
+                                            <div style="font-size: 12px;">
+                                                <div>1 hari yang lalu</div>
+                                                <div style="color: rgba(255, 255, 255, 0.5);">Last: Agent</div>
+                                            </div>
+                                        </td>
+                                        <td style="max-width: 200px;">
+                                            <div style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Diskusi hotel, minta quad room, 4 orang</div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <button class="btn btn-sm btn-icon" title="Change Stage">
+                                                    <span class="material-icons">swap_horiz</span>
+                                                </button>
+                                                <button class="btn btn-sm btn-icon" title="View Details">
+                                                    <span class="material-icons">visibility</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10B981, #34D399); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">MF</div>
+                                                <div>
+                                                    <div style="font-weight: 600;">Muhammad Fadli</div>
+                                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">28 messages</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white;">
+                                                <span class="material-icons">chat</span>
+                                                +62 856-7890-1234
+                                            </button>
+                                        </td>
+                                        <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Booked</span></td>
+                                        <td>
+                                            <div style="font-size: 12px;">
+                                                <div>3 hari yang lalu</div>
+                                                <div style="color: rgba(255, 255, 255, 0.5);">Last: Payment</div>
+                                            </div>
+                                        </td>
+                                        <td style="max-width: 200px;">
+                                            <div style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Sudah DP 10jt, paket VIP Maret</div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <button class="btn btn-sm btn-icon" title="Payment Reminder">
+                                                    <span class="material-icons">notifications</span>
+                                                </button>
+                                                <button class="btn btn-sm btn-icon" title="View Details">
+                                                    <span class="material-icons">visibility</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
