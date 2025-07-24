@@ -44,7 +44,8 @@ import {
   ExpandMore,
   PersonAdd,
   ListAlt,
-  Home
+  Home,
+  Campaign
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -152,6 +153,14 @@ const ModernLayout = () => {
       path: '/backup',
       roles: ['Admin'],
       color: '#6B7280'
+    },
+    {
+      text: 'Marketing',
+      icon: <Campaign />,
+      path: '/marketing',
+      roles: ['Admin', 'Marketing'],
+      color: '#EC4899',
+      badge: 'Beta'
     },
     {
       text: 'Manajemen User',

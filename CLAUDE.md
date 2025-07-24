@@ -143,3 +143,5 @@ Aktor & Flow:
 - Perubahan file/folder
 - Prompt/plan yang digunakan
 - Self-evaluation kualitas hasil
+- fitur baru, perintah baru, desain baru, sistem baru selalu mengacu kepada sistem  http://103.181.143.223:8888/demo-complete-umroh-app.html
+- tampilkan hasilnya selalu di sistem  http://103.181.143.223:8888/demo-complete-umroh-app.html

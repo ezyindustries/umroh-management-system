@@ -1384,6 +1384,187 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        
+        /* Marketing Page Styles */
+        .marketing-stat-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.7));
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .marketing-stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .marketing-stat-card:hover .stat-value {
+            transform: scale(1.05);
+        }
+        
+        .marketing-stat-card .stat-value {
+            transition: transform 0.3s ease;
+        }
+        
+        .pipeline-stages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .pipeline-stage {
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .pipeline-stage:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pipeline-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .pipeline-info {
+            margin-bottom: 15px;
+        }
+        
+        .pipeline-count {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .pipeline-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+        
+        .pipeline-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .pipeline-progress {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Customer List */
+        .customer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .customer-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .customer-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(8px);
+        }
+        
+        .customer-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .customer-info {
+            flex: 1;
+        }
+        
+        .customer-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .customer-stage {
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+        
+        .customer-details {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+        
+        .customer-meta {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
 
         .status-verified { 
             background: linear-gradient(135deg, #10b981, #059669); 
@@ -1507,6 +1688,12 @@
             <div class="nav-item" onclick="showPage('groups')">
                 <span class="material-icons">group</span>
                 Grup Keberangkatan
+            </div>
+            
+            <div class="nav-item" onclick="showPage('marketing')">
+                <span class="material-icons">campaign</span>
+                <span>Marketing</span>
+                <span class="badge" style="background: #EC4899; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">Beta</span>
             </div>
             
             <div class="nav-item" onclick="showPage('reports')">
@@ -1792,6 +1979,374 @@
                 </div>
             </div>
 
+            <!-- Marketing Page -->
+            <div id="marketing" class="page">
+                <div class="glass-card">
+                    <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px; background: linear-gradient(135deg, #EC4899, #F472B6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">campaign</span>Marketing Dashboard</h2>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 30px;">Kelola leads, customer journey, dan WhatsApp marketing</p>
+                    
+                    <!-- Detailed Marketing Stats -->
+                    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 30px;">
+                        <!-- Yearly Leads -->
+                        <div class="marketing-stat-card" style="background: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3);">
+                            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #3B82F6, #60A5FA); opacity: 0.15; border-radius: 50%; filter: blur(20px);"></div>
+                            <div style="position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: #3B82F6; opacity: 0.1; border-radius: 50%;"></div>
+                            <div style="position: relative; text-align: center;">
+                                <div class="stat-value" style="font-size: 32px; font-weight: 700; color: #60A5FA; margin-bottom: 5px; background: linear-gradient(135deg, #3B82F6, #60A5FA); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">3,248</div>
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">Leads Tahun Ini</div>
+                                <div style="font-size: 11px; color: rgba(96, 165, 250, 0.8); margin-top: 5px;">Total tahun ini</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Monthly Leads -->
+                        <div class="marketing-stat-card" style="background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.1)); border: 1px solid rgba(139, 92, 246, 0.3);">
+                            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #8B5CF6, #A78BFA); opacity: 0.15; border-radius: 50%; filter: blur(20px);"></div>
+                            <div style="position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: #8B5CF6; opacity: 0.1; border-radius: 50%;"></div>
+                            <div style="position: relative; text-align: center;">
+                                <div class="stat-value" style="font-size: 32px; font-weight: 700; color: #A78BFA; margin-bottom: 5px; background: linear-gradient(135deg, #8B5CF6, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">342</div>
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">Leads Bulan Ini</div>
+                                <div style="font-size: 11px; color: rgba(167, 139, 250, 0.8); margin-top: 5px;">+23% dari bulan lalu</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Today Leads -->
+                        <div class="marketing-stat-card" style="background: linear-gradient(145deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.1)); border: 1px solid rgba(236, 72, 153, 0.3);">
+                            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #EC4899, #F472B6); opacity: 0.15; border-radius: 50%; filter: blur(20px);"></div>
+                            <div style="position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: #EC4899; opacity: 0.1; border-radius: 50%;"></div>
+                            <div style="position: relative; text-align: center;">
+                                <div class="stat-value" style="font-size: 32px; font-weight: 700; color: #F472B6; margin-bottom: 5px; background: linear-gradient(135deg, #EC4899, #F472B6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">18</div>
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">Leads Hari Ini</div>
+                                <div style="font-size: 11px; color: rgba(244, 114, 182, 0.8); margin-top: 5px;">Hari ini</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Yesterday Leads -->
+                        <div class="marketing-stat-card" style="background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(252, 211, 77, 0.1)); border: 1px solid rgba(245, 158, 11, 0.3);">
+                            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #F59E0B, #FCD34D); opacity: 0.15; border-radius: 50%; filter: blur(20px);"></div>
+                            <div style="position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: #F59E0B; opacity: 0.1; border-radius: 50%;"></div>
+                            <div style="position: relative; text-align: center;">
+                                <div class="stat-value" style="font-size: 32px; font-weight: 700; color: #FCD34D; margin-bottom: 5px; background: linear-gradient(135deg, #F59E0B, #FCD34D); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">12</div>
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">Leads Kemarin</div>
+                                <div style="font-size: 11px; color: rgba(252, 211, 77, 0.8); margin-top: 5px;">Kemarin</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Monthly Closings -->
+                        <div class="marketing-stat-card" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #10B981, #34D399); opacity: 0.15; border-radius: 50%; filter: blur(20px);"></div>
+                            <div style="position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: #10B981; opacity: 0.1; border-radius: 50%;"></div>
+                            <div style="position: relative; text-align: center;">
+                                <div class="stat-value" style="font-size: 32px; font-weight: 700; color: #34D399; margin-bottom: 5px; background: linear-gradient(135deg, #10B981, #34D399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">45</div>
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">Closing Bulan Ini</div>
+                                <div style="font-size: 11px; color: rgba(52, 211, 153, 0.8); margin-top: 5px;">Total closing</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Today Closings -->
+                        <div class="marketing-stat-card" style="background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #10B981, #34D399); opacity: 0.15; border-radius: 50%; filter: blur(20px);"></div>
+                            <div style="position: absolute; bottom: -20px; left: -20px; width: 60px; height: 60px; background: #10B981; opacity: 0.1; border-radius: 50%;"></div>
+                            <div style="position: relative; text-align: center;">
+                                <div class="stat-value" style="font-size: 32px; font-weight: 700; color: #34D399; margin-bottom: 5px; background: linear-gradient(135deg, #10B981, #34D399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">3</div>
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.9); font-weight: 600;">Closing Hari Ini</div>
+                                <div style="font-size: 11px; color: rgba(52, 211, 153, 0.8); margin-top: 5px;">Hari ini</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sales Pipeline Overview -->
+                    <div class="glass-card" style="margin-top: 30px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3>Sales Pipeline Overview</h3>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Conversion Rate:</span>
+                                <span class="badge" style="background: linear-gradient(135deg, #10B981, #34D399); padding: 6px 12px; border-radius: 20px; font-weight: 600;">18.5%</span>
+                            </div>
+                        </div>
+                        <div class="pipeline-stages">
+                            <div class="pipeline-stage" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.1); cursor: pointer;" onclick="filterByStage('leads')">
+                                <div class="pipeline-icon" style="background: linear-gradient(135deg, #3B82F6, #60A5FA);">
+                                    <span class="material-icons">person_add</span>
+                                </div>
+                                <div class="pipeline-info">
+                                    <div class="pipeline-count">125</div>
+                                    <div class="pipeline-label">Leads</div>
+                                    <div class="pipeline-value">Rp 2.5M</div>
+                                </div>
+                                <div class="pipeline-progress">
+                                    <div class="progress-bar" style="width: 100%; background: linear-gradient(90deg, #3B82F6, #60A5FA);"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="pipeline-stage" style="border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.1); cursor: pointer;" onclick="filterByStage('interest')">
+                                <div class="pipeline-icon" style="background: linear-gradient(135deg, #F59E0B, #FCD34D);">
+                                    <span class="material-icons">star</span>
+                                </div>
+                                <div class="pipeline-info">
+                                    <div class="pipeline-count">78</div>
+                                    <div class="pipeline-label">Interest</div>
+                                    <div class="pipeline-value">Rp 1.8M</div>
+                                </div>
+                                <div class="pipeline-progress">
+                                    <div class="progress-bar" style="width: 62%; background: linear-gradient(90deg, #F59E0B, #FCD34D);"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="pipeline-stage" style="border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.1); cursor: pointer;" onclick="filterByStage('booked')">
+                                <div class="pipeline-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+                                    <span class="material-icons">check_circle</span>
+                                </div>
+                                <div class="pipeline-info">
+                                    <div class="pipeline-count">45</div>
+                                    <div class="pipeline-label">Booked</div>
+                                    <div class="pipeline-value">Rp 990M</div>
+                                </div>
+                                <div class="pipeline-progress">
+                                    <div class="progress-bar" style="width: 36%; background: linear-gradient(90deg, #10B981, #34D399);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer List -->
+                    <div class="glass-card" style="margin-top: 30px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                            <h3>Customer Management</h3>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <div class="search-box" style="min-width: 300px;">
+                                    <span class="material-icons">search</span>
+                                    <input type="text" id="marketingSearch" placeholder="Cari nama atau nomor telepon..." onkeyup="searchMarketingCustomers()">
+                                </div>
+                                <button class="btn btn-primary" onclick="showMarketingStageFilter()">
+                                    <span class="material-icons">filter_list</span>
+                                    Filter
+                                </button>
+                                <button class="btn btn-success" onclick="refreshMarketingData()">
+                                    <span class="material-icons">refresh</span>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Buttons -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                            <button class="btn btn-outline" id="filterAll" onclick="filterByStage('all')" style="background: linear-gradient(135deg, #EC4899, #F472B6); border: none; color: white;">
+                                Semua (248)
+                            </button>
+                            <button class="btn btn-outline" id="filterLeads" onclick="filterByStage('leads')" style="border-color: rgba(59, 130, 246, 0.5); color: #3B82F6;">
+                                Leads (125)
+                            </button>
+                            <button class="btn btn-outline" id="filterInterest" onclick="filterByStage('interest')" style="border-color: rgba(245, 158, 11, 0.5); color: #F59E0B;">
+                                Interest (78)
+                            </button>
+                            <button class="btn btn-outline" id="filterBooked" onclick="filterByStage('booked')" style="border-color: rgba(16, 185, 129, 0.5); color: #10B981;">
+                                Booked (45)
+                            </button>
+                        </div>
+                        
+                        <!-- Customer List Table -->
+                        <div class="table-container" style="max-height: 600px; overflow-y: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>WhatsApp</th>
+                                        <th>Stage</th>
+                                        <th>Package</th>
+                                        <th>Value</th>
+                                        <th>Last Contact</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="marketingCustomerList">
+                                    <!-- Sample customers -->
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3B82F6, #60A5FA); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; position: relative;">
+                                                    AH
+                                                    <div style="position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background: #EF4444; border-radius: 50%; border: 2px solid #1e293b;"></div>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 600;">Ahmad Hidayat</div>
+                                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">3 unread messages</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white;" onclick="openWhatsApp('+6281234567890')">
+                                                <span class="material-icons">chat</span>
+                                                +62 812-3456-7890
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3);">Leads</span>
+                                        </td>
+                                        <td>UMR2025</td>
+                                        <td style="color: #F59E0B; font-weight: 600;">Rp 35M</td>
+                                        <td>
+                                            <div style="font-size: 12px;">
+                                                <div>2 jam yang lalu</div>
+                                                <div style="color: rgba(255, 255, 255, 0.5);">Last: Customer</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <button class="btn btn-sm btn-icon" onclick="changeCustomerStage(1)" title="Change Stage">
+                                                    <span class="material-icons">swap_horiz</span>
+                                                </button>
+                                                <button class="btn btn-sm btn-icon" onclick="viewCustomerDetails(1)" title="View Details">
+                                                    <span class="material-icons">visibility</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #F59E0B, #FCD34D); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                    SR
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 600;">Siti Rahmawati</div>
+                                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Tertarik paket plus</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white;" onclick="openWhatsApp('+6281987654321')">
+                                                <span class="material-icons">chat</span>
+                                                +62 819-8765-4321
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);">Interest</span>
+                                        </td>
+                                        <td>UMR2025P</td>
+                                        <td style="color: #F59E0B; font-weight: 600;">Rp 55M</td>
+                                        <td>
+                                            <div style="font-size: 12px;">
+                                                <div>1 hari yang lalu</div>
+                                                <div style="color: rgba(255, 255, 255, 0.5);">Last: Agent</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <button class="btn btn-sm btn-icon" onclick="changeCustomerStage(2)" title="Change Stage">
+                                                    <span class="material-icons">swap_horiz</span>
+                                                </button>
+                                                <button class="btn btn-sm btn-icon" onclick="viewCustomerDetails(2)" title="View Details">
+                                                    <span class="material-icons">visibility</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10B981, #34D399); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                    MF
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 600;">Muhammad Fadli</div>
+                                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Sudah DP</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm" style="background: linear-gradient(135deg, #25D366, #128C7E); color: white;" onclick="openWhatsApp('+6285678901234')">
+                                                <span class="material-icons">chat</span>
+                                                +62 856-7890-1234
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3);">Booked</span>
+                                        </td>
+                                        <td>UMR2025</td>
+                                        <td style="color: #10B981; font-weight: 600;">Rp 35M</td>
+                                        <td>
+                                            <div style="font-size: 12px;">
+                                                <div>3 hari yang lalu</div>
+                                                <div style="color: rgba(255, 255, 255, 0.5);">Last: System</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <button class="btn btn-sm btn-icon" onclick="changeCustomerStage(3)" title="Change Stage">
+                                                    <span class="material-icons">swap_horiz</span>
+                                                </button>
+                                                <button class="btn btn-sm btn-icon" onclick="viewCustomerDetails(3)" title="View Details">
+                                                    <span class="material-icons">visibility</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Auto Reply Rules -->
+                    <div class="glass-card" style="margin-top: 30px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3>Auto Reply Rules</h3>
+                            <button class="btn btn-primary" onclick="addAutoReplyRule()">
+                                <span class="material-icons">add</span>
+                                Add Rule
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Trigger Keyword</th>
+                                        <th>Reply Template</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>harga</strong></td>
+                                        <td style="max-width: 300px; font-size: 12px;">Untuk informasi harga terbaru, kami memiliki beberapa pilihan paket...</td>
+                                        <td>10</td>
+                                        <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-icon" onclick="editAutoReply(1)">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>jadwal</strong></td>
+                                        <td style="max-width: 300px; font-size: 12px;">Jadwal keberangkatan umroh kami: Setiap bulan tersedia...</td>
+                                        <td>10</td>
+                                        <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-icon" onclick="editAutoReply(2)">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>assalamualaikum</strong></td>
+                                        <td style="max-width: 300px; font-size: 12px;">Waalaikumsalam warahmatullahi wabarakatuh 🙏...</td>
+                                        <td>30</td>
+                                        <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-icon" onclick="editAutoReply(3)">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Reports Page -->
             <div id="reports" class="page">
                 <div class="glass-card">
@@ -5895,6 +6450,262 @@
             });
         }
 
+
+        // Marketing Functions
+        function openWhatsApp(phoneNumber) {
+            const waNumber = phoneNumber.replace(/[^0-9]/g, '');
+            const waLink = `https://wa.me/${waNumber}`;
+            window.open(waLink, '_blank');
+        }
+
+        function filterByStage(stage) {
+            // Reset all buttons
+            document.querySelectorAll('[id^="filter"]').forEach(btn => {
+                if (btn.id === 'filterAll') {
+                    btn.style.background = stage === 'all' ? 'linear-gradient(135deg, #EC4899, #F472B6)' : '';
+                    btn.style.border = stage === 'all' ? 'none' : '1px solid rgba(236, 72, 153, 0.5)';
+                    btn.style.color = stage === 'all' ? 'white' : '#EC4899';
+                } else if (btn.id === 'filterLeads') {
+                    btn.style.background = stage === 'leads' ? 'linear-gradient(135deg, #3B82F6, #60A5FA)' : '';
+                    btn.style.border = stage === 'leads' ? 'none' : '1px solid rgba(59, 130, 246, 0.5)';
+                    btn.style.color = stage === 'leads' ? 'white' : '#3B82F6';
+                } else if (btn.id === 'filterInterest') {
+                    btn.style.background = stage === 'interest' ? 'linear-gradient(135deg, #F59E0B, #FCD34D)' : '';
+                    btn.style.border = stage === 'interest' ? 'none' : '1px solid rgba(245, 158, 11, 0.5)';
+                    btn.style.color = stage === 'interest' ? 'white' : '#F59E0B';
+                } else if (btn.id === 'filterBooked') {
+                    btn.style.background = stage === 'booked' ? 'linear-gradient(135deg, #10B981, #34D399)' : '';
+                    btn.style.border = stage === 'booked' ? 'none' : '1px solid rgba(16, 185, 129, 0.5)';
+                    btn.style.color = stage === 'booked' ? 'white' : '#10B981';
+                }
+            });
+
+            // Filter table rows
+            const rows = document.querySelectorAll('#marketingCustomerList tr');
+            rows.forEach(row => {
+                if (stage === 'all') {
+                    row.style.display = '';
+                } else {
+                    const stageCell = row.querySelector('td:nth-child(3) .badge');
+                    if (stageCell) {
+                        const rowStage = stageCell.textContent.toLowerCase();
+                        row.style.display = rowStage === stage ? '' : 'none';
+                    }
+                }
+            });
+
+            showNotification(`Showing ${stage === 'all' ? 'all' : stage} customers`);
+        }
+
+        function searchMarketingCustomers() {
+            const searchTerm = document.getElementById('marketingSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#marketingCustomerList tr');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('td:first-child')?.textContent.toLowerCase() || '';
+                const phone = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
+                
+                if (name.includes(searchTerm) || phone.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function changeCustomerStage(customerId) {
+            const stages = ['leads', 'interest', 'booked'];
+            const stageLabels = {
+                'leads': 'Leads',
+                'interest': 'Interest',
+                'booked': 'Booked'
+            };
+
+            // Create modal for stage change
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3>Change Customer Stage</h3>
+                        <button class="close-btn">&times;</button>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p style="margin-bottom: 20px;">Select new stage for this customer:</p>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            ${stages.map(stage => `
+                                <button class="btn btn-outline" style="width: 100%; padding: 15px; justify-content: flex-start; border-color: ${getStageColor(stage)}; color: ${getStageColor(stage)};" onclick="updateCustomerStage(${customerId}, '${stage}')">
+                                    <span class="material-icons" style="margin-right: 10px;">${getStageIcon(stage)}</span>
+                                    ${stageLabels[stage]}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add event listeners
+            modal.querySelector('.close-btn').addEventListener('click', () => modal.remove());
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        function getStageColor(stage) {
+            switch(stage) {
+                case 'leads': return '#3B82F6';
+                case 'interest': return '#F59E0B';
+                case 'booked': return '#10B981';
+                default: return '#6B7280';
+            }
+        }
+
+        function getStageIcon(stage) {
+            switch(stage) {
+                case 'leads': return 'person_add';
+                case 'interest': return 'star';
+                case 'booked': return 'check_circle';
+                default: return 'circle';
+            }
+        }
+
+        function updateCustomerStage(customerId, newStage) {
+            // Close modal
+            document.querySelector('.modal.active').remove();
+            
+            // Show success notification
+            showNotification(`Customer stage updated to ${newStage}`);
+            
+            // In real app, this would update the backend
+            // For demo, just refresh the display
+            filterByStage('all');
+        }
+
+        function viewCustomerDetails(customerId) {
+            // Sample customer data
+            const customers = {
+                1: {
+                    name: 'Ahmad Hidayat',
+                    phone: '+62 812-3456-7890',
+                    stage: 'leads',
+                    package: 'UMR2025',
+                    value: 'Rp 35M',
+                    firstContact: '2025-01-20',
+                    conversations: [
+                        { sender: 'customer', message: 'Assalamualaikum, saya mau tanya paket umroh', time: '2 jam yang lalu' },
+                        { sender: 'agent', message: 'Waalaikumsalam, silakan. Ada yang bisa saya bantu?', time: '2 jam yang lalu' },
+                        { sender: 'customer', message: 'Untuk bulan April ada?', time: '1 jam yang lalu' }
+                    ]
+                },
+                2: { 
+                    name: 'Siti Rahmawati',
+                    phone: '+62 819-8765-4321',
+                    stage: 'interest',
+                    package: 'UMR2025P',
+                    value: 'Rp 55M',
+                    firstContact: '2025-01-18',
+                    conversations: []
+                },
+                3: {
+                    name: 'Muhammad Fadli',
+                    phone: '+62 856-7890-1234',
+                    stage: 'booked',
+                    package: 'UMR2025',
+                    value: 'Rp 35M',
+                    firstContact: '2025-01-10',
+                    conversations: []
+                }
+            };
+
+            const customer = customers[customerId];
+            if (!customer) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal active';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px;">
+                    <div class="modal-header">
+                        <h3>Customer Details - ${customer.name}</h3>
+                        <button class="close-btn">&times;</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px;">
+                        <div>
+                            <h4 style="color: #EC4899; margin-bottom: 15px;">Customer Information</h4>
+                            <p><strong>Name:</strong> ${customer.name}</p>
+                            <p><strong>Phone:</strong> ${customer.phone}</p>
+                            <p><strong>Stage:</strong> <span class="badge" style="background: rgba(${getStageColorRgba(customer.stage)}, 0.2); color: ${getStageColor(customer.stage)}; border: 1px solid rgba(${getStageColorRgba(customer.stage)}, 0.3);">${customer.stage}</span></p>
+                            <p><strong>Package:</strong> ${customer.package}</p>
+                            <p><strong>Value:</strong> ${customer.value}</p>
+                            <p><strong>First Contact:</strong> ${formatDate(customer.firstContact)}</p>
+                        </div>
+                        <div>
+                            <h4 style="color: #EC4899; margin-bottom: 15px;">Actions</h4>
+                            <button class="btn btn-success btn-sm" onclick="openWhatsApp('${customer.phone}')" style="width: 100%; margin-bottom: 10px;">
+                                <span class="material-icons">chat</span>
+                                Open WhatsApp
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="changeCustomerStage(${customerId})" style="width: 100%; margin-bottom: 10px;">
+                                <span class="material-icons">swap_horiz</span>
+                                Change Stage
+                            </button>
+                            <button class="btn btn-warning btn-sm" style="width: 100%;">
+                                <span class="material-icons">edit</span>
+                                Edit Details
+                            </button>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; border-top: 1px solid rgba(71, 85, 105, 0.3);">
+                        <h4 style="color: #EC4899; margin-bottom: 15px;">Conversation History</h4>
+                        <div style="max-height: 300px; overflow-y: auto; background: rgba(30, 41, 59, 0.3); border-radius: 8px; padding: 15px;">
+                            ${customer.conversations.length > 0 ? customer.conversations.map(conv => `
+                                <div style="margin-bottom: 15px; ${conv.sender === 'customer' ? 'text-align: left;' : 'text-align: right;'}">
+                                    <div style="display: inline-block; max-width: 70%; padding: 10px 15px; border-radius: 15px; background: ${conv.sender === 'customer' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(16, 185, 129, 0.2)'}; border: 1px solid ${conv.sender === 'customer' ? 'rgba(59, 130, 246, 0.3)' : 'rgba(16, 185, 129, 0.3)'};">
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.5); margin-bottom: 5px;">${conv.sender === 'customer' ? 'Customer' : 'Agent'} - ${conv.time}</div>
+                                        <div>${conv.message}</div>
+                                    </div>
+                                </div>
+                            `).join('') : '<p style="text-align: center; color: rgba(255, 255, 255, 0.5);">No conversation history yet</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add event listeners
+            modal.querySelector('.close-btn').addEventListener('click', () => modal.remove());
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        function getStageColorRgba(stage) {
+            switch(stage) {
+                case 'leads': return '59, 130, 246';
+                case 'interest': return '245, 158, 11';
+                case 'booked': return '16, 185, 129';
+                default: return '107, 114, 128';
+            }
+        }
+
+        function showMarketingStageFilter() {
+            showNotification('Advanced filter options coming soon!');
+        }
+
+        function refreshMarketingData() {
+            showNotification('Data refreshed successfully!');
+            // In real app, this would fetch fresh data from server
+        }
+
+        function addAutoReplyRule() {
+            showNotification('Auto reply rule editor coming soon!');
+        }
+
+        function editAutoReply(ruleId) {
+            showNotification('Edit auto reply feature coming soon!');
+        }
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {

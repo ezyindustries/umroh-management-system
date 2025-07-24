@@ -48,6 +48,7 @@ const metricsRoutes = require('./routes/metrics');
 const docsRoutes = require('./routes/docs');
 const brosurRoutes = require('./routes/brosur');
 const notificationsRoutes = require('./routes/notifications');
+const marketingRoutes = require('./routes/marketing');
 
 const app = express();
 const server = http.createServer(app);
@@ -147,6 +148,7 @@ app.use('/api/metrics', metricsRoutes);
 app.use('/api/docs', docsRoutes);
 app.use('/api/brosur', brosurRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/marketing', marketingRoutes);
 
 // Catch-all route for React SPA (must be after API routes)
 app.get('*', (req, res) => {

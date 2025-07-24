@@ -287,4 +287,28 @@ export const backupAPI = {
     api.post('/backup/test')
 };
 
+// Marketing API
+export const marketingAPI = {
+  getStatistics: () => 
+    api.get('/marketing/statistics'),
+  
+  getCustomers: (params) => 
+    api.get('/marketing/customers', { params }),
+  
+  getCustomer: (id) => 
+    api.get(`/marketing/customers/${id}`),
+  
+  updateCustomerStage: (id, data) => 
+    api.patch(`/marketing/customers/${id}/stage`, data),
+  
+  sendMessage: (id, data) => 
+    api.post(`/marketing/customers/${id}/message`, data),
+  
+  getPackageTemplates: () => 
+    api.get('/marketing/packages'),
+  
+  createPackageTemplate: (data) => 
+    api.post('/marketing/packages', data)
+};
+
 export default api;
