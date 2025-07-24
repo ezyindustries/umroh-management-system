@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground Handling - Standardized Cards</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+        }
+
+        /* Filter Card */
+        .filter-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Flight Card */
+        .flight-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Status Badges Container */
+        .status-badges {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Card Header */
+        .card-header {
+            margin-bottom: 12px;
+            padding-right: 150px;
+        }
+
+        .flight-code {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .route-badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* Package Info */
+        .package-info {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .package-name {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .group-name {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        /* Event Alert */
+        .event-alert {
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Key Metrics */
+        .key-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 14px;
+            border-radius: 8px;
+        }
+
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .metric-icon {
+            font-size: 28px;
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        /* Service Grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .service-badge {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+            border: 1px solid;
+            transition: all 0.2s;
+        }
+
+        .service-badge.clickable {
+            cursor: pointer;
+        }
+
+        .service-badge.clickable:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* No Services Message */
+        .no-services {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        /* Action Button */
+        .view-details-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3B82F6, #60A5FA);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: auto;
+            transition: all 0.2s;
+        }
+
+        .view-details-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Color Definitions */
+        .urgent { border-left: 5px solid #EF4444; }
+        .soon { border-left: 5px solid #F59E0B; }
+        .upcoming { border-left: 5px solid #3B82F6; }
+        .completed { border-left: 5px solid #10B981; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ground Handling Management</h1>
+            <p>Kelola tugas dan kewajiban tim ground handling untuk setiap penerbangan</p>
+        </div>
+
+        <!-- Filter Card -->
+        <div class="filter-card">
+            <p style="text-align: center; color: rgba(255, 255, 255, 0.6);">Filter controls would go here</p>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="cards-grid">
+            <!-- Flight 1 - Urgent -->
+            <div class="flight-card urgent">
+                <!-- Status Badges -->
+                <div class="status-badges">
+                    <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">H-2</span>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border-color: rgba(59, 130, 246, 0.3);">Preparing</span>
+                </div>
+                
+                <!-- Header -->
+                <div class="card-header">
+                    <h3 class="flight-code" style="color: #EF4444;">GA-897</h3>
+                    <div class="route-badges">
+                        <span class="badge">CGK-JED</span>
+                        <span class="badge">Garuda</span>
+                        <span class="badge">T3</span>
+                    </div>
+                </div>
+                
+                <!-- Package Info -->
+                <div class="package-info">
+                    <div class="package-name">Paket Umroh Eksekutif</div>
+                    <div class="group-name">Grup Al-Barokah</div>
+                </div>
+                
+                <!-- Event Alert -->
+                <div class="event-alert" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <span class="material-icons" style="color: #EF4444; font-size: 24px;">warning</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13px; color: #EF4444;">KEBERANGKATAN H-2</div>
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">26 Jul 2025, 23:30</div>
+                    </div>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="key-metrics">
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #3B82F6;">people</span>
+                        <div>
+                            <div class="metric-label">PAX</div>
+                            <div class="metric-value">225</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #F59E0B;">luggage</span>
+                        <div>
+                            <div class="metric-label">BAGASI</div>
+                            <div class="metric-value">450</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service Indicators -->
+                <div class="service-grid">
+                    <div class="service-badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">
+                        <span class="material-icons" style="font-size: 16px;">event_seat</span>
+                        <span>2 Lounge</span>
+                    </div>
+                    <div class="service-badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">
+                        <span class="material-icons" style="font-size: 16px;">hotel</span>
+                        <span>1 Hotel ✓</span>
+                    </div>
+                    <div class="service-badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">
+                        <span class="material-icons" style="font-size: 16px;">restaurant</span>
+                        <span>3 Meal</span>
+                    </div>
+                    <div class="service-badge clickable" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border-color: rgba(245, 158, 11, 0.3);" onclick="alert('Special requests modal would open here')">
+                        <span class="material-icons" style="font-size: 16px;">accessible</span>
+                        <span>5 Request</span>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <button class="view-details-btn">
+                    <span class="material-icons" style="font-size: 18px;">visibility</span>
+                    View Details
+                </button>
+            </div>
+
+            <!-- Flight 2 - Soon -->
+            <div class="flight-card soon">
+                <!-- Status Badges -->
+                <div class="status-badges">
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border-color: rgba(245, 158, 11, 0.3);">H-5</span>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border-color: rgba(59, 130, 246, 0.3);">Scheduled</span>
+                </div>
+                
+                <!-- Header -->
+                <div class="card-header">
+                    <h3 class="flight-code" style="color: #F59E0B;">SV-815</h3>
+                    <div class="route-badges">
+                        <span class="badge">JED-MED</span>
+                        <span class="badge">Saudia</span>
+                        <span class="badge">T1</span>
+                    </div>
+                </div>
+                
+                <!-- Package Info -->
+                <div class="package-info">
+                    <div class="package-name">Paket Umroh Reguler</div>
+                    <div class="group-name">Grup Al-Hikmah</div>
+                </div>
+                
+                <!-- Event Alert -->
+                <div class="event-alert" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3);">
+                    <span class="material-icons" style="color: #F59E0B; font-size: 24px;">schedule</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13px; color: #F59E0B;">KEDATANGAN H-5</div>
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">31 Jul 2025, 14:15</div>
+                    </div>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="key-metrics">
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #3B82F6;">people</span>
+                        <div>
+                            <div class="metric-label">PAX</div>
+                            <div class="metric-value">180</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #F59E0B;">luggage</span>
+                        <div>
+                            <div class="metric-label">BAGASI</div>
+                            <div class="metric-value">360</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service Indicators -->
+                <div class="service-grid">
+                    <div class="service-badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">
+                        <span class="material-icons" style="font-size: 16px;">hotel</span>
+                        <span>2 Hotel</span>
+                    </div>
+                    <div class="service-badge clickable" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border-color: rgba(245, 158, 11, 0.3);" onclick="alert('Special requests modal would open here')">
+                        <span class="material-icons" style="font-size: 16px;">directions_bus</span>
+                        <span>1 Request</span>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <button class="view-details-btn">
+                    <span class="material-icons" style="font-size: 18px;">visibility</span>
+                    View Details
+                </button>
+            </div>
+
+            <!-- Flight 3 - Upcoming -->
+            <div class="flight-card upcoming">
+                <!-- Status Badges -->
+                <div class="status-badges">
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border-color: rgba(59, 130, 246, 0.3);">H-14</span>
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border-color: rgba(59, 130, 246, 0.3);">Scheduled</span>
+                </div>
+                
+                <!-- Header -->
+                <div class="card-header">
+                    <h3 class="flight-code" style="color: #3B82F6;">QR-955</h3>
+                    <div class="route-badges">
+                        <span class="badge">CGK-DOH</span>
+                        <span class="badge">Qatar</span>
+                        <span class="badge">T2</span>
+                    </div>
+                </div>
+                
+                <!-- Package Info -->
+                <div class="package-info">
+                    <div class="package-name">Paket Umroh VIP</div>
+                    <div class="group-name">Grup Al-Amin</div>
+                </div>
+                
+                <!-- Event Alert -->
+                <div class="event-alert" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <span class="material-icons" style="color: #3B82F6; font-size: 24px;">flight_takeoff</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13px; color: #3B82F6;">KEBERANGKATAN H-14</div>
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">07 Aug 2025, 01:45</div>
+                    </div>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="key-metrics">
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #3B82F6;">people</span>
+                        <div>
+                            <div class="metric-label">PAX</div>
+                            <div class="metric-value">45</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #F59E0B;">luggage</span>
+                        <div>
+                            <div class="metric-label">BAGASI</div>
+                            <div class="metric-value">90</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- No Services -->
+                <div class="no-services">
+                    Tidak ada layanan tambahan yang diminta
+                </div>
+                
+                <!-- Action Button -->
+                <button class="view-details-btn">
+                    <span class="material-icons" style="font-size: 18px;">visibility</span>
+                    View Details
+                </button>
+            </div>
+
+            <!-- Flight 4 - Completed -->
+            <div class="flight-card completed">
+                <!-- Status Badges -->
+                <div class="status-badges">
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">H+3</span>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">Completed</span>
+                </div>
+                
+                <!-- Header -->
+                <div class="card-header">
+                    <h3 class="flight-code" style="color: #10B981;">EK-385</h3>
+                    <div class="route-badges">
+                        <span class="badge">CGK-DXB</span>
+                        <span class="badge">Emirates</span>
+                        <span class="badge">T3</span>
+                    </div>
+                </div>
+                
+                <!-- Package Info -->
+                <div class="package-info">
+                    <div class="package-name">Paket Umroh Premium</div>
+                    <div class="group-name">Grup Al-Falah</div>
+                </div>
+                
+                <!-- Event Alert -->
+                <div class="event-alert" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <span class="material-icons" style="color: #10B981; font-size: 24px;">check_circle</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 13px; color: #10B981;">SELESAI</div>
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">21 Jul 2025, 14:30</div>
+                    </div>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="key-metrics">
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #3B82F6;">people</span>
+                        <div>
+                            <div class="metric-label">PAX</div>
+                            <div class="metric-value">180</div>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <span class="material-icons metric-icon" style="color: #F59E0B;">luggage</span>
+                        <div>
+                            <div class="metric-label">BAGASI</div>
+                            <div class="metric-value">360</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service Indicators -->
+                <div class="service-grid">
+                    <div class="service-badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">
+                        <span class="material-icons" style="font-size: 16px;">event_seat</span>
+                        <span>3 Lounge ✓</span>
+                    </div>
+                    <div class="service-badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981; border-color: rgba(16, 185, 129, 0.3);">
+                        <span class="material-icons" style="font-size: 16px;">restaurant</span>
+                        <span>2 Meal ✓</span>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <button class="view-details-btn">
+                    <span class="material-icons" style="font-size: 18px;">visibility</span>
+                    View Details
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

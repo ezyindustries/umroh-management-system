@@ -654,7 +654,7 @@ const MarketingPage = () => {
                               </Typography>
                               {customer.summary && (
                                 <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                                  "{customer.summary}"
+                                  &quot;{customer.summary}&quot;
                                 </Typography>
                               )}
                               {customer.last_message_from && (

@@ -2406,262 +2406,289 @@
                     </div>
                     
                     <!-- Ground Handling Cards -->
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- Ground Handling Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
                         <!-- Flight 1 - Urgent -->
-                        <div class="glass-card flight-card" style="border-left: 4px solid #EF4444; padding: 16px;">
+                        <div class="glass-card flight-card" style="border-left: 5px solid #EF4444; padding: 16px; position: relative; min-height: 420px; display: flex; flex-direction: column;">
                             <!-- Status Badges -->
-                            <div style="position: absolute; top: 12px; right: 12px;">
-                                <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 10px; font-size: 12px;">H-2</span>
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); margin-left: 5px; padding: 4px 10px; font-size: 12px;">Preparing</span>
+                            <div style="position: absolute; top: 16px; right: 16px; display: flex; gap: 6px;">
+                                <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 4px 12px; font-size: 11px; font-weight: 600;">H-2</span>
+                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 12px; font-size: 11px;">Preparing</span>
                             </div>
                             
                             <!-- Header -->
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                <h3 style="color: #EF4444; margin: 0; font-size: 24px;">GA-897</h3>
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 10px; font-size: 12px;">CGK-JED</span>
-                                <span class="badge" style="padding: 4px 10px; font-size: 12px;">Garuda</span>
-                                <span class="badge" style="padding: 4px 10px; font-size: 12px;">T3</span>
+                            <div style="margin-bottom: 12px; padding-right: 150px;">
+                                <h3 style="color: #EF4444; margin: 0 0 8px 0; font-size: 26px; font-weight: 700;">GA-897</h3>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">CGK-JED</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">Garuda</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">T3</span>
+                                </div>
                             </div>
                             
                             <!-- Package Info -->
-                            <div style="color: rgba(255, 255, 255, 0.7); margin-bottom: 12px; font-size: 14px;">
-                                Paket Umroh Eksekutif • Grup Al-Barokah
+                            <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="color: rgba(255, 255, 255, 0.95); font-size: 14px; font-weight: 500;">Paket Umroh Eksekutif</div>
+                                <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">Grup Al-Barokah</div>
+                            </div>
+                            
+                            <!-- Event Alert -->
+                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons" style="color: #EF4444; font-size: 24px;">warning</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 13px; color: #EF4444;">KEBERANGKATAN H-2</div>
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">26 Jul 2025, 23:30</div>
+                                </div>
                             </div>
                             
                             <!-- Key Metrics -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px;">
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">flight_takeoff</span>
-                                        Departure
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #3B82F6;">people</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">PAX</div>
+                                        <div style="font-weight: 700; font-size: 20px;">225</div>
                                     </div>
-                                    <div style="font-weight: 600; font-size: 15px;">26 Jul, 23:30</div>
                                 </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">flight_land</span>
-                                        Arrival
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #F59E0B;">luggage</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">BAGASI</div>
+                                        <div style="font-weight: 700; font-size: 20px;">450</div>
                                     </div>
-                                    <div style="font-weight: 600; font-size: 15px;">27 Jul, 05:45</div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">people</span>
-                                        PAX
-                                    </div>
-                                    <div style="font-weight: 600; font-size: 15px;">225</div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">luggage</span>
-                                        Baggage
-                                    </div>
-                                    <div style="font-weight: 600; font-size: 15px;">450 pcs</div>
                                 </div>
                             </div>
                             
-                            <!-- Service Indicators (Only show if requested) -->
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
-                                <span class="badge" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #EF4444; padding: 4px 12px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">event_seat</span> 2 Lounge
-                                </span>
-                                <span class="badge" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10B981; padding: 4px 12px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">hotel</span> 1 Hotel ✓
-                                </span>
-                                <span class="badge" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #EF4444; padding: 4px 12px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">restaurant</span> 3 Meal
-                                </span>
-                                <span class="badge" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #F59E0B; padding: 4px 12px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">accessible</span> 5 Request
-                                </span>
+                            <!-- Service Grid -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; flex: 1;">
+                                <div style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 16px;">event_seat</span>
+                                    <span>2 Lounge</span>
+                                </div>
+                                <div style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 16px;">hotel</span>
+                                    <span>1 Hotel ✓</span>
+                                </div>
+                                <div style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 16px;">restaurant</span>
+                                    <span>3 Meal</span>
+                                </div>
+                                <div style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center; cursor: pointer; transition: all 0.2s;" onclick="showSpecialRequests('GA-897')" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                    <span class="material-icons" style="font-size: 16px;">accessible</span>
+                                    <span>5 Request</span>
+                                </div>
                             </div>
                             
-                            <!-- Expandable Details -->
-                            <details class="glass-details" style="margin-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px;">
-                                <summary style="cursor: pointer; padding: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600;">
-                                    <span>View Details</span>
-                                    <span class="material-icons expand-icon" style="transition: transform 0.3s;">expand_more</span>
-                                </summary>
-                                
-                                <div style="padding: 16px 0;">
-                                    <!-- Tabs -->
-                                    <div style="display: flex; gap: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 16px;">
-                                        <div style="padding: 8px 0; border-bottom: 2px solid #3B82F6; color: #3B82F6; font-size: 14px;">Schedule</div>
-                                        <div style="padding: 8px 0; cursor: pointer; font-size: 14px; color: rgba(255, 255, 255, 0.7);">Reservations</div>
-                                        <div style="padding: 8px 0; cursor: pointer; font-size: 14px; color: rgba(255, 255, 255, 0.7);">Requests</div>
-                                        <div style="padding: 8px 0; cursor: pointer; font-size: 14px; color: rgba(255, 255, 255, 0.7);">Documents</div>
-                                    </div>
-                                    
-                                    <!-- Reservations Tab Content -->
-                                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                                        <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 8px;">
-                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                                <h4 style="margin: 0; font-size: 16px;">Dokumen Reservasi</h4>
-                                                <button class="btn btn-sm" style="background: linear-gradient(135deg, #3B82F6, #60A5FA); padding: 4px 12px; font-size: 12px;">
-                                                    <span class="material-icons" style="font-size: 16px;">upload</span>
-                                                    Upload
-                                                </button>
-                                            </div>
-                                            <div style="display: flex; flex-direction: column; gap: 8px;">
-                                                <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(16, 185, 129, 0.1); border-radius: 6px;">
-                                                    <span class="material-icons" style="color: #10B981; font-size: 20px;">description</span>
-                                                    <div style="flex: 1;">
-                                                        <div style="font-weight: 600; font-size: 13px;">Hotel_Reservation_AlBarokah.pdf</div>
-                                                        <div style="font-size: 11px; color: rgba(255, 255, 255, 0.6);">Uploaded: 20 Jul 2025</div>
-                                                    </div>
-                                                    <span class="material-icons" style="color: #10B981;">check_circle</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div style="font-size: 13px; color: rgba(255, 255, 255, 0.6); text-align: center; padding: 20px;">
-                                            Upload dokumen bukti reservasi untuk Lounge, Hotel, dan Meal
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Action Buttons -->
-                                    <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
-                                        <button class="btn btn-warning" style="padding: 8px 16px; font-size: 13px;">
-                                            <span class="material-icons" style="font-size: 16px;">edit</span>
-                                            Edit
-                                        </button>
-                                        <button class="btn btn-primary" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA); padding: 8px 16px; font-size: 13px;">
-                                            <span class="material-icons" style="font-size: 16px;">calendar_month</span>
-                                            Calendar
-                                        </button>
-                                        <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;">
-                                            <span class="material-icons" style="font-size: 16px;">description</span>
-                                            Report
-                                        </button>
-                                    </div>
-                                </div>
-                            </details>
+                            <!-- Action Button -->
+                            <button onclick="showFlightDetails('GA-897')" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #3B82F6, #60A5FA); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <span class="material-icons" style="font-size: 18px;">visibility</span>
+                                View Details
+                            </button>
                         </div>
                         
                         <!-- Flight 2 - Soon -->
-                        <div class="glass-card flight-card" style="border-left: 4px solid #F59E0B; padding: 16px;">
+                        <div class="glass-card flight-card" style="border-left: 5px solid #F59E0B; padding: 16px; position: relative; min-height: 420px; display: flex; flex-direction: column;">
                             <!-- Status Badges -->
-                            <div style="position: absolute; top: 12px; right: 12px;">
-                                <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; font-size: 12px;">H-5</span>
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); margin-left: 5px; padding: 4px 10px; font-size: 12px;">Scheduled</span>
+                            <div style="position: absolute; top: 16px; right: 16px; display: flex; gap: 6px;">
+                                <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 12px; font-size: 11px; font-weight: 600;">H-5</span>
+                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 12px; font-size: 11px;">Scheduled</span>
                             </div>
                             
                             <!-- Header -->
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                <h3 style="color: #F59E0B; margin: 0; font-size: 24px;">SV-815</h3>
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 10px; font-size: 12px;">CGK-JED</span>
-                                <span class="badge" style="padding: 4px 10px; font-size: 12px;">Saudi</span>
-                                <span class="badge" style="padding: 4px 10px; font-size: 12px;">T2E</span>
+                            <div style="margin-bottom: 12px; padding-right: 150px;">
+                                <h3 style="color: #F59E0B; margin: 0 0 8px 0; font-size: 26px; font-weight: 700;">SV-815</h3>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">JED-MED</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">Saudia</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">T1</span>
+                                </div>
                             </div>
                             
                             <!-- Package Info -->
-                            <div style="color: rgba(255, 255, 255, 0.7); margin-bottom: 12px; font-size: 14px;">
-                                Paket Umroh Hemat • Grup Ar-Rahman
+                            <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="color: rgba(255, 255, 255, 0.95); font-size: 14px; font-weight: 500;">Paket Umroh Reguler</div>
+                                <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">Grup Al-Hikmah</div>
+                            </div>
+                            
+                            <!-- Event Alert -->
+                            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons" style="color: #F59E0B; font-size: 24px;">schedule</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 13px; color: #F59E0B;">KEDATANGAN H-5</div>
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">31 Jul 2025, 14:15</div>
+                                </div>
                             </div>
                             
                             <!-- Key Metrics -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px;">
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">flight_takeoff</span>
-                                        Departure
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #3B82F6;">people</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">PAX</div>
+                                        <div style="font-weight: 700; font-size: 20px;">180</div>
                                     </div>
-                                    <div style="font-weight: 600; font-size: 15px;">29 Jul, 14:00</div>
                                 </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">flight_land</span>
-                                        Arrival
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #F59E0B;">luggage</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">BAGASI</div>
+                                        <div style="font-weight: 700; font-size: 20px;">360</div>
                                     </div>
-                                    <div style="font-weight: 600; font-size: 15px;">29 Jul, 20:30</div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">people</span>
-                                        PAX
-                                    </div>
-                                    <div style="font-weight: 600; font-size: 15px;">180</div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">luggage</span>
-                                        Baggage
-                                    </div>
-                                    <div style="font-weight: 600; font-size: 15px;">360 pcs</div>
                                 </div>
                             </div>
                             
-                            <!-- Service Indicators (Only show if requested) -->
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
-                                <span class="badge" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10B981; padding: 4px 12px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">event_seat</span> 1 Lounge ✓
-                                </span>
-                                <span class="badge" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #EF4444; padding: 4px 12px; font-size: 12px;">
-                                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">restaurant</span> 2 Meal
-                                </span>
+                            <!-- Service Grid -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; flex: 1;">
+                                <div style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 16px;">hotel</span>
+                                    <span>2 Hotel</span>
+                                </div>
+                                <div style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center; cursor: pointer; transition: all 0.2s;" onclick="showSpecialRequests('SV-815')" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                    <span class="material-icons" style="font-size: 16px;">directions_bus</span>
+                                    <span>1 Request</span>
+                                </div>
                             </div>
+                            
+                            <!-- Action Button -->
+                            <button onclick="showFlightDetails('SV-815')" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #3B82F6, #60A5FA); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <span class="material-icons" style="font-size: 18px;">visibility</span>
+                                View Details
+                            </button>
                         </div>
                         
                         <!-- Flight 3 - Upcoming -->
-                        <div class="glass-card flight-card" style="border-left: 4px solid #3B82F6; padding: 16px;">
+                        <div class="glass-card flight-card" style="border-left: 5px solid #3B82F6; padding: 16px; position: relative; min-height: 420px; display: flex; flex-direction: column;">
                             <!-- Status Badges -->
-                            <div style="position: absolute; top: 12px; right: 12px;">
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 10px; font-size: 12px;">H-14</span>
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); margin-left: 5px; padding: 4px 10px; font-size: 12px;">Scheduled</span>
+                            <div style="position: absolute; top: 16px; right: 16px; display: flex; gap: 6px;">
+                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 12px; font-size: 11px; font-weight: 600;">H-14</span>
+                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 12px; font-size: 11px;">Scheduled</span>
                             </div>
                             
                             <!-- Header -->
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                <h3 style="color: #3B82F6; margin: 0; font-size: 24px;">QR-955</h3>
-                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 10px; font-size: 12px;">CGK-DOH-JED</span>
-                                <span class="badge" style="padding: 4px 10px; font-size: 12px;">Qatar</span>
-                                <span class="badge" style="padding: 4px 10px; font-size: 12px;">T3</span>
+                            <div style="margin-bottom: 12px; padding-right: 150px;">
+                                <h3 style="color: #3B82F6; margin: 0 0 8px 0; font-size: 26px; font-weight: 700;">QR-955</h3>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">CGK-DOH</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">Qatar</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">T2</span>
+                                </div>
                             </div>
                             
                             <!-- Package Info -->
-                            <div style="color: rgba(255, 255, 255, 0.7); margin-bottom: 12px; font-size: 14px;">
-                                Paket Umroh Plus • Grup Al-Amin
+                            <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="color: rgba(255, 255, 255, 0.95); font-size: 14px; font-weight: 500;">Paket Umroh VIP</div>
+                                <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">Grup Al-Amin</div>
+                            </div>
+                            
+                            <!-- Event Alert -->
+                            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons" style="color: #3B82F6; font-size: 24px;">flight_takeoff</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 13px; color: #3B82F6;">KEBERANGKATAN H-14</div>
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">07 Aug 2025, 01:45</div>
+                                </div>
                             </div>
                             
                             <!-- Key Metrics -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px;">
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">flight_takeoff</span>
-                                        Departure
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #3B82F6;">people</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">PAX</div>
+                                        <div style="font-weight: 700; font-size: 20px;">45</div>
                                     </div>
-                                    <div style="font-weight: 600; font-size: 15px;">07 Aug, 01:45</div>
                                 </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">flight_land</span>
-                                        Arrival
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #F59E0B;">luggage</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">BAGASI</div>
+                                        <div style="font-weight: 700; font-size: 20px;">90</div>
                                     </div>
-                                    <div style="font-weight: 600; font-size: 15px;">07 Aug, 12:00</div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">people</span>
-                                        PAX
-                                    </div>
-                                    <div style="font-weight: 600; font-size: 15px;">200</div>
-                                </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <span class="material-icons" style="font-size: 14px;">luggage</span>
-                                        Baggage
-                                    </div>
-                                    <div style="font-weight: 600; font-size: 15px;">400 pcs</div>
                                 </div>
                             </div>
                             
-                            <!-- No Additional Services Requested -->
-                            <div style="padding: 8px 12px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; text-align: center; font-size: 13px; color: rgba(255, 255, 255, 0.6);">
-                                No additional services requested
+                            <!-- No Services Message -->
+                            <div style="padding: 16px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; text-align: center; font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 14px; flex: 1;">
+                                Tidak ada layanan tambahan yang diminta
                             </div>
+                            
+                            <!-- Action Button -->
+                            <button onclick="showFlightDetails('QR-955')" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #3B82F6, #60A5FA); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <span class="material-icons" style="font-size: 18px;">visibility</span>
+                                View Details
+                            </button>
                         </div>
-                    </div>
-                    
+                        
+                        <!-- Flight 4 - Completed -->
+                        <div class="glass-card flight-card" style="border-left: 5px solid #10B981; padding: 16px; position: relative; min-height: 420px; display: flex; flex-direction: column;">
+                            <!-- Status Badges -->
+                            <div style="position: absolute; top: 16px; right: 16px; display: flex; gap: 6px;">
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 12px; font-size: 11px; font-weight: 600;">H+3</span>
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 12px; font-size: 11px;">Completed</span>
+                            </div>
+                            
+                            <!-- Header -->
+                            <div style="margin-bottom: 12px; padding-right: 150px;">
+                                <h3 style="color: #10B981; margin: 0 0 8px 0; font-size: 26px; font-weight: 700;">EK-385</h3>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">CGK-DXB</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">Emirates</span>
+                                    <span class="badge" style="font-size: 11px; padding: 3px 10px;">T3</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Package Info -->
+                            <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="color: rgba(255, 255, 255, 0.95); font-size: 14px; font-weight: 500;">Paket Umroh Premium</div>
+                                <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px;">Grup Al-Falah</div>
+                            </div>
+                            
+                            <!-- Event Alert -->
+                            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+                                <span class="material-icons" style="color: #10B981; font-size: 24px;">check_circle</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 13px; color: #10B981;">SELESAI</div>
+                                    <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7);">21 Jul 2025, 14:30</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Key Metrics -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; background: rgba(255, 255, 255, 0.03); padding: 14px; border-radius: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #3B82F6;">people</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">PAX</div>
+                                        <div style="font-weight: 700; font-size: 20px;">180</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 28px; color: #F59E0B;">luggage</span>
+                                    <div>
+                                        <div style="font-size: 10px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">BAGASI</div>
+                                        <div style="font-weight: 700; font-size: 20px;">360</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Service Grid -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; flex: 1;">
+                                <div style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 16px;">event_seat</span>
+                                    <span>3 Lounge ✓</span>
+                                </div>
+                                <div style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                                    <span class="material-icons" style="font-size: 16px;">restaurant</span>
+                                    <span>2 Meal ✓</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Button -->
+                            <button onclick="showFlightDetails('EK-385')" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #3B82F6, #60A5FA); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                <span class="material-icons" style="font-size: 18px;">visibility</span>
+                                View Details
+                            </button>
+                        </div>
+                    </div>                    
                     <!-- Add New Handling Button -->
                     <div style="text-align: center; margin-top: 30px;">
                         <button class="btn btn-primary btn-lg">
@@ -7094,6 +7121,85 @@
                     }
                 });
             });
+        });
+    </script>
+    
+    <!-- Modal for Special Requests -->
+    <div id="specialRequestsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px;">
+            <div class="glass-card" style="max-height: 80vh; overflow-y: auto; padding: 24px; position: relative;">
+                <button onclick="closeModal('specialRequestsModal')" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer;">
+                    <span class="material-icons">close</span>
+                </button>
+                <h3 style="margin-bottom: 20px; background: linear-gradient(135deg, #F59E0B, #FCD34D); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Special Requests</h3>
+                <div id="requestsList">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Special Requests Data
+        const specialRequests = {
+            'GA-897': [
+                { type: 'wheelchair', name: 'Hj. Fatimah (65th)', notes: 'Kursi roda dari check-in hingga boarding' },
+                { type: 'wheelchair', name: 'H. Ahmad (70th)', notes: 'Bantuan kursi roda untuk transit' },
+                { type: 'special_seat', name: 'Ibu Siti', notes: 'Seat dekat toilet (kondisi hamil)' },
+                { type: 'special_meal', name: 'Bpk. Yusuf', notes: 'Diabetic meal' },
+                { type: 'medical', name: 'Hj. Aisyah', notes: 'Membawa oxygen concentrator' }
+            ],
+            'SV-815': [],
+            'QR-955': []
+        };
+        
+        function showSpecialRequests(flightCode) {
+            const modal = document.getElementById('specialRequestsModal');
+            const requestsList = document.getElementById('requestsList');
+            const requests = specialRequests[flightCode] || [];
+            
+            requestsList.innerHTML = '';
+            
+            if (requests.length === 0) {
+                requestsList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.6);">No special requests for this flight</p>';
+            } else {
+                requests.forEach(request => {
+                    const requestItem = `
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid #F59E0B;">
+                            <div style="display: flex; align-items: start; gap: 12px;">
+                                <span class="material-icons" style="color: #F59E0B; font-size: 24px;">
+                                    ${request.type === 'wheelchair' ? 'accessible' : 
+                                      request.type === 'special_seat' ? 'event_seat' :
+                                      request.type === 'special_meal' ? 'restaurant' : 'medical_services'}
+                                </span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; margin-bottom: 4px; font-size: 14px;">${request.name}</div>
+                                    <div style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">${request.notes}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    requestsList.innerHTML += requestItem;
+                });
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        function showFlightDetails(flightCode) {
+            // Implement flight details modal
+            alert('Flight details for ' + flightCode + ' - To be implemented');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('specialRequestsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal('specialRequestsModal');
+            }
         });
     </script>
 </body>
