@@ -228,6 +228,45 @@
                 grid-template-columns: repeat(4, 1fr);
             }
         }
+        
+        .card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.8));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 16px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(71, 85, 105, 0.4),
+                0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(71, 85, 105, 0.5),
+                0 1px 3px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), rgba(16, 185, 129, 0.6), rgba(139, 92, 246, 0.6), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
 
         .report-grid {
             display: grid;
@@ -3139,189 +3178,233 @@
                     <!-- PNR Cards Grid -->
                     <div class="cards-grid" style="margin-top: 30px;">
                         <!-- PNR Card 1 -->
-                        <div class="card" style="padding: 20px; position: relative;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
-                                <div>
-                                    <h4 style="margin: 0; color: #F59E0B;">PNR: GA897JKT</h4>
-                                    <p style="margin: 5px 0; font-size: 14px; color: rgba(255,255,255,0.7);">Paket Ramadhan Plus 2025</p>
+                        <div class="card" style="padding: 24px; position: relative; min-height: 380px; display: flex; flex-direction: column;">
+                            <!-- Header Section -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0; color: #F59E0B; font-size: 18px; font-weight: 600;">PNR: GA897JKT</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: rgba(255,255,255,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Paket Ramadhan Plus 2025</p>
                                 </div>
-                                <span class="status-badge status-paid">ticketed</span>
+                                <span class="status-badge status-paid" style="margin-left: 10px;">ticketed</span>
                             </div>
                             
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                    <span class="material-icons" style="font-size: 16px; color: rgba(255,255,255,0.6);">flight</span>
-                                    <span style="font-size: 14px;">Garuda Indonesia</span>
+                            <!-- Flight Info Section -->
+                            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <span class="material-icons" style="font-size: 18px; color: #F59E0B;">flight</span>
+                                    <span style="font-size: 14px; font-weight: 500;">Garuda Indonesia</span>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6);">
-                                    <span class="material-icons" style="font-size: 16px;">route</span>
-                                    <span>CGK → JED → MED → JED → CGK</span>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 18px; color: rgba(255,255,255,0.5);">route</span>
+                                    <span style="font-size: 12px; color: rgba(255,255,255,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CGK → JED → MED → JED → CGK</span>
                                 </div>
                             </div>
                             
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <!-- Passenger Info Section -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span class="material-icons" style="font-size: 16px; color: rgba(255,255,255,0.6);">people</span>
-                                        <span style="font-size: 14px;">Penumpang: 42/45</span>
+                                        <span class="material-icons" style="font-size: 18px; color: rgba(255,255,255,0.6);">people</span>
+                                        <span style="font-size: 14px; font-weight: 500;">42/45 Penumpang</span>
                                     </div>
-                                    <span class="status-badge" style="background: rgba(251, 191, 36, 0.2); color: #FCD34D;">3 kursi tersisa</span>
+                                    <span class="status-badge" style="background: rgba(251, 191, 36, 0.2); color: #FCD34D; padding: 4px 10px; font-size: 11px;">3 tersisa</span>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                    <div style="background: linear-gradient(90deg, #F59E0B, #FCD34D); height: 100%; width: 93.3%;"></div>
+                                    <div style="background: linear-gradient(90deg, #F59E0B, #FCD34D); height: 100%; width: 93.3%; transition: width 0.3s ease;"></div>
                                 </div>
                             </div>
                             
-                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
-                                    <span class="material-icons" style="font-size: 16px; color: #FCA5A5;">warning</span>
-                                    <span style="font-size: 12px; font-weight: 600; color: #FCA5A5;">Jatuh Tempo Pelunasan</span>
+                            <!-- Payment Alert Section -->
+                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                            <span class="material-icons" style="font-size: 18px; color: #FCA5A5;">warning</span>
+                                            <span style="font-size: 12px; font-weight: 600; color: #FCA5A5;">Jatuh Tempo Pelunasan</span>
+                                        </div>
+                                        <div style="font-size: 13px; color: rgba(255,255,255,0.9);">15 Feb 2025</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 16px; font-weight: 600; color: #FCA5A5;">H-3</div>
+                                        <div style="font-size: 12px; color: rgba(255,255,255,0.7);">Rp 25jt</div>
+                                    </div>
                                 </div>
-                                <div style="font-size: 14px; color: #FCA5A5;">15 Feb 2025 (H-3)</div>
-                                <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px;">Rp 25,000,000</div>
                             </div>
                             
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 5px;">
-                                    <span>Total: Rp 450,000,000</span>
-                                    <span>Dibayar: 89%</span>
+                            <!-- Payment Progress Section -->
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span style="font-size: 12px; color: rgba(255,255,255,0.6);">Total: Rp 450jt</span>
+                                    <span style="font-size: 12px; color: #10B981; font-weight: 500;">89% Dibayar</span>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
-                                    <div style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 89%;"></div>
+                                    <div style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 89%; transition: width 0.3s ease;"></div>
                                 </div>
                             </div>
                             
-                            <div style="display: flex; gap: 10px;">
-                                <button class="btn btn-small btn-secondary" style="flex: 1;" onclick="showPnrDetails(1)">
+                            <!-- Action Buttons -->
+                            <div style="display: flex; gap: 10px; margin-top: auto;">
+                                <button class="btn btn-small btn-secondary" style="flex: 1; padding: 8px 16px;" onclick="showPnrDetails(1)">
+                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">info</span>
                                     Details
                                 </button>
-                                <button class="btn btn-small btn-primary" style="flex: 1;" onclick="assignJamaahToPnr(1)">
-                                    Assign Jamaah
+                                <button class="btn btn-small btn-primary" style="flex: 1; padding: 8px 16px;" onclick="assignJamaahToPnr(1)">
+                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">person_add</span>
+                                    Assign
                                 </button>
                             </div>
                         </div>
                         
                         <!-- PNR Card 2 -->
-                        <div class="card" style="padding: 20px; position: relative;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
-                                <div>
-                                    <h4 style="margin: 0; color: #F59E0B;">PNR: SV832CGK</h4>
-                                    <p style="margin: 5px 0; font-size: 14px; color: rgba(255,255,255,0.7);">Paket Hemat Maret 2025</p>
+                        <div class="card" style="padding: 24px; position: relative; min-height: 380px; display: flex; flex-direction: column;">
+                            <!-- Header Section -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0; color: #F59E0B; font-size: 18px; font-weight: 600;">PNR: SV832CGK</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: rgba(255,255,255,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Paket Hemat Maret 2025</p>
                                 </div>
-                                <span class="status-badge status-pending">booked</span>
+                                <span class="status-badge status-pending" style="margin-left: 10px;">booked</span>
                             </div>
                             
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                    <span class="material-icons" style="font-size: 16px; color: rgba(255,255,255,0.6);">flight</span>
-                                    <span style="font-size: 14px;">Saudi Airlines</span>
+                            <!-- Flight Info Section -->
+                            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <span class="material-icons" style="font-size: 18px; color: #F59E0B;">flight</span>
+                                    <span style="font-size: 14px; font-weight: 500;">Saudi Airlines</span>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6);">
-                                    <span class="material-icons" style="font-size: 16px;">route</span>
-                                    <span>CGK → JED (Transit: RUH)</span>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 18px; color: rgba(255,255,255,0.5);">route</span>
+                                    <span style="font-size: 12px; color: rgba(255,255,255,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CGK → JED (Transit: RUH)</span>
                                 </div>
                             </div>
                             
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <!-- Passenger Info Section -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span class="material-icons" style="font-size: 16px; color: rgba(255,255,255,0.6);">people</span>
-                                        <span style="font-size: 14px;">Penumpang: 25/60</span>
+                                        <span class="material-icons" style="font-size: 18px; color: rgba(255,255,255,0.6);">people</span>
+                                        <span style="font-size: 14px; font-weight: 500;">25/60 Penumpang</span>
                                     </div>
-                                    <span class="status-badge" style="background: rgba(59, 130, 246, 0.2); color: #93BBFE;">35 kursi tersisa</span>
+                                    <span class="status-badge" style="background: rgba(59, 130, 246, 0.2); color: #93BBFE; padding: 4px 10px; font-size: 11px;">35 tersisa</span>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                    <div style="background: linear-gradient(90deg, #3B82F6, #60A5FA); height: 100%; width: 41.7%;"></div>
+                                    <div style="background: linear-gradient(90deg, #3B82F6, #60A5FA); height: 100%; width: 41.7%; transition: width 0.3s ease;"></div>
                                 </div>
                             </div>
                             
-                            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
-                                    <span class="material-icons" style="font-size: 16px; color: #93BBFE;">schedule</span>
-                                    <span style="font-size: 12px; font-weight: 600; color: #93BBFE;">Jatuh Tempo DP</span>
+                            <!-- Payment Alert Section -->
+                            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                            <span class="material-icons" style="font-size: 18px; color: #93BBFE;">schedule</span>
+                                            <span style="font-size: 12px; font-weight: 600; color: #93BBFE;">Jatuh Tempo DP</span>
+                                        </div>
+                                        <div style="font-size: 13px; color: rgba(255,255,255,0.9);">5 Mar 2025</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 16px; font-weight: 600; color: #93BBFE;">H-40</div>
+                                        <div style="font-size: 12px; color: rgba(255,255,255,0.7);">Rp 150jt</div>
+                                    </div>
                                 </div>
-                                <div style="font-size: 14px; color: #93BBFE;">5 Mar 2025 (H-40)</div>
-                                <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px;">Rp 150,000,000</div>
                             </div>
                             
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 5px;">
-                                    <span>Total: Rp 600,000,000</span>
-                                    <span>Dibayar: 0%</span>
+                            <!-- Payment Progress Section -->
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span style="font-size: 12px; color: rgba(255,255,255,0.6);">Total: Rp 600jt</span>
+                                    <span style="font-size: 12px; color: #EF4444; font-weight: 500;">0% Dibayar</span>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
-                                    <div style="background: linear-gradient(90deg, #EF4444, #F87171); height: 100%; width: 0%;"></div>
+                                    <div style="background: linear-gradient(90deg, #EF4444, #F87171); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
                                 </div>
                             </div>
                             
-                            <div style="display: flex; gap: 10px;">
-                                <button class="btn btn-small btn-secondary" style="flex: 1;" onclick="showPnrDetails(2)">
+                            <!-- Action Buttons -->
+                            <div style="display: flex; gap: 10px; margin-top: auto;">
+                                <button class="btn btn-small btn-secondary" style="flex: 1; padding: 8px 16px;" onclick="showPnrDetails(2)">
+                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">info</span>
                                     Details
                                 </button>
-                                <button class="btn btn-small btn-primary" style="flex: 1;" onclick="assignJamaahToPnr(2)">
-                                    Assign Jamaah
+                                <button class="btn btn-small btn-primary" style="flex: 1; padding: 8px 16px;" onclick="assignJamaahToPnr(2)">
+                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">person_add</span>
+                                    Assign
                                 </button>
                             </div>
                         </div>
                         
                         <!-- PNR Card 3 -->
-                        <div class="card" style="padding: 20px; position: relative;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
-                                <div>
-                                    <h4 style="margin: 0; color: #F59E0B;">PNR: EY456SUB</h4>
-                                    <p style="margin: 5px 0; font-size: 14px; color: rgba(255,255,255,0.7);">Paket VIP April 2025</p>
+                        <div class="card" style="padding: 24px; position: relative; min-height: 380px; display: flex; flex-direction: column;">
+                            <!-- Header Section -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0; color: #F59E0B; font-size: 18px; font-weight: 600;">PNR: EY456SUB</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 13px; color: rgba(255,255,255,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Paket VIP April 2025</p>
                                 </div>
-                                <span class="status-badge status-paid">completed</span>
+                                <span class="status-badge status-paid" style="margin-left: 10px;">completed</span>
                             </div>
                             
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                    <span class="material-icons" style="font-size: 16px; color: rgba(255,255,255,0.6);">flight</span>
-                                    <span style="font-size: 14px;">Etihad Airways</span>
+                            <!-- Flight Info Section -->
+                            <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <span class="material-icons" style="font-size: 18px; color: #F59E0B;">flight</span>
+                                    <span style="font-size: 14px; font-weight: 500;">Etihad Airways</span>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6);">
-                                    <span class="material-icons" style="font-size: 16px;">route</span>
-                                    <span>SUB → AUH → JED → MED</span>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="material-icons" style="font-size: 18px; color: rgba(255,255,255,0.5);">route</span>
+                                    <span style="font-size: 12px; color: rgba(255,255,255,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">SUB → AUH → JED → MED</span>
                                 </div>
                             </div>
                             
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <!-- Passenger Info Section -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                     <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span class="material-icons" style="font-size: 16px; color: rgba(255,255,255,0.6);">people</span>
-                                        <span style="font-size: 14px;">Penumpang: 30/30</span>
+                                        <span class="material-icons" style="font-size: 18px; color: rgba(255,255,255,0.6);">people</span>
+                                        <span style="font-size: 14px; font-weight: 500;">30/30 Penumpang</span>
                                     </div>
-                                    <span class="status-badge status-paid">Full</span>
+                                    <span class="status-badge status-paid" style="padding: 4px 10px; font-size: 11px;">Full</span>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                    <div style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 100%;"></div>
+                                    <div style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 100%; transition: width 0.3s ease;"></div>
                                 </div>
                             </div>
                             
-                            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="material-icons" style="font-size: 16px; color: #6EE7B7;">check_circle</span>
-                                    <span style="font-size: 12px; font-weight: 600; color: #6EE7B7;">Pembayaran Lunas</span>
+                            <!-- Payment Alert Section -->
+                            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 10px; margin-bottom: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                            <span class="material-icons" style="font-size: 18px; color: #6EE7B7;">check_circle</span>
+                                            <span style="font-size: 12px; font-weight: 600; color: #6EE7B7;">Pembayaran Lunas</span>
+                                        </div>
+                                        <div style="font-size: 13px; color: rgba(255,255,255,0.9);">10 Jan 2025</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="material-icons" style="font-size: 24px; color: #6EE7B7;">done_all</span>
+                                    </div>
                                 </div>
-                                <div style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px;">Lunas pada 10 Jan 2025</div>
                             </div>
                             
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 5px;">
-                                    <span>Total: Rp 450,000,000</span>
-                                    <span>Dibayar: 100%</span>
+                            <!-- Payment Progress Section -->
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span style="font-size: 12px; color: rgba(255,255,255,0.6);">Total: Rp 450jt</span>
+                                    <span style="font-size: 12px; color: #10B981; font-weight: 500;">100% Dibayar</span>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
-                                    <div style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 100%;"></div>
+                                    <div style="background: linear-gradient(90deg, #10B981, #34D399); height: 100%; width: 100%; transition: width 0.3s ease;"></div>
                                 </div>
                             </div>
                             
-                            <div style="display: flex; gap: 10px;">
-                                <button class="btn btn-small btn-secondary" style="flex: 1;" onclick="showPnrDetails(3)">
+                            <!-- Action Buttons -->
+                            <div style="display: flex; gap: 10px; margin-top: auto;">
+                                <button class="btn btn-small btn-secondary" style="flex: 1; padding: 8px 16px;" onclick="showPnrDetails(3)">
+                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">info</span>
                                     Details
                                 </button>
-                                <button class="btn btn-small btn-secondary" style="flex: 1;" disabled>
-                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle;">print</span>
+                                <button class="btn btn-small btn-secondary" style="flex: 1; padding: 8px 16px;" onclick="printManifest(3)">
+                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">print</span>
                                     Manifest
                                 </button>
                             </div>
@@ -7917,6 +8000,10 @@
 
         function assignJamaahToPnr(pnrId) {
             alert('Assign jamaah to PNR ID: ' + pnrId + ' - Modal to be implemented');
+        }
+
+        function printManifest(pnrId) {
+            alert('Print manifest for PNR ID: ' + pnrId + ' - Feature to be implemented');
         }
     </script>
 </body>
