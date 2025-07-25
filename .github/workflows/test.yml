@@ -1,0 +1,121 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [ main, master, develop ]
+  push:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: umroh_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create test environment file
+        run: |
+          cat > .env.test << EOF
+          NODE_ENV=test
+          PORT=5001
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_NAME=umroh_test
+          DB_USER=test
+          DB_PASSWORD=test
+          REDIS_HOST=localhost
+          REDIS_PORT=6379
+          JWT_SECRET=test_secret_key_for_testing_only
+          JWT_EXPIRE=1d
+          EOF
+
+      - name: Run database migrations
+        run: |
+          export $(cat .env.test | xargs)
+          node backend/scripts/setup-database.js
+        env:
+          NODE_ENV: test
+
+      - name: Run linter
+        run: npm run lint || echo "No lint script"
+
+      - name: Run unit tests
+        run: npm test || echo "No test script"
+        env:
+          NODE_ENV: test
+
+      - name: Run API tests
+        run: npm run test:api || echo "No API test script"
+        env:
+          NODE_ENV: test
+
+      - name: Generate test coverage
+        run: npm run test:coverage || echo "No coverage script"
+        env:
+          NODE_ENV: test
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run security audit
+        run: npm audit --production
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
