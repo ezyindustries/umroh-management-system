@@ -48,7 +48,8 @@ import {
   Campaign,
   Hotel,
   LocalAirport,
-  Inventory
+  Inventory,
+  Flight
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
@@ -179,6 +180,14 @@ const ModernLayout = () => {
       path: '/inventory',
       roles: ['Admin', 'Marketing', 'Operator Keberangkatan'],
       color: '#7C3AED',
+      badge: 'New'
+    },
+    {
+      text: 'Tiket Penerbangan',
+      icon: <Flight />,
+      path: '/flights',
+      roles: ['Admin', 'Tim Ticketing', 'Operator Keberangkatan'],
+      color: '#F59E0B',
       badge: 'New'
     },
     {
