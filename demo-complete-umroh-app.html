@@ -21,6 +21,11 @@
             padding: 0;
             box-sizing: border-box;
         }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -46,7 +51,11 @@
 
         .app-container {
             display: flex;
-            min-height: 100vh;
+            flex-direction: row;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
         }
 
         /* Sidebar */
@@ -61,6 +70,9 @@
                 inset 0 1px 0 rgba(71, 85, 105, 0.4),
                 0 20px 40px rgba(0, 0, 0, 0.3),
                 0 1px 3px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1000;
+            flex-shrink: 0;
         }
 
         .logo {
@@ -136,6 +148,11 @@
             flex: 1;
             padding: 30px;
             overflow-y: auto;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+            margin-left: 0;
+            isolation: isolate;
         }
 
         .page {
@@ -2900,7 +2917,7 @@
                         <button class="tab-btn" onclick="switchInventoryTab('transactions')">Transaksi</button>
                         <button class="tab-btn" onclick="switchInventoryTab('slayer')">Slayer</button>
                         <button class="tab-btn" onclick="switchInventoryTab('earphone')">Earphone</button>
-                        <button class="tab-btn" onclick="switchInventoryTab('checklist')">Checklist</button>
+                        <button class="tab-btn" onclick="switchInventoryTab('checklist')">Distribusi Jamaah</button>
                         <button class="tab-btn" onclick="switchInventoryTab('recap')">Recap Penjualan</button>
                     </div>
                     
@@ -3009,6 +3026,8 @@
                         </table>
                     </div>
                     
+                        </div>
+                        
                     <!-- Slayer Tab Content -->
                     <div id="inventorySlayerTab" class="tab-content" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -3162,6 +3181,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -4774,11 +4794,62 @@
         let currentGroupRooms = [];
         let selectedAllocationStrategy = 'auto';
 
+        // Debug function to fix layout issues
+        function debugLayout() {
+            console.log('Debugging layout...');
+            
+            // Check all pages
+            const pages = document.querySelectorAll('.page');
+            console.log('Total pages:', pages.length);
+            
+            let activeCount = 0;
+            pages.forEach((page, index) => {
+                if (page.classList.contains('active')) {
+                    console.log('Active page:', page.id);
+                    activeCount++;
+                }
+            });
+            
+            if (activeCount > 1) {
+                console.warn('Multiple active pages detected! Resetting...');
+                pages.forEach((page, index) => {
+                    if (index === 0) {
+                        page.classList.add('active');
+                    } else {
+                        page.classList.remove('active');
+                    }
+                    page.style.display = page.classList.contains('active') ? 'block' : 'none';
+                });
+            }
+            
+            // Check sidebar visibility
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarRect = sidebar.getBoundingClientRect();
+            console.log('Sidebar position:', sidebarRect);
+            
+            const mainContent = document.querySelector('.main-content');
+            const mainRect = mainContent.getBoundingClientRect();
+            console.log('Main content position:', mainRect);
+            
+            // Check for overlaps
+            if (mainRect.left < sidebarRect.right) {
+                console.warn('Content overlapping sidebar!');
+            }
+        }
+        
+        // Run debug on load
+        window.addEventListener('load', () => {
+            setTimeout(debugLayout, 100);
+        });
+
         // Navigation
         function showPage(pageId) {
+            console.log('Showing page:', pageId);
+            
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
+                page.style.display = 'none'; // Force hide
             });
             
             // Remove active class from all nav items
@@ -4787,10 +4858,21 @@
             });
             
             // Show selected page
-            document.getElementById(pageId).classList.add('active');
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                selectedPage.style.display = 'block'; // Force show
+            } else {
+                console.error('Page not found:', pageId);
+            }
             
-            // Add active class to clicked nav item
-            event.target.closest('.nav-item').classList.add('active');
+            // Scroll to top of main content
+            document.querySelector('.main-content').scrollTop = 0;
+            
+            // Add active class to clicked nav item - handle both direct clicks and child element clicks
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
             
             // Load page specific data
             loadPageData(pageId);

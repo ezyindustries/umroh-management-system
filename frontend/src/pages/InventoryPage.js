@@ -43,7 +43,12 @@ import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   Print as PrintIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
+  Palette as PaletteIcon,
+  Headphones as HeadphonesIcon,
+  Receipt as ReceiptIcon,
+  Timeline as TimelineIcon,
+  SwapHoriz as SwapHorizIcon
 } from '@mui/icons-material';
 import axios from 'axios';
 
@@ -586,8 +591,10 @@ const InventoryPage = () => {
         </TabPanel>
 
         <TabPanel value={tabValue} index={2}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">Manajemen Warna Slayer</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+            <Typography variant="h5" sx={{ fontWeight: 600, color: '#1e293b' }}>
+              Manajemen Warna Slayer
+            </Typography>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
