@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Jamaah - Umroh Management</title>
+    
+    <!-- Only load necessary resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="shared/css/base.css" rel="stylesheet">
+    
+    <style>
+        /* App Header */
+        .app-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .app-title .material-icons {
+            font-size: 28px;
+            color: #10b981;
+        }
+        
+        /* Search and Filter Bar */
+        .toolbar {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .search-box .material-icons {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        /* Data Table */
+        .data-table {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+        
+        .btn-icon .material-icons {
+            font-size: 18px;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+            
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">
+                <span class="material-icons">people</span>
+                Manajemen Jamaah
+            </h1>
+            
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-sm" style="background: rgba(71, 85, 105, 0.3);">
+                    <span class="material-icons">arrow_back</span>
+                    Kembali
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 30px;">
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">1,285</div>
+                <div class="stat-label">Total Jamaah</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">847</div>
+                <div class="stat-label">Sudah Berangkat</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">438</div>
+                <div class="stat-label">Dalam Proses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">18</div>
+                <div class="stat-label">Paket Aktif</div>
+            </div>
+        </div>
+        
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="material-icons">search</span>
+                <input type="text" class="search-input" placeholder="Cari nama, NIK, atau nomor paspor..." id="searchInput">
+            </div>
+            
+            <select class="form-control" style="width: 200px;">
+                <option value="">Semua Paket</option>
+                <option value="1">Ramadhan Plus 2025</option>
+                <option value="2">Eksekutif Maret 2025</option>
+                <option value="3">Premium April 2025</option>
+            </select>
+            
+            <button class="btn btn-success">
+                <span class="material-icons">add</span>
+                Tambah Jamaah
+            </button>
+            
+            <button class="btn btn-primary">
+                <span class="material-icons">upload</span>
+                Import Excel
+            </button>
+        </div>
+        
+        <!-- Data Table -->
+        <div class="data-table">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIK</th>
+                            <th>Nama</th>
+                            <th>No. Paspor</th>
+                            <th>Paket</th>
+                            <th>No. HP</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-container">
+                <div class="spinner"></div>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-icon">
+                    <span class="material-icons">person_off</span>
+                </div>
+                <div class="empty-title">Tidak ada data jamaah</div>
+                <div class="empty-desc">Mulai dengan menambah jamaah baru atau import dari Excel</div>
+                <button class="btn btn-primary">
+                    <span class="material-icons">add</span>
+                    Tambah Jamaah Pertama
+                </button>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <div style="color: var(--text-secondary); font-size: 14px;">
+                Menampilkan <span id="showingFrom">1</span>-<span id="showingTo">10</span> dari <span id="totalData">1,285</span> data
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-sm" style="background: rgba(71, 85, 105, 0.3);" onclick="previousPage()">
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                <button class="btn btn-sm btn-primary">1</button>
+                <button class="btn btn-sm" style="background: rgba(71, 85, 105, 0.3);">2</button>
+                <button class="btn btn-sm" style="background: rgba(71, 85, 105, 0.3);">3</button>
+                <button class="btn btn-sm" style="background: rgba(71, 85, 105, 0.3);" onclick="nextPage()">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="shared/js/utils.js"></script>
+    <script>
+        // Sample data
+        const sampleData = [
+            { id: 1, nik: '3175012101700001', name: 'H. Ahmad Fauzi', passport: 'A1234567', package: 'Ramadhan Plus', phone: '081234567890', status: 'active' },
+            { id: 2, nik: '3175012101700002', name: 'Hj. Siti Fatimah', passport: 'B2345678', package: 'Eksekutif', phone: '081234567891', status: 'active' },
+            { id: 3, nik: '3175012101700003', name: 'M. Rizki Pratama', passport: 'C3456789', package: 'Premium', phone: '081234567892', status: 'pending' },
+            { id: 4, nik: '3175012101700004', name: 'Hj. Aminah', passport: 'D4567890', package: 'Ramadhan Plus', phone: '081234567893', status: 'active' },
+            { id: 5, nik: '3175012101700005', name: 'H. Abdullah', passport: 'E5678901', package: 'Premium', phone: '081234567894', status: 'active' },
+        ];
+        
+        // Load data
+        function loadData() {
+            const tbody = document.getElementById('dataTable');
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Simulate loading
+            setTimeout(() => {
+                loadingState.style.display = 'none';
+                
+                if (sampleData.length === 0) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                tbody.innerHTML = sampleData.map((item, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.nik}</td>
+                        <td><strong>${item.name}</strong></td>
+                        <td>${item.passport}</td>
+                        <td>${item.package}</td>
+                        <td>${item.phone}</td>
+                        <td>
+                            <span class="status-badge status-${item.status}">
+                                ${item.status === 'active' ? 'Aktif' : 'Pending'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-icon btn-primary" title="View">
+                                    <span class="material-icons">visibility</span>
+                                </button>
+                                <button class="btn btn-icon btn-warning" title="Edit">
+                                    <span class="material-icons">edit</span>
+                                </button>
+                                <button class="btn btn-icon btn-danger" title="Delete">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }, 1000);
+        }
+        
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', debounce(function(e) {
+            console.log('Searching:', e.target.value);
+            // Implement search logic
+        }, 300));
+        
+        // Pagination
+        function previousPage() {
+            console.log('Previous page');
+        }
+        
+        function nextPage() {
+            console.log('Next page');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+        });
+    </script>
+</body>
+</html>

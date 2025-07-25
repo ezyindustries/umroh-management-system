@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{APP_TITLE}} - Umroh Management</title>
+    
+    <!-- Only load necessary resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="shared/css/base.css" rel="stylesheet">
+    
+    <style>
+        /* App-specific minimal header */
+        .app-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .app-title .material-icons {
+            font-size: 28px;
+            color: {{ICON_COLOR}};
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            background: rgba(71, 85, 105, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(71, 85, 105, 0.5);
+            color: var(--text-primary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .main-content {
+            padding: 30px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(71, 85, 105, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .empty-icon .material-icons {
+            font-size: 40px;
+            color: var(--text-muted);
+        }
+        
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .empty-desc {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 18px;
+            }
+            
+            .app-title .material-icons {
+                font-size: 24px;
+            }
+            
+            .header-actions {
+                gap: 8px;
+            }
+            
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
+    
+    <!-- App specific styles -->
+    {{APP_STYLES}}
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1 class="app-title">
+                <span class="material-icons">{{APP_ICON}}</span>
+                {{APP_TITLE}}
+            </h1>
+            
+            <div class="header-actions">
+                <div class="user-info">
+                    <span class="material-icons">person</span>
+                    <span id="userName">Loading...</span>
+                </div>
+                <a href="index.html" class="back-btn">
+                    <span class="material-icons">arrow_back</span>
+                    Kembali ke Portal
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        {{APP_CONTENT}}
+    </main>
+    
+    <!-- Shared Scripts -->
+    <script src="shared/js/utils.js"></script>
+    
+    <!-- App Initialization -->
+    <script>
+        // Set user info
+        document.addEventListener('DOMContentLoaded', function() {
+            const userName = storage.get('userName') || 'Guest User';
+            document.getElementById('userName').textContent = userName;
+            
+            // Initialize app
+            if (typeof initApp === 'function') {
+                initApp();
+            }
+        });
+        
+        // Handle errors
+        window.addEventListener('error', function(e) {
+            console.error('App Error:', e);
+            showToast('Terjadi kesalahan. Silakan coba lagi.', 'error');
+        });
+    </script>
+    
+    <!-- App specific scripts -->
+    {{APP_SCRIPTS}}
+</body>
+</html>

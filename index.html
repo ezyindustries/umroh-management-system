@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umroh Management System - Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .portal-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .portal-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .portal-logo {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #10b981, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+        }
+        
+        .portal-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .app-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.8));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .app-card:hover::before {
+            opacity: 1;
+        }
+        
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            font-size: 40px;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+        }
+        
+        .app-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+        
+        .app-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* Icon Colors */
+        .icon-primary { background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1)); color: #3b82f6; }
+        .icon-success { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)); color: #10b981; }
+        .icon-warning { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1)); color: #f59e0b; }
+        .icon-danger { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1)); color: #ef4444; }
+        .icon-info { background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(8, 145, 178, 0.1)); color: #06b6d4; }
+        .icon-purple { background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.1)); color: #8b5cf6; }
+        
+        /* Badge Colors */
+        .badge-new { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .badge-beta { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+        .badge-pro { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        .system-info {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .info-item {
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        @media (max-width: 768px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .portal-logo {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <div class="portal-header">
+            <h1 class="portal-logo">Umroh Management System</h1>
+            <p class="portal-subtitle">Pilih aplikasi yang ingin Anda akses</p>
+        </div>
+        
+        <div class="system-info">
+            <div class="info-item">
+                <div class="info-label">Total Jamaah</div>
+                <div class="info-value">1,285</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Paket Aktif</div>
+                <div class="info-value">18</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">User Online</div>
+                <div class="info-value">7</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Server Status</div>
+                <div class="info-value" style="color: #10b981;">Online</div>
+            </div>
+        </div>
+        
+        <div class="apps-grid">
+            <!-- Dashboard -->
+            <a href="dashboard-app.html" class="app-card">
+                <div class="app-icon icon-primary">
+                    <span class="material-icons">dashboard</span>
+                </div>
+                <h3 class="app-title">Dashboard</h3>
+                <p class="app-description">Overview statistik dan monitoring real-time sistem umroh</p>
+            </a>
+            
+            <!-- Manajemen Jamaah -->
+            <a href="jamaah-app.html" class="app-card">
+                <div class="app-icon icon-success">
+                    <span class="material-icons">people</span>
+                </div>
+                <h3 class="app-title">Manajemen Jamaah</h3>
+                <p class="app-description">Input, edit, dan kelola data jamaah umroh</p>
+            </a>
+            
+            <!-- Pembayaran -->
+            <a href="payment-app.html" class="app-card">
+                <div class="app-icon icon-warning">
+                    <span class="material-icons">payment</span>
+                </div>
+                <h3 class="app-title">Pembayaran</h3>
+                <p class="app-description">Kelola pembayaran, cicilan, dan status keuangan jamaah</p>
+            </a>
+            
+            <!-- Tiket Penerbangan -->
+            <a href="flight-management.html" class="app-card">
+                <span class="app-badge badge-new">New</span>
+                <div class="app-icon icon-danger">
+                    <span class="material-icons">flight</span>
+                </div>
+                <h3 class="app-title">Tiket Penerbangan</h3>
+                <p class="app-description">Manajemen PNR, jadwal penerbangan, dan seat allocation</p>
+            </a>
+            
+            <!-- Hotel -->
+            <a href="hotel-app.html" class="app-card">
+                <span class="app-badge badge-new">New</span>
+                <div class="app-icon icon-info">
+                    <span class="material-icons">hotel</span>
+                </div>
+                <h3 class="app-title">Hotel</h3>
+                <p class="app-description">Atur kamar hotel, rooming list, dan fasilitas penginapan</p>
+            </a>
+            
+            <!-- Dokumen -->
+            <a href="document-app.html" class="app-card">
+                <div class="app-icon icon-purple">
+                    <span class="material-icons">description</span>
+                </div>
+                <h3 class="app-title">Dokumen</h3>
+                <p class="app-description">Upload dan kelola dokumen paspor, visa, dan persyaratan</p>
+            </a>
+            
+            <!-- Laporan -->
+            <a href="reports-management.html" class="app-card">
+                <div class="app-icon icon-primary">
+                    <span class="material-icons">assessment</span>
+                </div>
+                <h3 class="app-title">Laporan & Analytics</h3>
+                <p class="app-description">Generate laporan dan analisis data operasional</p>
+            </a>
+            
+            <!-- Excel Import/Export -->
+            <a href="excel-management.html" class="app-card">
+                <div class="app-icon icon-success">
+                    <span class="material-icons">table_chart</span>
+                </div>
+                <h3 class="app-title">Excel Import/Export</h3>
+                <p class="app-description">Import data massal dan export laporan ke Excel</p>
+            </a>
+            
+            <!-- Inventory -->
+            <a href="inventory-app.html" class="app-card">
+                <span class="app-badge badge-beta">Beta</span>
+                <div class="app-icon icon-warning">
+                    <span class="material-icons">inventory</span>
+                </div>
+                <h3 class="app-title">Perlengkapan</h3>
+                <p class="app-description">Kelola stok dan distribusi perlengkapan jamaah</p>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 Umroh Management System. All rights reserved.</p>
+            <p style="margin-top: 8px; font-size: 12px;">Version 1.0.0 | Last updated: January 2025</p>
+        </div>
+    </div>
+    
+    <script>
+        // Add ripple effect on click
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                ripple.style.width = ripple.style.height = '10px';
+                ripple.style.left = e.clientX - this.offsetLeft - 5 + 'px';
+                ripple.style.top = e.clientY - this.offsetTop - 5 + 'px';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                ripple.style.pointerEvents = 'none';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+        
+        // Animation keyframe
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    width: 200px;
+                    height: 200px;
+                    opacity: 0;
+                    margin-left: -95px;
+                    margin-top: -95px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Log access for monitoring
+        console.log('Portal accessed at:', new Date().toISOString());
+    </script>
+</body>
+</html>

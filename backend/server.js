@@ -5,30 +5,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const morgan = require('morgan');
 require('dotenv').config();
 
 const { setupDatabase } = require('./config/database');
-const { setupLogging } = require('./config/logging');
-const securityConfig = require('./config/security');
-const performanceService = require('./services/performanceService');
-const monitoringService = require('./services/monitoringService');
-const websocketService = require('./services/websocketService');
-const notificationService = require('./services/notificationService');
-const { errorHandler } = require('./middleware/errorHandler');
-const { auditLogger } = require('./middleware/auditLogger');
-const { 
-  helmetConfig, 
-  securityHeaders, 
-  validateRequest, 
-  sanitizeInput 
-} = require('./middleware/securityMiddleware');
-const {
-  requestTimer,
-  optimizeDatabase,
-  memoryMonitor,
-  optimizeQueryParams,
-  collectMetrics
-} = require('./middleware/performanceMiddleware');
+const { authMiddleware } = require('./middleware/auth');
 
 // Import routes
 const authRoutes = require('./routes/auth');
