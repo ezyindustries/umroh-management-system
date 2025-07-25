@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Tiket Penerbangan - Umroh Management</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.8));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #F59E0B, #F97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header .material-icons {
+            font-size: 36px;
+            color: #F59E0B;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .pnr-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.8));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(71, 85, 105, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pnr-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(71, 85, 105, 0.4);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        .pnr-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .pnr-title {
+            flex: 1;
+        }
+        
+        .pnr-code {
+            font-size: 18px;
+            font-weight: 600;
+            color: #F59E0B;
+            margin-bottom: 4px;
+        }
+        
+        .package-name {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        
+        .status-ticketed {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .status-booked {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .status-draft {
+            background: linear-gradient(135deg, #64748b, #475569);
+            color: white;
+        }
+        
+        .pnr-section {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+        }
+        
+        .pnr-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .section-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .section-item .material-icons {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .section-item span {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .route-info {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .passenger-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(71, 85, 105, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .payment-alert {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .payment-alert.overdue {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        .payment-date {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .payment-amount {
+            font-size: 14px;
+            font-weight: 600;
+            color: #F59E0B;
+        }
+        
+        .payment-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .card-actions .btn {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+        
+        .remaining-badge {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #F59E0B;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.9));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+        }
+        
+        .modal-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F59E0B;
+        }
+        
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3b82f6;
+            margin: 25px 0 15px 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+        }
+        
+        .section-title:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span class="material-icons">flight</span>
+                Manajemen Tiket Penerbangan
+            </h1>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
+                Kelola PNR, jadwal penerbangan, dan penugasan jamaah
+            </p>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+                <span class="material-icons">add</span>
+                Buat PNR Baru
+            </button>
+        </div>
+        
+        <!-- PNR Cards Grid -->
+        <div class="cards-grid">
+            <!-- PNR Card 1 -->
+            <div class="pnr-card">
+                <div class="pnr-header">
+                    <div class="pnr-title">
+                        <div class="pnr-code">PNR: GA897JKT</div>
+                        <div class="package-name">Paket Ramadhan Plus 2025</div>
+                    </div>
+                    <span class="status-badge status-ticketed">ticketed</span>
+                </div>
+                
+                <!-- Flight Info -->
+                <div class="pnr-section">
+                    <div class="section-item">
+                        <span class="material-icons">flight_takeoff</span>
+                        <span>Garuda Indonesia</span>
+                    </div>
+                    <div class="section-item">
+                        <span class="material-icons">route</span>
+                        <span class="route-info" title="Jakarta (CGK) → Jeddah (JED) → Madinah (MED)">
+                            Jakarta (CGK) → Jeddah (JED) → Madinah (MED)
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Passenger Info -->
+                <div class="pnr-section">
+                    <div class="passenger-info">
+                        <div class="section-item">
+                            <span class="material-icons">people</span>
+                            <span>Penumpang: 40/45</span>
+                        </div>
+                        <span class="remaining-badge">5 kursi tersisa</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 89%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Payment Info -->
+                <div class="pnr-section">
+                    <div class="payment-alert">
+                        <div class="payment-date">Jatuh tempo: 15 Jan 2025 (H-7)</div>
+                        <div class="payment-amount">Rp 15.000.000</div>
+                    </div>
+                    <div class="payment-progress">
+                        <span>Total: Rp 450.000.000</span>
+                        <span>Terbayar: 78%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="viewDetails('GA897JKT')">
+                        Details
+                    </button>
+                    <button class="btn btn-success" onclick="assignJamaah('GA897JKT')">
+                        Assign Jamaah
+                    </button>
+                </div>
+            </div>
+            
+            <!-- PNR Card 2 -->
+            <div class="pnr-card">
+                <div class="pnr-header">
+                    <div class="pnr-title">
+                        <div class="pnr-code">PNR: SV2024MED</div>
+                        <div class="package-name">Paket Eksekutif Maret 2025</div>
+                    </div>
+                    <span class="status-badge status-booked">booked</span>
+                </div>
+                
+                <!-- Flight Info -->
+                <div class="pnr-section">
+                    <div class="section-item">
+                        <span class="material-icons">flight_takeoff</span>
+                        <span>Saudi Airlines</span>
+                    </div>
+                    <div class="section-item">
+                        <span class="material-icons">route</span>
+                        <span class="route-info" title="Jakarta (CGK) → Riyadh (RUH) → Jeddah (JED)">
+                            Jakarta (CGK) → Riyadh (RUH) → Jeddah (JED)
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Passenger Info -->
+                <div class="pnr-section">
+                    <div class="passenger-info">
+                        <div class="section-item">
+                            <span class="material-icons">people</span>
+                            <span>Penumpang: 30/30</span>
+                        </div>
+                        <span class="status-badge status-ticketed">Full</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Payment Info -->
+                <div class="pnr-section">
+                    <div class="payment-alert overdue">
+                        <div class="payment-date">Jatuh tempo: 5 Jan 2025 (Terlambat 3 hari)</div>
+                        <div class="payment-amount">Rp 25.000.000</div>
+                    </div>
+                    <div class="payment-progress">
+                        <span>Total: Rp 600.000.000</span>
+                        <span>Terbayar: 85%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="viewDetails('SV2024MED')">
+                        Details
+                    </button>
+                    <button class="btn btn-warning" onclick="managePayment('SV2024MED')">
+                        Kelola Pembayaran
+                    </button>
+                </div>
+            </div>
+            
+            <!-- PNR Card 3 -->
+            <div class="pnr-card">
+                <div class="pnr-header">
+                    <div class="pnr-title">
+                        <div class="pnr-code">PNR: EK2025DXB</div>
+                        <div class="package-name">Paket Premium April 2025</div>
+                    </div>
+                    <span class="status-badge status-draft">draft</span>
+                </div>
+                
+                <!-- Flight Info -->
+                <div class="pnr-section">
+                    <div class="section-item">
+                        <span class="material-icons">flight_takeoff</span>
+                        <span>Emirates</span>
+                    </div>
+                    <div class="section-item">
+                        <span class="material-icons">route</span>
+                        <span class="route-info" title="Jakarta (CGK) → Dubai (DXB) → Madinah (MED)">
+                            Jakarta (CGK) → Dubai (DXB) → Madinah (MED)
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Passenger Info -->
+                <div class="pnr-section">
+                    <div class="passenger-info">
+                        <div class="section-item">
+                            <span class="material-icons">people</span>
+                            <span>Penumpang: 15/50</span>
+                        </div>
+                        <span class="remaining-badge">35 kursi tersisa</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Payment Info -->
+                <div class="pnr-section">
+                    <div class="payment-alert">
+                        <div class="payment-date">Jatuh tempo: 30 Jan 2025 (H-22)</div>
+                        <div class="payment-amount">Rp 30.000.000</div>
+                    </div>
+                    <div class="payment-progress">
+                        <span>Total: Rp 750.000.000</span>
+                        <span>Terbayar: 40%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="viewDetails('EK2025DXB')">
+                        Details
+                    </button>
+                    <button class="btn btn-success" onclick="assignJamaah('EK2025DXB')">
+                        Assign Jamaah
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create PNR Modal -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Buat PNR Baru</h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            
+            <form id="pnrForm">
+                <!-- Basic Info -->
+                <div class="section-title">Informasi Dasar</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kode PNR</label>
+                        <input type="text" class="form-control" placeholder="Contoh: GA897JKT" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Paket Umroh</label>
+                        <select class="form-control" required>
+                            <option value="">Pilih Paket</option>
+                            <option value="1">Paket Ramadhan Plus 2025</option>
+                            <option value="2">Paket Eksekutif Maret 2025</option>
+                            <option value="3">Paket Premium April 2025</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Maskapai</label>
+                        <select class="form-control" required>
+                            <option value="">Pilih Maskapai</option>
+                            <option value="garuda">Garuda Indonesia</option>
+                            <option value="saudi">Saudi Airlines</option>
+                            <option value="emirates">Emirates</option>
+                            <option value="etihad">Etihad Airways</option>
+                            <option value="qatar">Qatar Airways</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Kursi</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 45" required>
+                    </div>
+                </div>
+                
+                <!-- Flight Route -->
+                <div class="section-title">Rute Penerbangan</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>No. Penerbangan</label>
+                        <input type="text" class="form-control" placeholder="Contoh: GA897">
+                    </div>
+                    <div class="form-group">
+                        <label>Kota Keberangkatan</label>
+                        <input type="text" class="form-control" placeholder="Jakarta">
+                    </div>
+                    <div class="form-group">
+                        <label>Bandara (Kode)</label>
+                        <input type="text" class="form-control" placeholder="CGK">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tanggal Berangkat</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Jam Berangkat</label>
+                        <input type="time" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kota Tujuan</label>
+                        <input type="text" class="form-control" placeholder="Jeddah">
+                    </div>
+                    <div class="form-group">
+                        <label>Bandara (Kode)</label>
+                        <input type="text" class="form-control" placeholder="JED">
+                    </div>
+                </div>
+                
+                <!-- Payment Schedule -->
+                <div class="section-title">Jadwal Pembayaran</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipe Pembayaran</label>
+                        <select class="form-control">
+                            <option value="deposit">DP (Down Payment)</option>
+                            <option value="installment">Termin</option>
+                            <option value="final">Pelunasan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 15000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Jatuh Tempo</label>
+                        <input type="date" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Simpan PNR
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Functions
+        function openCreateModal() {
+            document.getElementById('createModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('createModal').classList.remove('active');
+        }
+        
+        function viewDetails(pnrCode) {
+            alert('Melihat detail PNR: ' + pnrCode);
+        }
+        
+        function assignJamaah(pnrCode) {
+            alert('Assign jamaah untuk PNR: ' + pnrCode);
+        }
+        
+        function managePayment(pnrCode) {
+            alert('Kelola pembayaran untuk PNR: ' + pnrCode);
+        }
+        
+        // Form submission
+        document.getElementById('pnrForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('PNR berhasil dibuat!');
+            closeModal();
+        });
+        
+        // Close modal when clicking outside
+        document.getElementById('createModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

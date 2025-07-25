@@ -261,6 +261,8 @@
             display: block !important;
             opacity: 1 !important;
             visibility: visible !important;
+            background: rgba(30, 41, 59, 0.9) !important;
+            color: white !important;
         }
         
         #flights .cards-grid,
@@ -269,6 +271,13 @@
             display: grid !important;
             opacity: 1 !important;
             visibility: visible !important;
+        }
+        
+        /* Ensure text is visible */
+        #flights *,
+        #reports *,
+        #excel * {
+            color: inherit;
         }
         
         .card {
