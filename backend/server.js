@@ -51,6 +51,7 @@ const notificationsRoutes = require('./routes/notifications');
 const marketingRoutes = require('./routes/marketing');
 const hotelsRoutes = require('./routes/hotels');
 const inventoryRoutes = require('./routes/inventory');
+const equipmentDistributionRoutes = require('./routes/equipmentDistribution');
 const flightsRoutes = require('./routes/flights');
 const groundHandlingRoutes = require('./routes/groundHandling');
 
@@ -155,6 +156,7 @@ app.use('/api/notifications', notificationsRoutes);
 app.use('/api/marketing', marketingRoutes);
 app.use('/api/hotels', hotelsRoutes);
 app.use('/api/inventory', inventoryRoutes);
+app.use('/api/equipment-distribution', equipmentDistributionRoutes);
 app.use('/api/flights', flightsRoutes);
 app.use('/api/ground-handling', groundHandlingRoutes);
 

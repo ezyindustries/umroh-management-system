@@ -38,7 +38,12 @@ import {
   LocalShipping as LocalShippingIcon,
   Assignment as AssignmentIcon,
   AttachMoney as AttachMoneyIcon,
-  Edit as EditIcon
+  Edit as EditIcon,
+  People as PeopleIcon,
+  CheckCircle as CheckCircleIcon,
+  Cancel as CancelIcon,
+  Print as PrintIcon,
+  Search as SearchIcon
 } from '@mui/icons-material';
 import axios from 'axios';
 
@@ -60,6 +65,10 @@ const InventoryPage = () => {
   const [earphoneMappings, setEarphoneMappings] = useState([]);
   const [salesRecap, setSalesRecap] = useState([]);
   const [groups, setGroups] = useState([]);
+  const [distributions, setDistributions] = useState([]);
+  const [checklistTemplate, setChecklistTemplate] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState('');
+  const [distributionSearch, setDistributionSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -69,6 +78,8 @@ const InventoryPage = () => {
   const [openTransaction, setOpenTransaction] = useState(false);
   const [openSlayerColor, setOpenSlayerColor] = useState(false);
   const [openEarphoneMapping, setOpenEarphoneMapping] = useState(false);
+  const [openDistributionDialog, setOpenDistributionDialog] = useState(false);
+  const [selectedJamaah, setSelectedJamaah] = useState(null);
 
   // Form states
   const [newItem, setNewItem] = useState({
@@ -127,14 +138,15 @@ const InventoryPage = () => {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const [itemsRes, alertsRes, transRes, slayerRes, earphoneRes, salesRes, groupsRes] = await Promise.all([
+      const [itemsRes, alertsRes, transRes, slayerRes, earphoneRes, salesRes, groupsRes, templateRes] = await Promise.all([
         axios.get('/api/inventory/items', config),
         axios.get('/api/inventory/alerts', config),
         axios.get('/api/inventory/transactions?limit=50', config),
         axios.get('/api/inventory/slayer-colors', config),
         axios.get('/api/inventory/earphone-mappings', config),
         axios.get('/api/inventory/sales-recap', config),
-        axios.get('/api/groups', config).catch(() => ({ data: [] }))
+        axios.get('/api/groups', config).catch(() => ({ data: [] })),
+        axios.get('/api/equipment-distribution/template', config).catch(() => ({ data: [] }))
       ]);
 
       setItems(itemsRes.data);
@@ -144,6 +156,7 @@ const InventoryPage = () => {
       setEarphoneMappings(earphoneRes.data);
       setSalesRecap(salesRes.data);
       setGroups(groupsRes.data || []);
+      setChecklistTemplate(templateRes.data || []);
     } catch (error) {
       setError('Gagal memuat data inventory');
       console.error(error);
@@ -258,6 +271,82 @@ const InventoryPage = () => {
       case 'in': return 'success';
       case 'out': return 'error';
       case 'adjustment': return 'warning';
+      default: return 'default';
+    }
+  };
+
+  const loadDistributions = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const params = new URLSearchParams();
+      if (selectedGroup) params.append('group_id', selectedGroup);
+      if (distributionSearch) params.append('search', distributionSearch);
+      
+      const response = await axios.get(`/api/equipment-distribution/distributions?${params}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setDistributions(response.data);
+    } catch (error) {
+      setError('Gagal memuat data distribusi');
+    }
+  };
+
+  const handleOpenDistribution = async (jamaah) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`/api/equipment-distribution/distributions/jamaah/${jamaah.jamaah_id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setSelectedJamaah({
+        ...jamaah,
+        distribution: response.data,
+        selectedItems: response.data.items || []
+      });
+      setOpenDistributionDialog(true);
+    } catch (error) {
+      setError('Gagal memuat detail distribusi');
+    }
+  };
+
+  const handleSaveDistribution = async (items) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post('/api/equipment-distribution/distributions', {
+        jamaah_id: selectedJamaah.jamaah_id,
+        group_id: selectedJamaah.group_id || selectedGroup,
+        items
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setSuccess('Distribusi perlengkapan berhasil disimpan');
+      setOpenDistributionDialog(false);
+      loadDistributions();
+    } catch (error) {
+      setError('Gagal menyimpan distribusi');
+    }
+  };
+
+  const handlePrintReceipt = async (distributionId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`/api/equipment-distribution/receipt/${distributionId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Implement print functionality
+      window.print();
+    } catch (error) {
+      setError('Gagal mencetak bukti');
+    }
+  };
+
+  const getDistributionStatusColor = (status) => {
+    switch (status) {
+      case 'complete': return 'success';
+      case 'partial': return 'warning';
+      case 'pending': return 'error';
       default: return 'default';
     }
   };
@@ -378,7 +467,7 @@ const InventoryPage = () => {
           <Tab label="Transaksi" />
           <Tab label="Slayer" />
           <Tab label="Earphone" />
-          <Tab label="Checklist" />
+          <Tab label="Distribusi Jamaah" />
           <Tab label="Recap Penjualan" />
         </Tabs>
 
@@ -585,12 +674,119 @@ const InventoryPage = () => {
         </TabPanel>
 
         <TabPanel value={tabValue} index={4}>
-          <Typography variant="h6" gutterBottom>
-            Checklist Perlengkapan
-          </Typography>
-          <Typography color="textSecondary">
-            Fitur checklist perlengkapan jamaah dan TL akan tersedia di halaman detail grup keberangkatan
-          </Typography>
+          <Box>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+              <Typography variant="h6">Distribusi Perlengkapan Jamaah</Typography>
+              <Box display="flex" gap={2}>
+                <FormControl size="small" sx={{ minWidth: 200 }}>
+                  <InputLabel>Filter Grup</InputLabel>
+                  <Select
+                    value={selectedGroup}
+                    onChange={(e) => {
+                      setSelectedGroup(e.target.value);
+                      loadDistributions();
+                    }}
+                    label="Filter Grup"
+                  >
+                    <MenuItem value="">Semua Grup</MenuItem>
+                    {groups.map(group => (
+                      <MenuItem key={group.id} value={group.id}>
+                        {group.name} - {new Date(group.departure_date).toLocaleDateString('id-ID')}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <TextField
+                  size="small"
+                  placeholder="Cari jamaah..."
+                  value={distributionSearch}
+                  onChange={(e) => setDistributionSearch(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && loadDistributions()}
+                  InputProps={{
+                    startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                  }}
+                />
+                <Button variant="contained" onClick={loadDistributions}>
+                  Cari
+                </Button>
+              </Box>
+            </Box>
+
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Nama Jamaah</TableCell>
+                    <TableCell>NIK</TableCell>
+                    <TableCell>No. HP</TableCell>
+                    <TableCell>Grup</TableCell>
+                    <TableCell>Item Diterima</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Aksi</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {distributions.map((dist) => (
+                    <TableRow key={dist.jamaah_id}>
+                      <TableCell>{dist.jamaah_name}</TableCell>
+                      <TableCell>{dist.nik}</TableCell>
+                      <TableCell>{dist.phone}</TableCell>
+                      <TableCell>{dist.group_name}</TableCell>
+                      <TableCell>
+                        {dist.items_received > 0 ? (
+                          <Box>
+                            <Typography variant="body2">{dist.items_received} item</Typography>
+                            <Typography variant="caption" color="textSecondary">
+                              {dist.items_list}
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <Typography variant="body2" color="textSecondary">-</Typography>
+                        )}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Chip 
+                          label={dist.status_text} 
+                          color={getDistributionStatusColor(dist.distribution_status || 'pending')}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell align="center">
+                        <Box display="flex" gap={1} justifyContent="center">
+                          <Button 
+                            size="small" 
+                            variant="outlined"
+                            onClick={() => handleOpenDistribution(dist)}
+                          >
+                            {dist.distribution_id ? 'Edit' : 'Catat'}
+                          </Button>
+                          {dist.distribution_id && (
+                            <IconButton 
+                              size="small"
+                              color="primary"
+                              onClick={() => handlePrintReceipt(dist.distribution_id)}
+                            >
+                              <PrintIcon fontSize="small" />
+                            </IconButton>
+                          )}
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            {distributions.length === 0 && (
+              <Box textAlign="center" py={4}>
+                <Typography color="textSecondary">
+                  {selectedGroup || distributionSearch 
+                    ? 'Tidak ada data yang ditemukan' 
+                    : 'Pilih grup untuk melihat data jamaah'}
+                </Typography>
+              </Box>
+            )}
+          </Box>
         </TabPanel>
 
         <TabPanel value={tabValue} index={5}>
@@ -906,7 +1102,193 @@ const InventoryPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Equipment Distribution Dialog */}
+      <EquipmentDistributionDialog
+        open={openDistributionDialog}
+        onClose={() => setOpenDistributionDialog(false)}
+        jamaah={selectedJamaah}
+        items={items}
+        checklistTemplate={checklistTemplate}
+        onSave={handleSaveDistribution}
+      />
     </Box>
+  );
+};
+
+// Equipment Distribution Dialog Component
+const EquipmentDistributionDialog = ({ open, onClose, jamaah, items, checklistTemplate, onSave }) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (jamaah?.distribution?.items) {
+      setSelectedItems(jamaah.distribution.items.map(item => ({
+        ...item,
+        selected: true
+      })));
+    } else if (checklistTemplate) {
+      setSelectedItems(checklistTemplate.map(template => ({
+        item_id: template.item_id,
+        item_name: template.item_name,
+        category: template.category,
+        quantity: template.quantity,
+        selected: template.is_required,
+        size: '',
+        color: '',
+        serial_number: ''
+      })));
+    }
+  }, [jamaah, checklistTemplate]);
+
+  const handleToggleItem = (itemId) => {
+    setSelectedItems(prev => prev.map(item => 
+      item.item_id === itemId ? { ...item, selected: !item.selected } : item
+    ));
+  };
+
+  const handleUpdateItem = (itemId, field, value) => {
+    setSelectedItems(prev => prev.map(item => 
+      item.item_id === itemId ? { ...item, [field]: value } : item
+    ));
+  };
+
+  const handleSave = async () => {
+    const itemsToSave = selectedItems
+      .filter(item => item.selected)
+      .map(({ item_id, quantity, size, color, serial_number, notes }) => ({
+        item_id,
+        quantity: quantity || 1,
+        size,
+        color,
+        serial_number,
+        notes,
+        received_date: new Date().toISOString()
+      }));
+
+    onSave(itemsToSave);
+  };
+
+  if (!jamaah) return null;
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="h6">
+            Distribusi Perlengkapan - {jamaah.jamaah_name}
+          </Typography>
+          <IconButton onClick={onClose}>
+            <CancelIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body2" color="textSecondary">
+            NIK: {jamaah.nik} | HP: {jamaah.phone} | Grup: {jamaah.group_name}
+          </Typography>
+        </Box>
+
+        <TableContainer>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell padding="checkbox"></TableCell>
+                <TableCell>Item</TableCell>
+                <TableCell>Kategori</TableCell>
+                <TableCell>Qty</TableCell>
+                <TableCell>Ukuran</TableCell>
+                <TableCell>Warna</TableCell>
+                <TableCell>Serial No.</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selectedItems.map((item) => (
+                <TableRow key={item.item_id}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={item.selected}
+                      onChange={() => handleToggleItem(item.item_id)}
+                    />
+                  </TableCell>
+                  <TableCell>{item.item_name}</TableCell>
+                  <TableCell>{item.category}</TableCell>
+                  <TableCell>
+                    <TextField
+                      size="small"
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => handleUpdateItem(item.item_id, 'quantity', e.target.value)}
+                      disabled={!item.selected}
+                      sx={{ width: 60 }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {['seragam', 'mukenah', 'ihram'].includes(item.category) && (
+                      <Select
+                        size="small"
+                        value={item.size || ''}
+                        onChange={(e) => handleUpdateItem(item.item_id, 'size', e.target.value)}
+                        disabled={!item.selected}
+                        sx={{ width: 80 }}
+                      >
+                        <MenuItem value="">-</MenuItem>
+                        <MenuItem value="S">S</MenuItem>
+                        <MenuItem value="M">M</MenuItem>
+                        <MenuItem value="L">L</MenuItem>
+                        <MenuItem value="XL">XL</MenuItem>
+                        <MenuItem value="XXL">XXL</MenuItem>
+                      </Select>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {item.category === 'slayer' && (
+                      <TextField
+                        size="small"
+                        value={item.color || ''}
+                        onChange={(e) => handleUpdateItem(item.item_id, 'color', e.target.value)}
+                        disabled={!item.selected}
+                        placeholder="Warna"
+                        sx={{ width: 100 }}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {item.category === 'earphone' && (
+                      <TextField
+                        size="small"
+                        value={item.serial_number || ''}
+                        onChange={(e) => handleUpdateItem(item.item_id, 'serial_number', e.target.value)}
+                        disabled={!item.selected}
+                        placeholder="Serial"
+                        sx={{ width: 100 }}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box mt={3}>
+          <Alert severity="info">
+            Total item yang dipilih: {selectedItems.filter(item => item.selected).length} dari {selectedItems.length} item
+          </Alert>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Batal</Button>
+        <Button 
+          onClick={handleSave} 
+          variant="contained"
+          disabled={selectedItems.filter(item => item.selected).length === 0}
+        >
+          Simpan Distribusi
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
