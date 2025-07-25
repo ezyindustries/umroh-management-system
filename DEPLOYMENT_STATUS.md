@@ -44,6 +44,8 @@
 
 - **Demo Interface**: http://103.181.143.223:8888/demo-complete-umroh-app.html
 - **Flight Booking System**: http://103.181.143.223:8888/flight-booking-system.html
+- **Reports System**: http://103.181.143.223:8888/reports-system.html
+- **Excel Import/Export**: http://103.181.143.223:8888/excel-system.html
 - **API Health Check**: http://103.181.143.223:5000/api/health
 - **Database**: PostgreSQL on localhost:5432
 
