@@ -148,20 +148,25 @@
             flex: 1;
             padding: 30px;
             overflow-y: auto;
+            overflow-x: hidden;
             height: 100vh;
             position: relative;
             z-index: 1;
             margin-left: 0;
-            isolation: isolate;
+            background: transparent;
         }
 
         .page {
             display: none;
             animation: fadeIn 0.5s ease;
+            width: 100%;
+            min-height: 100%;
         }
 
         .page.active {
-            display: block;
+            display: block !important;
+            opacity: 1;
+            visibility: visible;
         }
 
         @keyframes fadeIn {
@@ -197,6 +202,8 @@
                 0 1px 3px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
+            opacity: 1;
+            visibility: visible;
         }
 
         .glass-card::before {
@@ -244,6 +251,24 @@
             .cards-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
+        }
+        
+        /* Force visibility for problem pages */
+        #flights .glass-card,
+        #flights .card,
+        #reports .glass-card,
+        #excel .glass-card {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        #flights .cards-grid,
+        #reports .report-grid,
+        #excel .section {
+            display: grid !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
         
         .card {
@@ -4837,6 +4862,32 @@
             }
         }
         
+        // Debug specific pages
+        function debugPage(pageId) {
+            const page = document.getElementById(pageId);
+            if (!page) {
+                console.error('Page not found:', pageId);
+                return;
+            }
+            
+            console.log(`Debugging ${pageId}:`);
+            console.log('- Display:', window.getComputedStyle(page).display);
+            console.log('- Visibility:', window.getComputedStyle(page).visibility);
+            console.log('- Opacity:', window.getComputedStyle(page).opacity);
+            console.log('- Z-index:', window.getComputedStyle(page).zIndex);
+            console.log('- Position:', window.getComputedStyle(page).position);
+            
+            const cards = page.querySelectorAll('.glass-card, .card');
+            console.log(`- Found ${cards.length} cards`);
+            
+            cards.forEach((card, index) => {
+                console.log(`  Card ${index + 1}:`);
+                console.log('  - Display:', window.getComputedStyle(card).display);
+                console.log('  - Visibility:', window.getComputedStyle(card).visibility);
+                console.log('  - Opacity:', window.getComputedStyle(card).opacity);
+            });
+        }
+        
         // Run debug on load
         window.addEventListener('load', () => {
             setTimeout(debugLayout, 100);
@@ -4862,6 +4913,15 @@
             if (selectedPage) {
                 selectedPage.classList.add('active');
                 selectedPage.style.display = 'block'; // Force show
+                selectedPage.style.opacity = '1'; // Force opacity
+                selectedPage.style.visibility = 'visible'; // Force visibility
+                
+                // Ensure content is visible
+                const cards = selectedPage.querySelectorAll('.glass-card, .card');
+                cards.forEach(card => {
+                    card.style.opacity = '1';
+                    card.style.visibility = 'visible';
+                });
             } else {
                 console.error('Page not found:', pageId);
             }
@@ -4876,6 +4936,22 @@
             
             // Load page specific data
             loadPageData(pageId);
+            
+            // Force refresh for problem pages
+            if (['flights', 'reports', 'excel'].includes(pageId)) {
+                setTimeout(() => {
+                    const page = document.getElementById(pageId);
+                    if (page) {
+                        // Force repaint
+                        page.style.display = 'none';
+                        page.offsetHeight; // Trigger reflow
+                        page.style.display = 'block';
+                        
+                        // Log for debugging
+                        console.log(`Force refreshed ${pageId} page`);
+                    }
+                }, 10);
+            }
         }
 
         function loadPageData(pageId) {
