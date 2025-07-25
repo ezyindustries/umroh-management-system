@@ -1,12 +1,18 @@
 const pool = require('../config/database').pool;
 const logger = require('../config/logging').logger;
-const OpenAI = require('openai');
+const Anthropic = require('@anthropic-ai/sdk');
 const axios = require('axios');
 
-// Initialize OpenAI
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+// Initialize Claude AI lazily
+let anthropic = null;
+const getClaude = () => {
+    if (!anthropic && process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY !== 'placeholder-key') {
+        anthropic = new Anthropic({
+            apiKey: process.env.ANTHROPIC_API_KEY
+        });
+    }
+    return anthropic;
+};
 
 // WAHA API configuration
 const WAHA_API_URL = process.env.WAHA_API_URL || 'http://localhost:3000';
@@ -227,16 +233,36 @@ class MarketingController {
             
             Provide a suggested reply based on the stage and context.`;
             
-            const completion = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
+            const aiClient = getClaude();
+            if (!aiClient) {
+                // Return a simple analysis without AI if not configured
+                return {
+                    stage: 'leads',
+                    confidence: 0.5,
+                    intent: 'inquiry',
+                    suggested_reply: 'Maaf, sistem AI sedang dalam maintenance. Silakan hubungi admin untuk informasi lebih lanjut.'
+                };
+            }
+            
+            const completion = await aiClient.messages.create({
+                model: "claude-3-haiku-20240307",
                 messages: [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: message }
+                    { role: "user", content: `${systemPrompt}\n\nUser message: ${message}\n\nRespond in JSON format.` }
                 ],
-                response_format: { type: "json_object" }
+                max_tokens: 500
             });
             
-            return JSON.parse(completion.choices[0].message.content);
+            try {
+                return JSON.parse(completion.content[0].text);
+            } catch (parseError) {
+                // Fallback if JSON parsing fails
+                return {
+                    stage: 'leads',
+                    confidence: 0.7,
+                    intent: 'general',
+                    suggested_reply: completion.content[0].text
+                };
+            }
         } catch (error) {
             logger.error('AI analysis error:', error);
             return {

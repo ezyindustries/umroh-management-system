@@ -10,6 +10,7 @@ require('dotenv').config();
 
 const { setupDatabase } = require('./config/database');
 const { authMiddleware } = require('./middleware/auth');
+const securityConfig = require('./config/security');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -40,7 +41,18 @@ const app = express();
 const server = http.createServer(app);
 
 // Setup logging
-const logger = setupLogging();
+const winston = require('winston');
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple()
+        }),
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/combined.log' })
+    ]
+});
 
 // Validate environment variables for security
 try {
@@ -51,8 +63,7 @@ try {
 }
 
 // Enhanced security middleware
-app.use(helmetConfig);
-app.use(securityHeaders);
+app.use(helmet());
 app.use(compression());
 
 // Trust proxy for production deployments

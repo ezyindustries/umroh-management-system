@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const flightController = require('../controllers/flightController');
-const authMiddleware = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 
 // All routes require authentication
-router.use(authMiddleware);
+router.use(authenticate);
 
 // PNR routes
 router.get('/pnrs', flightController.getAllPNRs);

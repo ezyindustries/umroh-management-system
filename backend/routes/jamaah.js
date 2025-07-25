@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { db } = require('../config/database');
-const { authMiddleware } = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 const Joi = require('joi');
 
 // Apply auth middleware to all routes
-router.use(authMiddleware);
+router.use(authenticate);
 
 // Validation schema
 const jamaahSchema = Joi.object({

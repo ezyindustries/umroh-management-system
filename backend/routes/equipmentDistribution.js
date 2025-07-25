@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const equipmentDistributionController = require('../controllers/equipmentDistributionController');
-const authMiddleware = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 
 // All routes require authentication
-router.use(authMiddleware);
+router.use(authenticate);
 
 // Distribution routes
 router.get('/distributions', equipmentDistributionController.getDistributions);
