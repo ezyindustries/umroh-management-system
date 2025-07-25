@@ -29,9 +29,21 @@
   - Password: `admin123`
   - Roles: admin, finance, marketing, operations
 
+### 6. New Features Added
+- Created comprehensive flight booking system page (`flight-booking-system.html`)
+- Linked flight menu in main app to redirect to new flight booking page
+- Flight booking system includes:
+  - PNR Management (CRUD operations)
+  - Booking Jamaah to flights
+  - Flight Schedule Management
+  - Manifest Generation
+  - Reports (Passenger lists, revenue, seat utilization)
+  - Navigation back to main application
+
 ## 🔗 Access URLs
 
 - **Demo Interface**: http://103.181.143.223:8888/demo-complete-umroh-app.html
+- **Flight Booking System**: http://103.181.143.223:8888/flight-booking-system.html
 - **API Health Check**: http://103.181.143.223:5000/api/health
 - **Database**: PostgreSQL on localhost:5432
 

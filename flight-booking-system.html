@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Tiket Penerbangan - Manajemen Umroh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .flight-card {
+            transition: all 0.3s ease;
+        }
+        .flight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .tab-active {
+            border-bottom: 3px solid #10b981;
+            color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header dengan tombol kembali -->
+    <header class="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='demo-complete-umroh-app.html'" 
+                            class="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Kembali</span>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold">Sistem Tiket Penerbangan</h1>
+                        <p class="text-sm opacity-90">Manajemen PNR & Booking Penerbangan</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Admin User</span>
+                    <button class="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-all">
+                        <i class="fas fa-user-circle text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-white shadow-sm sticky top-20 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-8 overflow-x-auto">
+                <button class="tab-btn py-4 px-2 font-medium tab-active" data-tab="pnr">
+                    <i class="fas fa-plane mr-2"></i>PNR Management
+                </button>
+                <button class="tab-btn py-4 px-2 font-medium hover:text-emerald-600" data-tab="booking">
+                    <i class="fas fa-ticket-alt mr-2"></i>Booking Jamaah
+                </button>
+                <button class="tab-btn py-4 px-2 font-medium hover:text-emerald-600" data-tab="schedule">
+                    <i class="fas fa-calendar-alt mr-2"></i>Jadwal Penerbangan
+                </button>
+                <button class="tab-btn py-4 px-2 font-medium hover:text-emerald-600" data-tab="manifest">
+                    <i class="fas fa-list-alt mr-2"></i>Manifest
+                </button>
+                <button class="tab-btn py-4 px-2 font-medium hover:text-emerald-600" data-tab="reports">
+                    <i class="fas fa-chart-bar mr-2"></i>Laporan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- PNR Management Tab -->
+        <div id="pnr-tab" class="tab-content">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Total PNR</p>
+                            <p class="text-2xl font-bold text-gray-800">24</p>
+                        </div>
+                        <i class="fas fa-plane text-3xl text-emerald-500"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Seats</p>
+                            <p class="text-2xl font-bold text-gray-800">3,600</p>
+                        </div>
+                        <i class="fas fa-chair text-3xl text-blue-500"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Terisi</p>
+                            <p class="text-2xl font-bold text-gray-800">2,845</p>
+                            <p class="text-xs text-green-600">79%</p>
+                        </div>
+                        <i class="fas fa-users text-3xl text-green-500"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Tersedia</p>
+                            <p class="text-2xl font-bold text-gray-800">755</p>
+                        </div>
+                        <i class="fas fa-check-circle text-3xl text-orange-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add PNR Button -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold">Daftar PNR</h2>
+                <button onclick="showAddPNRModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg flex items-center">
+                    <i class="fas fa-plus mr-2"></i>Tambah PNR
+                </button>
+            </div>
+
+            <!-- PNR List -->
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PNR Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Route</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departure</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Airline</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capacity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="font-mono font-semibold text-emerald-600">ABC123</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">CGK - JED - MED</td>
+                            <td class="px-6 py-4 whitespace-nowrap">15 Mar 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="flex items-center">
+                                    <img src="https://via.placeholder.com/20x20/FF0000/FFFFFF?text=GA" class="mr-2 rounded">
+                                    Garuda Indonesia
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="text-sm">145/150</span>
+                                    <div class="ml-2 w-20 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-emerald-600 h-2 rounded-full" style="width: 97%"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Almost Full
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-emerald-600 hover:text-emerald-900 mr-3">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-blue-600 hover:text-blue-900 mr-3">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="font-mono font-semibold text-emerald-600">DEF456</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">CGK - JED - MED</td>
+                            <td class="px-6 py-4 whitespace-nowrap">22 Mar 2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="flex items-center">
+                                    <img src="https://via.placeholder.com/20x20/008000/FFFFFF?text=SV" class="mr-2 rounded">
+                                    Saudia
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <span class="text-sm">120/150</span>
+                                    <div class="ml-2 w-20 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-emerald-600 h-2 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Available
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button class="text-emerald-600 hover:text-emerald-900 mr-3">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="text-blue-600 hover:text-blue-900 mr-3">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Booking Jamaah Tab -->
+        <div id="booking-tab" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Booking Jamaah ke PNR</h2>
+                
+                <!-- Search Jamaah -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cari Jamaah</label>
+                    <div class="flex space-x-2">
+                        <input type="text" placeholder="Nama / NIK / No. HP" class="flex-1 border rounded-lg px-4 py-2">
+                        <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg">
+                            <i class="fas fa-search mr-2"></i>Cari
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected PNR -->
+                <div class="mb-6 p-4 bg-emerald-50 rounded-lg">
+                    <h3 class="font-semibold mb-2">PNR Terpilih</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-600">PNR Code</p>
+                            <p class="font-semibold">ABC123</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Route</p>
+                            <p class="font-semibold">CGK - JED - MED</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Departure</p>
+                            <p class="font-semibold">15 Mar 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Available Seats</p>
+                            <p class="font-semibold text-emerald-600">5</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jamaah List to Book -->
+                <div class="border rounded-lg overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left">
+                                    <input type="checkbox" class="rounded">
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIK</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. HP</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paket</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <input type="checkbox" class="rounded">
+                                </td>
+                                <td class="px-4 py-3">Ahmad Yusuf</td>
+                                <td class="px-4 py-3 font-mono text-sm">3301234567890123</td>
+                                <td class="px-4 py-3">0812-3456-7890</td>
+                                <td class="px-4 py-3">Umroh Maret 2025</td>
+                                <td class="px-4 py-3">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Ready
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 flex justify-end">
+                    <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg">
+                        <i class="fas fa-check mr-2"></i>Book Selected Jamaah
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div id="schedule-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Departure Flights -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-emerald-600">
+                        <i class="fas fa-plane-departure mr-2"></i>Penerbangan Berangkat
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flight-card border rounded-lg p-4 hover:border-emerald-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="font-semibold">GA 890</p>
+                                    <p class="text-sm text-gray-600">Garuda Indonesia</p>
+                                </div>
+                                <span class="text-sm text-emerald-600 font-semibold">15 Mar 2025</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-center">
+                                    <p class="font-bold">09:00</p>
+                                    <p class="text-sm text-gray-600">CGK</p>
+                                </div>
+                                <div class="flex-1 mx-4">
+                                    <div class="relative">
+                                        <div class="h-0.5 bg-gray-300"></div>
+                                        <i class="fas fa-plane absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-emerald-600"></i>
+                                    </div>
+                                    <p class="text-center text-xs text-gray-500 mt-1">5h 30m</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="font-bold">14:30</p>
+                                    <p class="text-sm text-gray-600">JED</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 flex justify-between items-center">
+                                <span class="text-sm text-gray-600">PNR: ABC123</span>
+                                <span class="text-sm font-semibold">145/150 seats</span>
+                            </div>
+                        </div>
+
+                        <div class="flight-card border rounded-lg p-4 hover:border-emerald-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="font-semibold">SV 816</p>
+                                    <p class="text-sm text-gray-600">Saudia</p>
+                                </div>
+                                <span class="text-sm text-emerald-600 font-semibold">22 Mar 2025</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-center">
+                                    <p class="font-bold">23:30</p>
+                                    <p class="text-sm text-gray-600">CGK</p>
+                                </div>
+                                <div class="flex-1 mx-4">
+                                    <div class="relative">
+                                        <div class="h-0.5 bg-gray-300"></div>
+                                        <i class="fas fa-plane absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-emerald-600"></i>
+                                    </div>
+                                    <p class="text-center text-xs text-gray-500 mt-1">9h 30m</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="font-bold">05:00+1</p>
+                                    <p class="text-sm text-gray-600">JED</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 flex justify-between items-center">
+                                <span class="text-sm text-gray-600">PNR: DEF456</span>
+                                <span class="text-sm font-semibold">120/150 seats</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Return Flights -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-blue-600">
+                        <i class="fas fa-plane-arrival mr-2"></i>Penerbangan Pulang
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flight-card border rounded-lg p-4 hover:border-blue-500">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <p class="font-semibold">GA 891</p>
+                                    <p class="text-sm text-gray-600">Garuda Indonesia</p>
+                                </div>
+                                <span class="text-sm text-blue-600 font-semibold">23 Mar 2025</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-center">
+                                    <p class="font-bold">23:00</p>
+                                    <p class="text-sm text-gray-600">MED</p>
+                                </div>
+                                <div class="flex-1 mx-4">
+                                    <div class="relative">
+                                        <div class="h-0.5 bg-gray-300"></div>
+                                        <i class="fas fa-plane absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 rotate-180"></i>
+                                    </div>
+                                    <p class="text-center text-xs text-gray-500 mt-1">9h 0m</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="font-bold">08:00+1</p>
+                                    <p class="text-sm text-gray-600">CGK</p>
+                                </div>
+                            </div>
+                            <div class="mt-3 flex justify-between items-center">
+                                <span class="text-sm text-gray-600">PNR: ABC123</span>
+                                <span class="text-sm font-semibold">145/150 seats</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar View -->
+            <div class="mt-6 bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold mb-4">Kalender Penerbangan</h3>
+                <div class="grid grid-cols-7 gap-2">
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Sun</div>
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Mon</div>
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Tue</div>
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Wed</div>
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Thu</div>
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Fri</div>
+                    <div class="text-center text-sm font-semibold text-gray-600 py-2">Sat</div>
+                    
+                    <!-- Calendar dates with flight indicators -->
+                    <div class="text-center py-2"></div>
+                    <div class="text-center py-2"></div>
+                    <div class="text-center py-2"></div>
+                    <div class="text-center py-2"></div>
+                    <div class="text-center py-2"></div>
+                    <div class="text-center py-2">1</div>
+                    <div class="text-center py-2">2</div>
+                    
+                    <!-- Week with flights -->
+                    <div class="text-center py-2">3</div>
+                    <div class="text-center py-2">4</div>
+                    <div class="text-center py-2">5</div>
+                    <div class="text-center py-2">6</div>
+                    <div class="text-center py-2">7</div>
+                    <div class="text-center py-2">8</div>
+                    <div class="text-center py-2">9</div>
+                    
+                    <!-- Flight dates highlighted -->
+                    <div class="text-center py-2">10</div>
+                    <div class="text-center py-2">11</div>
+                    <div class="text-center py-2">12</div>
+                    <div class="text-center py-2">13</div>
+                    <div class="text-center py-2">14</div>
+                    <div class="relative text-center py-2 bg-emerald-100 rounded-lg cursor-pointer hover:bg-emerald-200">
+                        <span class="font-semibold">15</span>
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+                            <i class="fas fa-plane text-xs text-emerald-600"></i>
+                        </div>
+                    </div>
+                    <div class="text-center py-2">16</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manifest Tab -->
+        <div id="manifest-tab" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold">Flight Manifest</h2>
+                        <div class="flex space-x-2">
+                            <select class="border rounded-lg px-4 py-2">
+                                <option>Select PNR</option>
+                                <option>ABC123 - 15 Mar 2025</option>
+                                <option>DEF456 - 22 Mar 2025</option>
+                            </select>
+                            <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-download mr-2"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manifest Details -->
+                <div class="p-6">
+                    <div class="mb-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-600">Flight Number</p>
+                            <p class="font-semibold">GA 890</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Route</p>
+                            <p class="font-semibold">CGK - JED - MED</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Date</p>
+                            <p class="font-semibold">15 March 2025</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Total Passengers</p>
+                            <p class="font-semibold">145</p>
+                        </div>
+                    </div>
+
+                    <!-- Passenger List -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Passport</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Gender</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Age</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Group</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Special</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-3">1</td>
+                                    <td class="px-4 py-3 font-semibold">AHMAD YUSUF</td>
+                                    <td class="px-4 py-3 font-mono text-sm">A1234567</td>
+                                    <td class="px-4 py-3">M</td>
+                                    <td class="px-4 py-3">45</td>
+                                    <td class="px-4 py-3">Jakarta-1</td>
+                                    <td class="px-4 py-3">
+                                        <span class="text-xs text-gray-500">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3">2</td>
+                                    <td class="px-4 py-3 font-semibold">FATIMAH ZAHRA</td>
+                                    <td class="px-4 py-3 font-mono text-sm">B2345678</td>
+                                    <td class="px-4 py-3">F</td>
+                                    <td class="px-4 py-3">42</td>
+                                    <td class="px-4 py-3">Jakarta-1</td>
+                                    <td class="px-4 py-3">
+                                        <span class="text-xs text-gray-500">-</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3">3</td>
+                                    <td class="px-4 py-3 font-semibold">MUHAMMAD IBRAHIM</td>
+                                    <td class="px-4 py-3 font-mono text-sm">C3456789</td>
+                                    <td class="px-4 py-3">M</td>
+                                    <td class="px-4 py-3">68</td>
+                                    <td class="px-4 py-3">Jakarta-2</td>
+                                    <td class="px-4 py-3">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Wheelchair
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Flight Utilization -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4">Flight Utilization</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Garuda Indonesia</span>
+                                <span class="text-sm font-semibold">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-emerald-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Saudia</span>
+                                <span class="text-sm font-semibold">78%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm">Emirates</span>
+                                <span class="text-sm font-semibold">92%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-red-600 h-2 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Route Performance -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4">Route Performance</h3>
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-sm text-gray-600">
+                                <th class="pb-2">Route</th>
+                                <th class="pb-2 text-right">Flights</th>
+                                <th class="pb-2 text-right">Avg Load</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-t">
+                                <td class="py-2">CGK - JED Direct</td>
+                                <td class="py-2 text-right">12</td>
+                                <td class="py-2 text-right font-semibold text-emerald-600">88%</td>
+                            </tr>
+                            <tr class="border-t">
+                                <td class="py-2">CGK - JED - MED</td>
+                                <td class="py-2 text-right">8</td>
+                                <td class="py-2 text-right font-semibold text-emerald-600">82%</td>
+                            </tr>
+                            <tr class="border-t">
+                                <td class="py-2">SUB - JED</td>
+                                <td class="py-2 text-right">4</td>
+                                <td class="py-2 text-right font-semibold text-emerald-600">75%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Monthly Statistics -->
+            <div class="mt-6 bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold mb-4">Monthly Flight Statistics</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-2xl font-bold text-emerald-600">24</p>
+                        <p class="text-sm text-gray-600">Total Flights</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-2xl font-bold text-blue-600">3,600</p>
+                        <p class="text-sm text-gray-600">Total Seats</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-2xl font-bold text-green-600">2,845</p>
+                        <p class="text-sm text-gray-600">Passengers</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 rounded-lg">
+                        <p class="text-2xl font-bold text-orange-600">79%</p>
+                        <p class="text-sm text-gray-600">Load Factor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add PNR Modal -->
+    <div id="addPNRModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Tambah PNR Baru</h3>
+                <button onclick="closeAddPNRModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">PNR Code</label>
+                        <input type="text" class="w-full border rounded-lg px-4 py-2" placeholder="ABC123">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Total Capacity</label>
+                        <input type="number" class="w-full border rounded-lg px-4 py-2" placeholder="150">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Airline</label>
+                        <select class="w-full border rounded-lg px-4 py-2">
+                            <option>Garuda Indonesia</option>
+                            <option>Saudia</option>
+                            <option>Emirates</option>
+                            <option>Qatar Airways</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Route</label>
+                        <input type="text" class="w-full border rounded-lg px-4 py-2" placeholder="CGK - JED - MED">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Departure Date</label>
+                        <input type="date" class="w-full border rounded-lg px-4 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Departure Time</label>
+                        <input type="time" class="w-full border rounded-lg px-4 py-2">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Flight Details</label>
+                        <textarea class="w-full border rounded-lg px-4 py-2" rows="3" placeholder="GA 890 | CGK-JED | 09:00-14:30"></textarea>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex justify-end space-x-2">
+                    <button type="button" onclick="closeAddPNRModal()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Batal
+                    </button>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-save mr-2"></i>Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                
+                // Add active class to clicked tab
+                this.classList.add('tab-active');
+                const tabId = this.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+
+        // Modal Functions
+        function showAddPNRModal() {
+            document.getElementById('addPNRModal').classList.remove('hidden');
+        }
+
+        function closeAddPNRModal() {
+            document.getElementById('addPNRModal').classList.add('hidden');
+        }
+
+        // Sample notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-4 px-6 py-3 rounded-lg text-white ${
+                type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            } shadow-lg transform transition-transform duration-300 translate-x-full`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
