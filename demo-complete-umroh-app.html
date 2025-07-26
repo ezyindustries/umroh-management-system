@@ -3590,7 +3590,7 @@
                 <button class="close-btn">&times;</button>
             </div>
             
-            <form onsubmit="saveJamaah(event)">
+            <form id="jamaahForm" onsubmit="saveJamaah(event)">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Nama Lengkap</label>
@@ -3613,8 +3613,8 @@
                         <label>Jenis Kelamin</label>
                         <select id="jamaahGender" required>
                             <option value="">Pilih</option>
-                            <option value="L">Laki-laki</option>
-                            <option value="P">Perempuan</option>
+                            <option value="male">Laki-laki</option>
+                            <option value="female">Perempuan</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -4154,12 +4154,17 @@
     </div>
 
     <script>
+        // API Configuration
+        function getApiBaseUrl() {
+            return window.location.hostname === 'localhost' 
+                ? 'http://localhost:5000'
+                : 'http://103.181.143.223:5000';
+        }
+        
         // Sample Data
-        let jamaahData = [
-            // Group 1 - Grup Ramadhan A (45 jamaah)
-            {
-                id: 1,
-                name: "Ahmad Fauzi",
+        let jamaahData = []; // Will be loaded from API
+
+        /*
                 nik: "1234567890123456",
                 phone: "081234567890",
                 email: "ahmad@email.com",
@@ -4546,9 +4551,8 @@
                 family_room_request: false,
                 registration_number: "UMR202400010"
             }
-            // Total so far: 10 jamaah for Group 1
-            // Add more jamaah to reach 42 members for Group 1...
-        ];
+            // Sample data removed - now using API
+        */
 
         let packageData = [
             {
@@ -5086,27 +5090,50 @@
         }
 
         // Jamaah Management
-        function loadJamaahTable() {
+        async function loadJamaahTable() {
             const tbody = document.getElementById('jamaahTableBody');
-            tbody.innerHTML = '';
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Loading...</td></tr>';
             
-            jamaahData.forEach((jamaah, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${jamaah.name}</td>
-                    <td>${jamaah.nik}</td>
-                    <td>${jamaah.phone}</td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <img src="${jamaah.passport_image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzY0NzQ4YiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCIgZmlsbD0iI2Y4ZmFmYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
+            try {
+                // Fetch data from backend API
+                const apiUrl = getApiBaseUrl() + '/api/jamaah';
+                console.log('Fetching jamaah data from:', apiUrl);
+                const response = await fetch(apiUrl);
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('API Result:', result);
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Failed to load data');
+                }
+                
+                // Update global jamaahData with API response
+                jamaahData = result.data || [];
+                console.log('Jamaah data loaded:', jamaahData.length, 'records');
+                tbody.innerHTML = '';
+                
+                if (jamaahData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Tidak ada data jamaah</td></tr>';
+                    return;
+                }
+                
+                jamaahData.forEach((jamaah, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${jamaah.name}</td>
+                        <td>${jamaah.nik || jamaah.passport_number || '-'}</td>
+                        <td>${jamaah.phone}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="${jamaah.passport_image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzY0NzQ4YiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCIgZmlsbD0iI2Y4ZmFmYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
                                  style="width: 40px; height: 24px; border-radius: 4px; object-fit: cover; cursor: pointer;" 
                                  onclick="viewPassportImage('${jamaah.passport_image}', '${jamaah.name}')"
                                  title="Klik untuk melihat paspor">
                             <span style="font-size: 12px; color: #cbd5e1;">${jamaah.passport_number || 'Belum ada'}</span>
                         </div>
                     </td>
-                    <td>${jamaah.package}</td>
+                    <td>${jamaah.packages && jamaah.packages.length > 0 ? jamaah.packages.map(p => p.name).join(', ') : '-'}</td>
                     <td><span class="status-badge status-${jamaah.status}">${getStatusText(jamaah.status)}</span></td>
                     <td>Rp ${(jamaah.total_paid || 0).toLocaleString()}</td>
                     <td>
@@ -5122,12 +5149,25 @@
                 `;
                 tbody.appendChild(row);
             });
+            } catch (error) {
+                console.error('Error loading jamaah data:', error);
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #ef4444;">Error: ' + error.message + '</td></tr>';
+                // Check if it's a network error
+                if (error.message.includes('Failed to fetch')) {
+                    showNotification('Tidak dapat terhubung ke server. Pastikan backend berjalan di port 5000.', 'error');
+                } else {
+                    showNotification('Gagal memuat data jamaah: ' + error.message, 'error');
+                }
+            }
         }
 
         function getStatusText(status) {
             const statusMap = {
                 'verified': 'Terverifikasi',
                 'pending': 'Pending',
+                'active': 'Aktif',
+                'cancelled': 'Dibatalkan',
+                'completed': 'Selesai',
                 'rejected': 'Ditolak'
             };
             return statusMap[status] || status;
@@ -5143,37 +5183,100 @@
             loadJamaahTable();
         }
 
-        function editJamaah(id) {
-            const jamaah = jamaahData.find(j => j.id === id);
-            if (jamaah) {
+        async function editJamaah(id) {
+            console.log('Editing jamaah with ID:', id);
+            
+            try {
+                // Fetch fresh data from API
+                const response = await fetch(getApiBaseUrl() + `/api/jamaah/${id}`);
+                const jamaah = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch jamaah data');
+                }
+                
+                console.log('Fetched jamaah data:', jamaah);
+                
+                // Store ID for update FIRST before opening modal
+                const form = document.getElementById('jamaahForm');
+                if (form) {
+                    form.dataset.editId = id;
+                }
+                
+                // First open the modal (but it won't reset because editId is set)
+                openModal('jamaahModal');
+                
+                // Then wait a bit for modal to be fully visible
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                // Debug: check if elements exist
+                console.log('Checking form elements:');
+                console.log('jamaahName element:', document.getElementById('jamaahName'));
+                console.log('jamaahNik element:', document.getElementById('jamaahNik'));
+                
                 // Populate form with jamaah data
-                document.getElementById('jamaahName').value = jamaah.name;
-                document.getElementById('jamaahNik').value = jamaah.nik;
-                document.getElementById('jamaahBirthDate').value = jamaah.birth_date;
-                document.getElementById('jamaahBirthPlace').value = jamaah.birth_place;
-                document.getElementById('jamaahGender').value = jamaah.gender;
-                document.getElementById('jamaahPhone').value = jamaah.phone;
-                document.getElementById('jamaahEmail').value = jamaah.email;
-                document.getElementById('jamaahPackage').value = jamaah.package_id;
-                document.getElementById('jamaahAddress').value = jamaah.address;
+                const nameField = document.getElementById('jamaahName');
+                const nikField = document.getElementById('jamaahNik');
+                
+                if (nameField) {
+                    nameField.value = jamaah.name || '';
+                    console.log('Set name to:', jamaah.name);
+                }
+                if (nikField) {
+                    nikField.value = jamaah.nik || '';
+                    console.log('Set NIK to:', jamaah.nik);
+                }
+                // Format birth date from ISO to ddmmyyyy
+                if (jamaah.birth_date) {
+                    const birthDate = new Date(jamaah.birth_date);
+                    const day = String(birthDate.getDate()).padStart(2, '0');
+                    const month = String(birthDate.getMonth() + 1).padStart(2, '0');
+                    const year = birthDate.getFullYear();
+                    document.getElementById('jamaahBirthDate').value = day + month + year;
+                }
+                
+                document.getElementById('jamaahBirthPlace').value = jamaah.birth_place || '';
+                document.getElementById('jamaahGender').value = jamaah.gender || '';
+                document.getElementById('jamaahPhone').value = jamaah.phone || '';
+                document.getElementById('jamaahEmail').value = jamaah.email || '';
+                
+                // Get package ID from packages array
+                if (jamaah.packages && jamaah.packages.length > 0) {
+                    document.getElementById('jamaahPackage').value = jamaah.packages[0].id;
+                }
+                document.getElementById('jamaahAddress').value = jamaah.address || '';
                 
                 // Regional data
-                document.getElementById('jamaahProvinsi').value = jamaah.provinsi || '';
-                document.getElementById('jamaahKabupaten').value = jamaah.kabupaten || '';
+                document.getElementById('jamaahProvinsi').value = jamaah.province || '';
+                document.getElementById('jamaahKabupaten').value = jamaah.city || '';
                 document.getElementById('jamaahKecamatan').value = jamaah.kecamatan || '';
                 document.getElementById('jamaahKelurahan').value = jamaah.kelurahan || '';
                 
-                // Personal data
-                document.getElementById('jamaahMaritalStatus').value = jamaah.marital_status || '';
-                document.getElementById('jamaahEducation').value = jamaah.education || '';
-                document.getElementById('jamaahOccupation').value = jamaah.occupation || '';
+                // Personal data (may not exist in current DB)
+                if (document.getElementById('jamaahMaritalStatus')) {
+                    document.getElementById('jamaahMaritalStatus').value = jamaah.marital_status || '';
+                }
+                if (document.getElementById('jamaahEducation')) {
+                    document.getElementById('jamaahEducation').value = jamaah.education || '';
+                }
+                if (document.getElementById('jamaahOccupation')) {
+                    document.getElementById('jamaahOccupation').value = jamaah.occupation || '';
+                }
                 
                 // Passport data
-                document.getElementById('jamaahPassportName').value = jamaah.passport_name || '';
+                if (document.getElementById('jamaahPassportName')) {
+                    document.getElementById('jamaahPassportName').value = jamaah.passport_name || '';
+                }
                 document.getElementById('jamaahPassportNumber').value = jamaah.passport_number || '';
-                document.getElementById('jamaahPassportCity').value = jamaah.passport_city || '';
-                document.getElementById('jamaahPassportIssueDate').value = jamaah.passport_issue_date || '';
-                document.getElementById('jamaahPassportExpireDate').value = jamaah.passport_expire_date || '';
+                if (document.getElementById('jamaahPassportCity')) {
+                    document.getElementById('jamaahPassportCity').value = jamaah.passport_city || '';
+                }
+                if (document.getElementById('jamaahPassportIssueDate')) {
+                    document.getElementById('jamaahPassportIssueDate').value = jamaah.passport_issue_date || '';
+                }
+                if (document.getElementById('jamaahPassportExpireDate')) {
+                    document.getElementById('jamaahPassportExpireDate').value = jamaah.passport_expire_date || '';
+                }
                 
                 // Check if passport name is same as KTP name
                 if (jamaah.passport_name === jamaah.name && jamaah.passport_name) {
@@ -5202,20 +5305,60 @@
                     document.getElementById('passportImg').src = jamaah.passport_image;
                 }
                 
-                openModal('jamaahModal');
+                // Change form title
+                const modalTitle = document.querySelector('#jamaahModal h2');
+                if (modalTitle) {
+                    modalTitle.textContent = 'Edit Data Jamaah';
+                }
+                
+                // Debug: check values after setting
+                console.log('After setting values:');
+                console.log('Name field value:', document.getElementById('jamaahName').value);
+                console.log('NIK field value:', document.getElementById('jamaahNik').value);
+                
+            } catch (error) {
+                console.error('Error fetching jamaah data:', error);
+                showNotification('Gagal memuat data jamaah: ' + error.message, 'error');
             }
         }
 
-        function deleteJamaah(id) {
+        async function deleteJamaah(id) {
             if (confirm('Yakin ingin menghapus data jamaah ini?')) {
-                jamaahData = jamaahData.filter(j => j.id !== id);
-                loadJamaahTable();
-                showNotification('Data jamaah berhasil dihapus!');
+                try {
+                    // In real API, we would soft delete by changing status to cancelled
+                    const response = await fetch(getApiBaseUrl() + `/api/jamaah/${id}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            status: 'cancelled',
+                            notes: 'Dibatalkan melalui sistem'
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Failed to delete jamaah');
+                    }
+
+                    await loadJamaahTable();
+                    showNotification('Data jamaah berhasil dihapus!');
+                } catch (error) {
+                    console.error('Error deleting jamaah:', error);
+                    showNotification('Gagal menghapus data jamaah: ' + error.message, 'error');
+                }
             }
         }
 
-        function saveJamaah(event) {
+        async function saveJamaah(event) {
             event.preventDefault();
+            
+            // Check if editing
+            const form = document.getElementById('jamaahForm');
+            const editId = form.dataset.editId;
+            const isEditing = !!editId;
             
             // Validate birth date first
             const birthDate = document.getElementById('jamaahBirthDate').value;
@@ -5241,85 +5384,90 @@
                 return;
             }
 
+            // Convert birth date to ISO format
+            const birthDateFormatted = birthDate.substring(4) + '-' + birthDate.substring(2, 4) + '-' + birthDate.substring(0, 2);
+            
             const formData = {
                 name: document.getElementById('jamaahName').value,
-                nik: document.getElementById('jamaahNik').value,
-                birth_date: birthDate,
-                birth_place: document.getElementById('jamaahBirthPlace').value,
+                nik: document.getElementById('jamaahNik').value || undefined,
+                birth_date: birthDateFormatted,
+                birth_place: document.getElementById('jamaahBirthPlace').value || undefined,
                 gender: document.getElementById('jamaahGender').value,
                 phone: document.getElementById('jamaahPhone').value,
-                email: document.getElementById('jamaahEmail').value,
-                package_id: parseInt(document.getElementById('jamaahPackage').value),
-                address: document.getElementById('jamaahAddress').value,
-                
-                // Regional data (optional)
-                provinsi: document.getElementById('jamaahProvinsi').value,
-                kabupaten: document.getElementById('jamaahKabupaten').value,
-                kecamatan: document.getElementById('jamaahKecamatan').value,
-                kelurahan: document.getElementById('jamaahKelurahan').value,
-                
-                // Personal data (optional)
-                marital_status: document.getElementById('jamaahMaritalStatus').value,
-                education: document.getElementById('jamaahEducation').value,
-                occupation: document.getElementById('jamaahOccupation').value,
-                
-                // Passport data
-                passport_name: document.getElementById('jamaahPassportName').value,
-                passport_number: document.getElementById('jamaahPassportNumber').value,
-                passport_city: document.getElementById('jamaahPassportCity').value,
-                passport_issue_date: passportIssueDate,
-                passport_expire_date: passportExpireDate,
-                passport_image: document.getElementById('passportImg').src || null,
-                
-                // Family data
-                family_role: document.getElementById('jamaahFamilyRole').value,
-                room_preference: document.getElementById('jamaahRoomPreference').value || 'quad', // Default to quad
-                family_room_request: document.getElementById('jamaahFamilyRoomRequest').checked
+                email: document.getElementById('jamaahEmail').value || undefined,
+                address: document.getElementById('jamaahAddress').value || undefined,
+                province: document.getElementById('jamaahProvinsi').value || undefined,
+                city: document.getElementById('jamaahKabupaten').value || undefined,
+                passport_number: document.getElementById('jamaahPassportNumber').value || undefined,
+                package_ids: document.getElementById('jamaahPackage').value ? [parseInt(document.getElementById('jamaahPackage').value)] : []
             };
-
-            // Handle family ID assignment
-            const familyRole = formData.family_role;
-            let mainFamilyId;
             
-            if (familyRole === 'kepala_keluarga') {
-                mainFamilyId = generateNewFamilyId();
-            } else if (familyRole === 'istri' || familyRole === 'anak') {
-                const selectedFamily = document.getElementById('jamaahMainFamily').value;
-                if (selectedFamily === 'new_family') {
-                    mainFamilyId = generateNewFamilyId();
-                } else if (selectedFamily) {
-                    mainFamilyId = parseInt(selectedFamily);
-                } else {
-                    showNotification('Silakan pilih kepala keluarga atau buat family baru', 'error');
-                    return;
+            // Remove undefined values
+            Object.keys(formData).forEach(key => {
+                if (formData[key] === undefined || formData[key] === '') {
+                    delete formData[key];
                 }
-            } else if (familyRole === 'individu') {
-                mainFamilyId = generateNewFamilyId(); // Each individual gets their own family ID
-            }
-            
-            formData.main_family_id = mainFamilyId;
-
-            // Get package name
-            const packageSelect = document.getElementById('jamaahPackage');
-            const packageName = packageSelect.options[packageSelect.selectedIndex].text.split(' - ')[0];
-            
-            // Add to jamaahData (in real app, this would be an API call)
-            const newId = Math.max(...jamaahData.map(j => j.id)) + 1;
-            jamaahData.push({
-                id: newId,
-                ...formData,
-                package: packageName,
-                status: 'pending',
-                total_paid: 0
             });
             
-            closeModal('jamaahModal');
-            loadJamaahTable();
-            showNotification('Data jamaah berhasil disimpan!');
+            // For new jamaah, package_ids is required
+            if (!isEditing && (!formData.package_ids || formData.package_ids.length === 0)) {
+                showNotification('Silakan pilih paket umroh', 'error');
+                return;
+            }
             
-            // Reset form
-            event.target.reset();
-            document.getElementById('passportPreview').style.display = 'none';
+            // For edit, don't send package_ids (managed separately)
+            if (isEditing) {
+                delete formData.package_ids;
+            }
+
+            try {
+                // Call API to save jamaah
+                const apiUrl = isEditing 
+                    ? getApiBaseUrl() + `/api/jamaah/${editId}`
+                    : getApiBaseUrl() + '/api/jamaah';
+                    
+                const method = isEditing ? 'PUT' : 'POST';
+                
+                console.log(`${isEditing ? 'Updating' : 'Creating'} jamaah with data:`, formData);
+                
+                const response = await fetch(apiUrl, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                console.log('Save response:', response.status, result);
+
+                if (!response.ok) {
+                    // Show detailed validation error
+                    if (result.details) {
+                        throw new Error(result.error + ': ' + result.details);
+                    }
+                    throw new Error(result.error || 'Failed to save jamaah');
+                }
+
+                // Success
+                closeModal('jamaahModal');
+                await loadJamaahTable(); // Reload the table
+                showNotification(isEditing ? 'Data jamaah berhasil diupdate!' : 'Data jamaah berhasil disimpan!');
+                
+                // Reset form and clear edit ID
+                event.target.reset();
+                delete form.dataset.editId;
+                document.getElementById('passportPreview').style.display = 'none';
+                
+                // Reset modal title
+                const modalTitle = document.querySelector('#jamaahModal h2');
+                if (modalTitle) {
+                    modalTitle.textContent = 'Tambah Jamaah Baru';
+                }
+            } catch (error) {
+                console.error('Error saving jamaah:', error);
+                showNotification('Gagal menyimpan data jamaah: ' + error.message, 'error');
+            }
         }
 
         // Package Management
@@ -7443,6 +7591,7 @@
 
         // Modal Functions
         function openModal(modalId) {
+            console.log('Opening modal:', modalId);
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.add('active');
@@ -7450,6 +7599,23 @@
                 
                 // Focus trap - focus on the modal
                 modal.focus();
+                
+                // Reset form if opening jamaah modal - but NOT if we're editing
+                if (modalId === 'jamaahModal') {
+                    const form = modal.querySelector('form');
+                    if (form && !form.dataset.editId) {
+                        // Only reset if NOT in edit mode
+                        form.reset();
+                        document.getElementById('passportPreview').style.display = 'none';
+                        // Reset modal title
+                        const modalTitle = modal.querySelector('h2');
+                        if (modalTitle) {
+                            modalTitle.textContent = 'Tambah Jamaah Baru';
+                        }
+                    }
+                }
+            } else {
+                console.error('Modal not found:', modalId);
             }
         }
 
@@ -7463,7 +7629,13 @@
                 const form = modal.querySelector('form');
                 if (form) {
                     form.reset();
+                    // Also clear any preview images
+                    const preview = modal.querySelector('#passportPreview');
+                    if (preview) {
+                        preview.style.display = 'none';
+                    }
                 }
+                console.log('Modal closed:', modalId);
             }
         }
 
@@ -8031,7 +8203,7 @@
     </script>
     
     <!-- Modal for Special Requests -->
-    <div id="specialRequestsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000;">
+    <div id="specialRequestsModal" class="modal">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px;">
             <div class="glass-card" style="max-height: 80vh; overflow-y: auto; padding: 24px; position: relative;">
                 <button onclick="closeModal('specialRequestsModal')" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer;">
@@ -8060,7 +8232,7 @@
         };
         
         function showSpecialRequests(flightCode) {
-            const modal = document.getElementById('specialRequestsModal');
+            openModal('specialRequestsModal');
             const requestsList = document.getElementById('requestsList');
             const requests = specialRequests[flightCode] || [];
             
@@ -8088,8 +8260,6 @@
                     requestsList.innerHTML += requestItem;
                 });
             }
-            
-            modal.style.display = 'block';
         }
         
         function showFlightDetails(flightCode) {
@@ -8097,9 +8267,7 @@
             alert('Flight details for ' + flightCode + ' - To be implemented');
         }
         
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+        // Removed duplicate closeModal function - using the main one above
         
         // Close modal when clicking outside
         document.getElementById('specialRequestsModal').addEventListener('click', function(e) {

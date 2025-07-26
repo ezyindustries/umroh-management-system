@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API Connection</title>
+</head>
+<body>
+    <h1>Test API Connection</h1>
+    <button onclick="testApi()">Test API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testApi() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const apiUrl = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:5000/api/jamaah'
+                    : 'http://103.181.143.223:5000/api/jamaah';
+                    
+                console.log('Testing API at:', apiUrl);
+                
+                const response = await fetch(apiUrl);
+                console.log('Response:', response);
+                
+                const data = await response.json();
+                console.log('Data:', data);
+                
+                resultDiv.innerHTML = `
+                    <h2>Success!</h2>
+                    <p>Status: ${response.status}</p>
+                    <p>Data count: ${data.data ? data.data.length : 0}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <h2>Error!</h2>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

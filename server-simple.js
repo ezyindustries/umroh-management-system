@@ -26,12 +26,15 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 try {
-  app.use('/api/auth', require('./routes/auth'));
-  app.use('/api/jamaah', require('./routes/jamaah'));
-  app.use('/api/packages', require('./routes/packages'));
-  app.use('/api/payments', require('./routes/payments'));
-  app.use('/api/documents', require('./routes/documents'));
-  app.use('/api/users', require('./routes/users'));
+  // Use the new jamaah routes
+  app.use('/api/jamaah', require('./backend/routes/jamaah-new'));
+  
+  // Other routes (will add later)
+  // app.use('/api/auth', require('./routes/auth'));
+  // app.use('/api/packages', require('./routes/packages'));
+  // app.use('/api/payments', require('./routes/payments'));
+  // app.use('/api/documents', require('./routes/documents'));
+  // app.use('/api/users', require('./routes/users'));
 } catch (error) {
   console.error('Error loading routes:', error.message);
 }
