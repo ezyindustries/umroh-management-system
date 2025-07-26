@@ -32,6 +32,9 @@ try {
   // Use simple packages routes
   app.use('/api/packages', require('./backend/routes/packages-simple'));
   
+  // WhatsApp integration routes
+  app.use('/api/whatsapp', require('./backend/routes/whatsapp'));
+  
   // Other routes (will add later)
   // app.use('/api/auth', require('./routes/auth'));
   // app.use('/api/payments', require('./routes/payments'));
