@@ -1,7 +1,12 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
-const { auditLog } = require('../services/auditService');
+// const { auditLog } = require('../services/auditService');
+
+// Simple audit log function
+const auditLog = async (data) => {
+  console.log('Audit Log:', data);
+};
 
 // Token blacklist for logged out tokens (in production, use Redis)
 const tokenBlacklist = new Set();

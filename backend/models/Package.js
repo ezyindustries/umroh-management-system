@@ -87,7 +87,7 @@ class Package {
   // Get package by ID
   static async findById(id) {
     const result = await query(
-      'SELECT * FROM packages WHERE id = $1',
+      'SELECT * FROM core.packages WHERE id = $1',
       [id]
     );
     return result.rows[0];
@@ -119,7 +119,7 @@ class Package {
     const offset = (page - 1) * limit;
 
     // Get total count
-    const countQuery = `SELECT COUNT(*) as total FROM packages WHERE ${whereClause}`;
+    const countQuery = `SELECT COUNT(*) as total FROM core.packages WHERE ${whereClause}`;
     const countResult = await query(countQuery, values);
     const total = parseInt(countResult.rows[0].total);
 
@@ -130,16 +130,10 @@ class Package {
     values.push(offset);
 
     const dataQuery = `
-      SELECT p.*, 
-             p.sisa_seat as available_capacity,
-             (p.jumlah_seat_total - p.sisa_seat) as occupied_seats,
-             COUNT(j.id) as jamaah_count,
-             ROUND((p.jumlah_seat_total - p.sisa_seat)::decimal / p.jumlah_seat_total * 100, 2) as occupancy_percentage
-      FROM packages p
-      LEFT JOIN jamaah j ON p.id = j.package_id AND j.is_deleted = false
+      SELECT p.*
+      FROM core.packages p
       WHERE ${whereClause}
-      GROUP BY p.id
-      ORDER BY p.departure_date ASC, p.kode_paket ASC
+      ORDER BY p.departure_date ASC, p.name ASC
       LIMIT $${paramCount - 1} OFFSET $${paramCount}
     `;
 
@@ -214,7 +208,7 @@ class Package {
       throw new Error('Package tidak dapat dihapus karena masih ada jamaah yang terdaftar');
     }
 
-    await query('DELETE FROM packages WHERE id = $1', [id]);
+    await query('DELETE FROM core.packages WHERE id = $1', [id]);
     return { success: true };
   }
 
@@ -230,7 +224,7 @@ class Package {
         MAX(price) as max_price,
         SUM(max_capacity) as total_capacity,
         SUM(current_capacity) as total_occupied
-      FROM packages
+      FROM core.packages
     `);
 
     return result.rows[0];
@@ -261,7 +255,7 @@ class Package {
   static async getAvailable() {
     const result = await query(`
       SELECT p.*, (p.max_capacity - p.current_capacity) as available_capacity
-      FROM packages p
+      FROM core.packages p
       WHERE p.is_active = true 
         AND p.current_capacity < p.max_capacity
         AND (p.departure_date IS NULL OR p.departure_date >= CURRENT_DATE)
@@ -306,7 +300,7 @@ class Package {
   // Get package by code
   static async findByCode(kode_paket) {
     const result = await query(
-      'SELECT * FROM packages WHERE kode_paket = $1',
+      'SELECT * FROM core.packages WHERE kode_paket = $1',
       [kode_paket]
     );
     return result.rows[0];
@@ -317,7 +311,7 @@ class Package {
     const result = await query(`
       SELECT p.*, 
              (p.max_capacity - p.current_capacity) as available_capacity
-      FROM packages p
+      FROM core.packages p
       WHERE p.departure_date BETWEEN $1 AND $2
         AND p.is_active = true
       ORDER BY p.departure_date ASC
@@ -338,7 +332,7 @@ class Package {
         p.price,
         (p.current_capacity::float / p.max_capacity * 100) as occupancy_percentage,
         (p.max_capacity - p.current_capacity) as available_spots
-      FROM packages p
+      FROM core.packages p
       WHERE p.is_active = true
       ORDER BY p.departure_date ASC
     `);
@@ -362,8 +356,8 @@ class Package {
       SELECT p.*, 
              COUNT(j.id) as jamaah_count,
              (p.current_capacity::float / p.max_capacity * 100) as occupancy_percentage
-      FROM packages p
-      LEFT JOIN jamaah j ON p.id = j.package_id AND j.is_deleted = false
+      FROM core.packages p
+      LEFT JOIN jamaah.jamaah_data j ON p.id = j.id AND j.status != 'cancelled'
       WHERE p.is_active = true
       GROUP BY p.id
       ORDER BY jamaah_count DESC, p.created_at DESC
@@ -418,7 +412,7 @@ class Package {
     const offset = (page - 1) * limit;
 
     // Get total count
-    const countQuery = `SELECT COUNT(*) as total FROM packages p WHERE ${whereClause}`;
+    const countQuery = `SELECT COUNT(*) as total FROM core.packages p WHERE ${whereClause}`;
     const countResult = await query(countQuery, values);
     const total = parseInt(countResult.rows[0].total);
 
@@ -437,8 +431,8 @@ class Package {
              pb.image_url as primary_image_url,
              pb.image_filename as primary_image_filename,
              pb.alt_text as primary_image_alt
-      FROM packages p
-      LEFT JOIN jamaah j ON p.id = j.package_id AND j.is_deleted = false
+      FROM core.packages p
+      LEFT JOIN jamaah.jamaah_data j ON p.id = j.id AND j.status != 'cancelled'
       LEFT JOIN package_brosur pb ON p.id = pb.package_id AND pb.is_primary = true
       WHERE ${whereClause}
       GROUP BY p.id, pb.image_url, pb.image_filename, pb.alt_text

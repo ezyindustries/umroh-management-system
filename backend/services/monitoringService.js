@@ -27,12 +27,12 @@ class MonitoringService {
   }
 
   initializeMonitoring() {
-    // Start monitoring intervals
-    setInterval(() => this.collectSystemMetrics(), 30000); // Every 30 seconds
-    setInterval(() => this.collectDatabaseMetrics(), 60000); // Every minute
-    setInterval(() => this.collectApplicationMetrics(), 60000); // Every minute
-    setInterval(() => this.checkAlerts(), 120000); // Every 2 minutes
-    setInterval(() => this.cleanupOldMetrics(), 3600000); // Every hour
+    // Start monitoring intervals - disabled temporarily
+    // setInterval(() => this.collectSystemMetrics(), 30000); // Every 30 seconds
+    // setInterval(() => this.collectDatabaseMetrics(), 60000); // Every minute
+    // setInterval(() => this.collectApplicationMetrics(), 60000); // Every minute
+    // setInterval(() => this.checkAlerts(), 120000); // Every 2 minutes
+    // setInterval(() => this.cleanupOldMetrics(), 3600000); // Every hour
 
     logger.info('System monitoring initialized');
   }

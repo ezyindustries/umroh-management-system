@@ -203,7 +203,7 @@ class SecurityConfig {
   // CORS configuration
   getCorsConfig() {
     const allowedOrigins = process.env.ALLOWED_ORIGINS 
-      ? process.env.ALLOWED_ORIGINS.split(',')
+      ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
       : ['http://localhost:3000'];
 
     return {
@@ -211,10 +211,18 @@ class SecurityConfig {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         
+        // Log for debugging
+        console.log('CORS check - Origin:', origin, 'Allowed:', allowedOrigins);
+        
         if (allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
-          callback(new Error('Not allowed by CORS'));
+          // In development, allow all origins
+          if (process.env.NODE_ENV !== 'production') {
+            callback(null, true);
+          } else {
+            callback(new Error('Not allowed by CORS'));
+          }
         }
       },
       credentials: true,
@@ -228,6 +236,7 @@ class SecurityConfig {
         'Cache-Control',
         'Pragma'
       ],
+      exposedHeaders: ['Content-Range', 'X-Content-Range'],
       maxAge: 86400 // 24 hours
     };
   }

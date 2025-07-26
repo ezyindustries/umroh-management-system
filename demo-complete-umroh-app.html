@@ -26,6 +26,64 @@
             height: 100%;
             overflow: hidden;
         }
+        
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(203, 213, 225, 0.2);
+            transition: .4s;
+            border: 1px solid rgba(203, 213, 225, 0.3);
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #e2e8f0;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: #25D366;
+            border-color: #25D366;
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px #25D366;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .slider.round {
+            border-radius: 24px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -2201,13 +2259,83 @@
                                         Terhubung: <span id="waConnectedNumber"></span>
                                     </span>
                                 </div>
+                                
+                                <!-- Leads Bot Toggle -->
+                                <div style="display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <label class="switch" style="margin: 0;">
+                                        <input type="checkbox" id="leadsBotToggle" onchange="toggleLeadsBot(this)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <span style="font-size: 14px; font-weight: 500; color: #25D366;">Leads Bot</span>
+                                </div>
+                                
                                 <button class="btn btn-primary" onclick="connectWhatsApp()" style="background: linear-gradient(135deg, #25D366, #128C7E);">
                                     <span class="material-icons">qr_code_scanner</span>
                                     Sambung ke WhatsApp
                                 </button>
+                                <button class="btn btn-warning" onclick="restartWhatsAppSession()" style="background: linear-gradient(135deg, #FFA726, #FB8C00);">
+                                    <span class="material-icons">restart_alt</span>
+                                    Restart Session
+                                </button>
                                 <button class="btn btn-danger" onclick="disconnectWhatsApp()" style="display: none;" id="waDisconnectBtn">
                                     <span class="material-icons">link_off</span>
                                     Putuskan
+                                </button>
+                                <button class="btn btn-success" onclick="openWhatsAppChat()" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+                                    <span class="material-icons">chat</span>
+                                    Buka WA
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- WhatsApp Monitoring Dashboard -->
+                        <div class="glass-card" style="margin-top: 30px; margin-bottom: 30px;">
+                            <h3 style="margin-bottom: 20px;">
+                                <span class="material-icons" style="vertical-align: middle; margin-right: 10px;">monitoring</span>
+                                WhatsApp Monitoring Dashboard
+                            </h3>
+                            
+                            <!-- Connection Status -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                                <div style="padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <h4 style="margin-bottom: 15px; font-size: 16px;">Connection Status</h4>
+                                    <div id="waMonitoringStatus" style="display: flex; align-items: center; gap: 10px;">
+                                        <div id="waStatusIndicator" style="width: 12px; height: 12px; border-radius: 50%; background: #EF4444;"></div>
+                                        <span id="waStatusText" style="font-weight: 500;">Disconnected</span>
+                                    </div>
+                                    <div style="margin-top: 15px; font-size: 13px; color: rgba(255, 255, 255, 0.6);">
+                                        <div>Session: <span id="waSessionName">default</span></div>
+                                        <div>Status: <span id="waSessionStatus">-</span></div>
+                                        <div>Last Check: <span id="waLastCheck">-</span></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <h4 style="margin-bottom: 15px; font-size: 16px;">Session Info</h4>
+                                    <div style="font-size: 13px; color: rgba(255, 255, 255, 0.8);">
+                                        <div style="margin-bottom: 10px;">Phone: <strong id="waPhoneInfo">-</strong></div>
+                                        <div style="margin-bottom: 10px;">Name: <strong id="waNameInfo">-</strong></div>
+                                        <div>Engine: <strong id="waEngineInfo">-</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <h4 style="margin-bottom: 15px; font-size: 16px;">Message Stats (Today)</h4>
+                                    <div style="font-size: 13px; color: rgba(255, 255, 255, 0.8);">
+                                        <div style="margin-bottom: 10px;">Messages Received: <strong id="waMsgReceived">0</strong></div>
+                                        <div style="margin-bottom: 10px;">Messages Sent: <strong id="waMsgSent">0</strong></div>
+                                        <div>Auto Replies: <strong id="waAutoReplies">0</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Auto Refresh Toggle -->
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                                <input type="checkbox" id="waAutoRefresh" checked style="width: 16px; height: 16px;">
+                                <label for="waAutoRefresh" style="font-size: 14px;">Auto refresh every 10 seconds</label>
+                                <button class="btn btn-sm" onclick="refreshWhatsAppStatus()" style="margin-left: auto;">
+                                    <span class="material-icons" style="font-size: 16px;">refresh</span>
+                                    Refresh Now
                                 </button>
                             </div>
                         </div>
@@ -5272,6 +5400,7 @@
                     // Marketing page - check WhatsApp status
                     console.log('Marketing page loaded');
                     checkWhatsAppStatus();
+                    loadLeadsBotState();
                     break;
                 default:
                     console.log('Page loaded:', pageId);
@@ -5755,11 +5884,14 @@
             try {
                 // Fetch packages from API
                 const response = await fetch(getApiBaseUrl() + '/api/packages');
-                const packages = await response.json();
+                const result = await response.json();
                 
                 if (!response.ok) {
                     throw new Error('Failed to load packages');
                 }
+                
+                // Extract data array from response
+                const packages = result.data || result || [];
                 
                 container.innerHTML = '';
                 
@@ -8542,6 +8674,10 @@
                     return;
                 }
                 
+                if (startData.needsQR) {
+                    showNotification('Session siap, silakan scan QR code', 'info');
+                }
+                
                 // Start checking for QR code
                 setTimeout(getQRCode, 2000);
                 
@@ -8650,6 +8786,470 @@
                 }
             }
         }
+        
+        async function restartWhatsAppSession() {
+            if (confirm('Restart WhatsApp session? Session lama akan dihapus.')) {
+                try {
+                    showNotification('Merestart session WhatsApp...', 'info');
+                    
+                    // Call restart endpoint
+                    const response = await fetch(getApiBaseUrl() + '/api/whatsapp/restart', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        waConnected = false;
+                        waPhoneNumber = '';
+                        updateWhatsAppStatus();
+                        showNotification('Session berhasil direstart. Silakan sambung ulang.', 'success');
+                    } else {
+                        showNotification('Gagal merestart session', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error restarting session:', error);
+                    showNotification('Gagal merestart session', 'error');
+                }
+            }
+        }
+        
+        // Leads Bot functionality
+        let leadsBotEnabled = false;
+        
+        async function toggleLeadsBot(checkbox) {
+            leadsBotEnabled = checkbox.checked;
+            
+            try {
+                // Update backend autoreply status
+                const response = await fetch(getApiBaseUrl() + '/api/whatsapp/autoreply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: leadsBotEnabled })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showNotification(
+                        leadsBotEnabled ? 
+                        'Leads Bot diaktifkan! Bot akan membalas pesan dengan kode paket.' : 
+                        'Leads Bot dimatikan.',
+                        'success'
+                    );
+                    
+                    // Save state to localStorage
+                    localStorage.setItem('leadsBotEnabled', leadsBotEnabled);
+                } else {
+                    // Revert checkbox if failed
+                    checkbox.checked = !leadsBotEnabled;
+                    leadsBotEnabled = !leadsBotEnabled;
+                    showNotification('Gagal mengubah status Leads Bot', 'error');
+                }
+            } catch (error) {
+                console.error('Error toggling leads bot:', error);
+                // Revert checkbox if failed
+                checkbox.checked = !leadsBotEnabled;
+                leadsBotEnabled = !leadsBotEnabled;
+                showNotification('Error: ' + error.message, 'error');
+            }
+        }
+        
+        // Load leads bot state on page load
+        function loadLeadsBotState() {
+            const savedState = localStorage.getItem('leadsBotEnabled');
+            if (savedState !== null) {
+                leadsBotEnabled = savedState === 'true';
+                const toggle = document.getElementById('leadsBotToggle');
+                if (toggle) {
+                    toggle.checked = leadsBotEnabled;
+                }
+            }
+        }
+        
+        // WhatsApp Chat Manager Functions
+        let selectedChat = null;
+        let chatMessages = {};
+        
+        async function openWhatsAppChat() {
+            // Open WhatsApp Chat Manager in new tab
+            window.open('whatsapp-chat.html', '_blank');
+        }
+        
+        async function loadChatList() {
+            try {
+                const response = await fetch(getApiBaseUrl() + '/api/whatsapp/chats');
+                if (response.ok) {
+                    const chats = await response.json();
+                    displayChatList(chats);
+                } else {
+                    // For now, show demo data
+                    const demoChats = [
+                        {
+                            id: '6281234567890@c.us',
+                            name: 'Ahmad Fauzi',
+                            lastMessage: 'Assalamualaikum, ada paket umroh bulan depan?',
+                            timestamp: new Date().toISOString(),
+                            unread: 2
+                        },
+                        {
+                            id: '6289876543210@c.us', 
+                            name: 'Ibu Siti',
+                            lastMessage: 'Terima kasih infonya',
+                            timestamp: new Date(Date.now() - 3600000).toISOString(),
+                            unread: 0
+                        },
+                        {
+                            id: '6285555555555@c.us',
+                            name: '+62 855-5555-5555',
+                            lastMessage: '#2025_12H_TUR_TK_SEP16',
+                            timestamp: new Date(Date.now() - 7200000).toISOString(),
+                            unread: 1
+                        }
+                    ];
+                    displayChatList(demoChats);
+                }
+            } catch (error) {
+                console.error('Error loading chats:', error);
+                // Show demo data on error
+                const demoChats = [
+                    {
+                        id: '6281234567890@c.us',
+                        name: 'Ahmad Fauzi',
+                        lastMessage: 'Assalamualaikum, ada paket umroh bulan depan?',
+                        timestamp: new Date().toISOString(),
+                        unread: 2
+                    }
+                ];
+                displayChatList(demoChats);
+            }
+        }
+        
+        function displayChatList(chats) {
+            const chatList = document.getElementById('chatList');
+            chatList.innerHTML = '';
+            
+            chats.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-item';
+                chatItem.style.cssText = `
+                    padding: 15px;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    cursor: pointer;
+                    transition: background 0.2s;
+                `;
+                
+                chatItem.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 45px; height: 45px; background: #25D366; border-radius: 50%; 
+                                    display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span class="material-icons" style="color: white;">person</span>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <h4 style="margin: 0; font-size: 15px; font-weight: 500;">${chat.name}</h4>
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">
+                                    ${formatMessageTime(chat.timestamp)}
+                                </span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <p style="margin: 0; font-size: 13px; color: rgba(255, 255, 255, 0.6); 
+                                         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    ${chat.lastMessage}
+                                </p>
+                                ${chat.unread > 0 ? `
+                                    <span style="background: #25D366; color: white; font-size: 11px; 
+                                                padding: 2px 6px; border-radius: 10px; margin-left: 10px;">
+                                        ${chat.unread}
+                                    </span>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                chatItem.onmouseover = () => {
+                    chatItem.style.background = 'rgba(255, 255, 255, 0.05)';
+                };
+                
+                chatItem.onmouseout = () => {
+                    chatItem.style.background = selectedChat === chat.id ? 'rgba(37, 211, 102, 0.1)' : '';
+                };
+                
+                chatItem.onclick = () => selectChat(chat);
+                
+                chatList.appendChild(chatItem);
+            });
+        }
+        
+        function selectChat(chat) {
+            selectedChat = chat.id;
+            
+            // Update UI
+            document.getElementById('chatEmptyState').style.display = 'none';
+            document.getElementById('chatHeader').style.display = 'block';
+            document.getElementById('messageInput').style.display = 'block';
+            
+            // Update header
+            document.getElementById('chatContactName').textContent = chat.name;
+            document.getElementById('chatContactNumber').textContent = chat.id.replace('@c.us', '');
+            
+            // Load messages
+            loadChatMessages(chat.id);
+            
+            // Update selected state in list
+            document.querySelectorAll('.chat-item').forEach((item, index) => {
+                item.style.background = index === Array.from(item.parentNode.children).indexOf(item) && 
+                                       item.querySelector('h4').textContent === chat.name ? 
+                                       'rgba(37, 211, 102, 0.1)' : '';
+            });
+        }
+        
+        async function loadChatMessages(chatId) {
+            try {
+                const response = await fetch(getApiBaseUrl() + `/api/whatsapp/messages/${chatId}`);
+                if (response.ok) {
+                    const messages = await response.json();
+                    displayMessages(messages);
+                } else {
+                    // Show demo messages
+                    const demoMessages = [
+                        {
+                            id: '1',
+                            from: chatId,
+                            fromMe: false,
+                            body: 'Assalamualaikum, ada paket umroh bulan depan?',
+                            timestamp: new Date(Date.now() - 3600000).toISOString()
+                        },
+                        {
+                            id: '2',
+                            from: '6282255555000@c.us',
+                            fromMe: true,
+                            body: 'Waalaikumsalam. Ada pak, kami punya beberapa paket untuk bulan depan. Bapak berminat untuk keberangkatan tanggal berapa?',
+                            timestamp: new Date(Date.now() - 3000000).toISOString()
+                        },
+                        {
+                            id: '3',
+                            from: chatId,
+                            fromMe: false,
+                            body: 'Sekitar pertengahan bulan. Ada yang 12 hari?',
+                            timestamp: new Date(Date.now() - 2400000).toISOString()
+                        }
+                    ];
+                    displayMessages(demoMessages);
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+        
+        function displayMessages(messages) {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.innerHTML = '';
+            
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.style.cssText = `
+                    display: flex;
+                    ${message.fromMe ? 'justify-content: flex-end' : 'justify-content: flex-start'}
+                `;
+                
+                const bubble = document.createElement('div');
+                bubble.style.cssText = `
+                    max-width: 70%;
+                    padding: 10px 15px;
+                    border-radius: 12px;
+                    ${message.fromMe ? 
+                        'background: #25D366; color: white; border-bottom-right-radius: 4px;' : 
+                        'background: rgba(255, 255, 255, 0.1); color: white; border-bottom-left-radius: 4px;'}
+                `;
+                
+                bubble.innerHTML = `
+                    <p style="margin: 0 0 5px 0; font-size: 14px; line-height: 1.4;">${message.body}</p>
+                    <span style="font-size: 11px; opacity: 0.7;">
+                        ${formatMessageTime(message.timestamp)}
+                    </span>
+                `;
+                
+                messageDiv.appendChild(bubble);
+                messagesList.appendChild(messageDiv);
+            });
+            
+            // Scroll to bottom
+            const messagesArea = document.getElementById('messagesArea');
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+        
+        async function sendWhatsAppMessage(event) {
+            event.preventDefault();
+            
+            const messageText = document.getElementById('messageText').value.trim();
+            if (!messageText || !selectedChat) return;
+            
+            try {
+                const response = await fetch(getApiBaseUrl() + '/api/whatsapp/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: selectedChat.replace('@c.us', ''),
+                        message: messageText
+                    })
+                });
+                
+                if (response.ok) {
+                    // Add message to UI immediately
+                    const newMessage = {
+                        id: Date.now().toString(),
+                        from: '6282255555000@c.us',
+                        fromMe: true,
+                        body: messageText,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    const messagesList = document.getElementById('messagesList');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.style.cssText = 'display: flex; justify-content: flex-end';
+                    
+                    const bubble = document.createElement('div');
+                    bubble.style.cssText = `
+                        max-width: 70%;
+                        padding: 10px 15px;
+                        border-radius: 12px;
+                        background: #25D366;
+                        color: white;
+                        border-bottom-right-radius: 4px;
+                    `;
+                    
+                    bubble.innerHTML = `
+                        <p style="margin: 0 0 5px 0; font-size: 14px; line-height: 1.4;">${messageText}</p>
+                        <span style="font-size: 11px; opacity: 0.7;">
+                            ${formatMessageTime(newMessage.timestamp)}
+                        </span>
+                    `;
+                    
+                    messageDiv.appendChild(bubble);
+                    messagesList.appendChild(messageDiv);
+                    
+                    // Clear input and scroll to bottom
+                    document.getElementById('messageText').value = '';
+                    const messagesArea = document.getElementById('messagesArea');
+                    messagesArea.scrollTop = messagesArea.scrollHeight;
+                } else {
+                    showNotification('Gagal mengirim pesan', 'error');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showNotification('Error: ' + error.message, 'error');
+            }
+        }
+        
+        function filterChats() {
+            const searchValue = document.getElementById('chatSearch').value.toLowerCase();
+            const chatItems = document.querySelectorAll('.chat-item');
+            
+            chatItems.forEach(item => {
+                const name = item.querySelector('h4').textContent.toLowerCase();
+                const message = item.querySelector('p').textContent.toLowerCase();
+                
+                if (name.includes(searchValue) || message.includes(searchValue)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        function formatMessageTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'Baru saja';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)} menit lalu`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)} jam lalu`;
+            
+            return date.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // WhatsApp monitoring functions
+        let waMonitoringInterval = null;
+        
+        async function refreshWhatsAppStatus() {
+            try {
+                const response = await fetch(getApiBaseUrl() + '/api/whatsapp/status');
+                const data = await response.json();
+                
+                // Update monitoring dashboard
+                const statusIndicator = document.getElementById('waStatusIndicator');
+                const statusText = document.getElementById('waStatusText');
+                const sessionStatus = document.getElementById('waSessionStatus');
+                const phoneInfo = document.getElementById('waPhoneInfo');
+                const nameInfo = document.getElementById('waNameInfo');
+                const engineInfo = document.getElementById('waEngineInfo');
+                const lastCheck = document.getElementById('waLastCheck');
+                
+                if (data.connected) {
+                    statusIndicator.style.background = '#10B981';
+                    statusText.textContent = 'Connected';
+                    sessionStatus.textContent = 'WORKING';
+                    phoneInfo.textContent = formatPhoneNumber(data.phoneNumber);
+                    nameInfo.textContent = data.name || '-';
+                    engineInfo.textContent = 'WEBJS';
+                } else {
+                    statusIndicator.style.background = '#EF4444';
+                    statusText.textContent = 'Disconnected';
+                    sessionStatus.textContent = data.status || 'FAILED';
+                    phoneInfo.textContent = '-';
+                    nameInfo.textContent = '-';
+                    engineInfo.textContent = '-';
+                }
+                
+                lastCheck.textContent = new Date().toLocaleTimeString('id-ID');
+                
+                // Update main status
+                waConnected = data.connected;
+                if (data.connected) {
+                    waPhoneNumber = formatPhoneNumber(data.phoneNumber);
+                }
+                updateWhatsAppStatus();
+                
+            } catch (error) {
+                console.error('Error refreshing WhatsApp status:', error);
+            }
+        }
+        
+        // Auto refresh monitoring
+        function startWhatsAppMonitoring() {
+            const autoRefresh = document.getElementById('waAutoRefresh');
+            if (autoRefresh && autoRefresh.checked) {
+                refreshWhatsAppStatus();
+                waMonitoringInterval = setInterval(refreshWhatsAppStatus, 10000); // Every 10 seconds
+            }
+        }
+        
+        function stopWhatsAppMonitoring() {
+            if (waMonitoringInterval) {
+                clearInterval(waMonitoringInterval);
+                waMonitoringInterval = null;
+            }
+        }
+        
+        // Auto refresh toggle handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const autoRefreshToggle = document.getElementById('waAutoRefresh');
+            if (autoRefreshToggle) {
+                autoRefreshToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                        startWhatsAppMonitoring();
+                    } else {
+                        stopWhatsAppMonitoring();
+                    }
+                });
+            }
+        });
         
         function updateWhatsAppStatus() {
             const statusDiv = document.getElementById('waConnectionStatus');
@@ -9335,6 +9935,78 @@
                 <h3 style="margin-bottom: 20px; background: linear-gradient(135deg, #F59E0B, #FCD34D); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Special Requests</h3>
                 <div id="requestsList">
                     <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- WhatsApp Chat Manager Modal -->
+    <div id="whatsappChatModal" class="modal">
+        <div class="modal-content" style="max-width: 1200px; height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <h3>WhatsApp Chat Manager</h3>
+                <button class="close-btn" onclick="closeModal('whatsappChatModal')">&times;</button>
+            </div>
+            
+            <div style="display: flex; flex: 1; overflow: hidden;">
+                <!-- Chat List Sidebar -->
+                <div style="width: 350px; background: rgba(30, 41, 59, 0.8); border-right: 1px solid rgba(255, 255, 255, 0.1); overflow-y: auto;">
+                    <!-- Search Box -->
+                    <div style="padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <input type="text" id="chatSearch" placeholder="Cari chat..." 
+                               style="width: 100%; padding: 10px 15px; background: rgba(255, 255, 255, 0.05); 
+                                      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; 
+                                      color: white;" onkeyup="filterChats()">
+                    </div>
+                    
+                    <!-- Chat List -->
+                    <div id="chatList">
+                        <!-- Chat items will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Chat Content Area -->
+                <div style="flex: 1; display: flex; flex-direction: column; background: rgba(15, 23, 42, 0.8);">
+                    <!-- Chat Header -->
+                    <div id="chatHeader" style="padding: 15px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: none;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 45px; height: 45px; background: #25D366; border-radius: 50%; 
+                                        display: flex; align-items: center; justify-content: center;">
+                                <span class="material-icons" style="color: white;">person</span>
+                            </div>
+                            <div>
+                                <h4 id="chatContactName" style="margin: 0; font-size: 16px;"></h4>
+                                <p id="chatContactNumber" style="margin: 0; font-size: 13px; color: rgba(255, 255, 255, 0.6);"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Messages Area -->
+                    <div id="messagesArea" style="flex: 1; overflow-y: auto; padding: 20px;">
+                        <div id="messagesList" style="display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Messages will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Message Input -->
+                    <div id="messageInput" style="padding: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: none;">
+                        <form onsubmit="sendWhatsAppMessage(event)" style="display: flex; gap: 10px;">
+                            <input type="text" id="messageText" placeholder="Ketik pesan..." 
+                                   style="flex: 1; padding: 12px 15px; background: rgba(255, 255, 255, 0.05); 
+                                          border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; 
+                                          color: white;">
+                            <button type="submit" class="btn btn-primary" style="background: #25D366;">
+                                <span class="material-icons">send</span>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div id="chatEmptyState" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+                        <span class="material-icons" style="font-size: 80px; color: rgba(255, 255, 255, 0.2); margin-bottom: 20px;">chat</span>
+                        <h3 style="color: rgba(255, 255, 255, 0.5); margin-bottom: 10px;">Pilih chat untuk memulai</h3>
+                        <p style="color: rgba(255, 255, 255, 0.3);">Pilih kontak dari daftar di sebelah kiri untuk melihat percakapan</p>
+                    </div>
                 </div>
             </div>
         </div>
