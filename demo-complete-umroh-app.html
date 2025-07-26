@@ -1274,6 +1274,18 @@
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 15px 30px rgba(239, 68, 68, 0.4);
         }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            color: white;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+        
+        .btn-info:hover {
+            background: linear-gradient(135deg, #0891b2, #0e7490);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(6, 182, 212, 0.4);
+        }
 
         /* Table */
         .table-container {
@@ -1974,17 +1986,20 @@
 
             <!-- Packages Page -->
             <div id="packages" class="page">
-                <div class="glass-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">card_travel</span>Paket Umroh</h2>
-                        <button class="btn btn-primary" onclick="openModal('packageModal')">
+                <div class="glass-card" style="padding: 35px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div>
+                            <h2 style="margin: 0;"><span class="material-icons" style="vertical-align: middle; margin-right: 10px; background: linear-gradient(135deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">card_travel</span>Paket Umroh</h2>
+                            <p style="color: rgba(255, 255, 255, 0.7); margin: 5px 0 0 0;">Kelola semua paket umroh yang tersedia</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openModal('packageModal')" style="padding: 12px 24px;">
                             <span class="material-icons">add</span>
                             Tambah Paket
                         </button>
                     </div>
                     
                     <!-- Package Cards -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;" id="packageGrid">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 30px; padding: 10px 0;" id="packageGrid">
                         <!-- Package cards will be populated by JavaScript -->
                     </div>
                 </div>
@@ -3852,7 +3867,7 @@
 
     <!-- Package Modal -->
     <div id="packageModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 800px;">
             <div class="modal-header">
                 <h3>Tambah/Edit Paket Umroh</h3>
                 <button class="close-btn">&times;</button>
@@ -3906,9 +3921,76 @@
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label>Deskripsi</label>
-                    <textarea id="packageDescription" rows="3"></textarea>
+                <!-- Flight Details Section -->
+                <h4 style="color: #3b82f6; margin: 20px 0 15px 0; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">Detail Penerbangan</h4>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Kota Keberangkatan</label>
+                        <input type="text" id="packageDepartureCity" placeholder="Contoh: Jakarta" value="Jakarta">
+                    </div>
+                    <div class="form-group">
+                        <label>Transit Berangkat</label>
+                        <input type="text" id="packageTransitDeparture" placeholder="Contoh: Istanbul (opsional)">
+                    </div>
+                    <div class="form-group">
+                        <label>Kota Tiba</label>
+                        <input type="text" id="packageArrivalCity" placeholder="Contoh: Madinah" value="Madinah">
+                    </div>
+                    <div class="form-group">
+                        <label>No. Penerbangan Berangkat</label>
+                        <input type="text" id="packageDepartureFlightNumber" placeholder="Contoh: TK057 (opsional)">
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Kota Pulang Dari</label>
+                        <input type="text" id="packageReturnDepartureCity" placeholder="Contoh: Jeddah" value="Jeddah">
+                    </div>
+                    <div class="form-group">
+                        <label>Transit Pulang</label>
+                        <input type="text" id="packageTransitReturn" placeholder="Contoh: Istanbul (opsional)">
+                    </div>
+                    <div class="form-group">
+                        <label>Kota Tiba Pulang</label>
+                        <input type="text" id="packageReturnArrivalCity" placeholder="Contoh: Jakarta" value="Jakarta">
+                    </div>
+                    <div class="form-group">
+                        <label>No. Penerbangan Pulang</label>
+                        <input type="text" id="packageReturnFlightNumber" placeholder="Contoh: TK058 (opsional)">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Catatan Penerbangan</label>
+                    <textarea id="packageFlightInfo" rows="2" placeholder="Informasi tambahan tentang penerbangan (opsional)"></textarea>
+                </div>
+                
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Gambar Brosur Utama</label>
+                    <input type="file" id="packageBrochure" accept="image/*" onchange="previewBrochure(event)">
+                    <div id="brochurePreview" style="margin-top: 10px; display: none;">
+                        <img id="brochureImg" style="width: 200px; height: 120px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(71, 85, 105, 0.4);">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Gambar Tambahan (Multiple)</label>
+                    <input type="file" id="packageImages" accept="image/*" multiple onchange="previewMultipleImages(event)">
+                    <small style="color: #94a3b8;">Anda dapat memilih beberapa gambar sekaligus (maks. 10 gambar)</small>
+                    <div id="multipleImagesPreview" style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Deskripsi Singkat</label>
+                    <textarea id="packageDescription" rows="3" placeholder="Deskripsi singkat paket (maks. 200 karakter)"></textarea>
+                </div>
+                
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Informasi Detail Paket</label>
+                    <textarea id="packageInfo" rows="5" placeholder="Informasi lengkap tentang paket ini, fasilitas, itinerary, dll."></textarea>
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
@@ -4055,6 +4137,27 @@
         </div>
     </div>
 
+    <!-- Package Details Modal -->
+    <div id="packageDetailModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3 id="packageDetailTitle">Detail Paket Umroh</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            
+            <div id="packageDetailContent" style="padding: 20px;">
+                <!-- Content will be populated dynamically -->
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                <button class="btn btn-primary" onclick="closeModal('packageDetailModal')">
+                    <span class="material-icons">close</span>
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Room Management Modal -->
     <div id="roomModal" class="modal">
         <div class="modal-content" style="max-width: 1200px; width: 95%;">
@@ -4167,6 +4270,12 @@
             return window.location.hostname === 'localhost' 
                 ? 'http://localhost:5000'
                 : 'http://103.181.143.223:5000';
+        }
+        
+        function getAuthToken() {
+            // For demo purposes, return a dummy token
+            // In production, this should retrieve the actual auth token from localStorage/sessionStorage
+            return 'demo-token';
         }
         
         // Sample Data
@@ -5160,7 +5269,7 @@
                     </td>
                     <td>${jamaah.packages && jamaah.packages.length > 0 ? jamaah.packages.map(p => p.name).join(', ') : '-'}</td>
                     <td><span class="status-badge status-${jamaah.status}">${getStatusText(jamaah.status)}</span></td>
-                    <td>Rp ${(jamaah.total_paid || 0).toLocaleString()}</td>
+                    <td>Rp ${formatPrice(jamaah.total_paid || 0)}</td>
                     <td>
                         <div class="table-actions">
                             <button class="btn btn-primary btn-sm" onclick="editJamaah(${jamaah.id})">
@@ -5516,56 +5625,116 @@
                     return;
                 }
                 
-                packages.forEach(package => {
+                // Filter only active packages for normal users
+                const activePackages = packages.filter(p => p.status === 'active');
+                
+                if (activePackages.length === 0) {
+                    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.7);">Tidak ada paket aktif saat ini</div>';
+                    return;
+                }
+                
+                activePackages.forEach(package => {
                 const remainingSeats = package.available || (package.quota - (package.booked || 0));
                 const card = document.createElement('div');
                 card.className = 'glass-card';
+                card.style.cssText = 'padding: 25px; transition: all 0.3s ease; cursor: pointer;';
                 card.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                        <h3 style="color: white; margin: 0;">${package.name}</h3>
-                        <span style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">${package.code}</span>
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+                        <div style="flex: 1;">
+                            <h3 style="color: white; margin: 0 0 8px 0; font-size: 20px;">${package.name}</h3>
+                            <span style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.1)); color: #3b82f6; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block;">${package.code}</span>
+                        </div>
+                        ${package.brochure_image ? `
+                        <div style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; margin-left: 15px; flex-shrink: 0;">
+                            <img src="${package.brochure_image}" alt="${package.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        ` : ''}
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
                         <div>
-                            <p style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Harga</p>
-                            <p style="color: #4facfe; font-weight: 600;">Rp ${(package.price || 0).toLocaleString()}</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin: 0 0 4px 0;">Harga Paket</p>
+                            <p style="color: #4facfe; font-weight: 700; font-size: 18px; margin: 0;">Rp ${formatPrice(package.price || 0)}</p>
                         </div>
                         <div>
-                            <p style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Keberangkatan</p>
-                            <p style="color: white;">${formatDate(package.departure_date)}</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin: 0 0 4px 0;">Keberangkatan</p>
+                            <p style="color: white; font-weight: 600; margin: 0;">${formatDate(package.departure_date)}</p>
                         </div>
                         <div>
-                            <p style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Durasi</p>
-                            <p style="color: white;">${calculateDuration(package.departure_date, package.return_date)} hari</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin: 0 0 4px 0;">Durasi</p>
+                            <p style="color: white; font-weight: 600; margin: 0;">${calculateDuration(package.departure_date, package.return_date)} hari</p>
                         </div>
                         <div>
-                            <p style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Sisa Seat</p>
-                            <p style="color: ${remainingSeats > 10 ? '#22c55e' : remainingSeats > 0 ? '#f59e0b' : '#ef4444'}; font-weight: 600;">${remainingSeats}/${package.quota}</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin: 0 0 4px 0;">Sisa Seat</p>
+                            <p style="color: ${remainingSeats > 10 ? '#22c55e' : remainingSeats > 0 ? '#f59e0b' : '#ef4444'}; font-weight: 700; margin: 0;">${remainingSeats}/${package.quota}</p>
                         </div>
                     </div>
                     
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: white; font-size: 14px; margin-bottom: 8px;">Detail Hotel & Penerbangan</h4>
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.8);">
-                            <p>🏨 Makkah: ${package.makkah_hotel} (${package.makkah_nights} malam)</p>
-                            <p>🏨 Madinah: ${package.madinah_hotel} (${package.madinah_nights} malam)</p>
-                            <p>✈️ Maskapai: ${package.airline}</p>
+                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 12px;">
+                        <h4 style="color: white; font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">Detail Hotel & Penerbangan</h4>
+                        <div style="font-size: 13px; color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                            <p style="margin: 0 0 8px 0;">🏨 <strong>Makkah:</strong> ${package.makkah_hotel} (${package.makkah_nights} malam)</p>
+                            <p style="margin: 0 0 8px 0;">🏨 <strong>Madinah:</strong> ${package.madinah_hotel} (${package.madinah_nights} malam)</p>
+                            <p style="margin: 0 0 8px 0;">✈️ <strong>Maskapai:</strong> ${package.airline}</p>
+                            
+                            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <p style="margin: 0 0 8px 0; color: #3b82f6;"><strong>🛫 Keberangkatan:</strong></p>
+                                <p style="margin: 0 0 4px 0; padding-left: 20px;">
+                                    ${package.departure_city || 'Jakarta'} 
+                                    ${package.transit_city_departure ? `→ ${package.transit_city_departure} (Transit)` : ''} 
+                                    → ${package.arrival_city || 'Madinah'}
+                                </p>
+                                ${package.departure_flight_number ? `<p style="margin: 0 0 8px 0; padding-left: 20px; font-size: 12px; color: rgba(255, 255, 255, 0.6);">Flight: ${package.departure_flight_number}</p>` : ''}
+                                
+                                <p style="margin: 0 0 8px 0; color: #10b981;"><strong>🛬 Kepulangan:</strong></p>
+                                <p style="margin: 0 0 4px 0; padding-left: 20px;">
+                                    ${package.return_departure_city || 'Jeddah'} 
+                                    ${package.transit_city_return ? `→ ${package.transit_city_return} (Transit)` : ''} 
+                                    → ${package.return_arrival_city || 'Jakarta'}
+                                </p>
+                                ${package.return_flight_number ? `<p style="margin: 0; padding-left: 20px; font-size: 12px; color: rgba(255, 255, 255, 0.6);">Flight: ${package.return_flight_number}</p>` : ''}
+                            </div>
                         </div>
                     </div>
                     
-                    <p style="color: rgba(255, 255, 255, 0.8); font-size: 12px; margin-bottom: 15px;">${package.description}</p>
+                    ${package.description ? `
+                    <div style="margin-bottom: 20px; padding: 15px; background: rgba(59, 130, 246, 0.05); border-radius: 12px; border-left: 3px solid #3b82f6;">
+                        <p style="color: rgba(255, 255, 255, 0.9); font-size: 13px; line-height: 1.6; margin: 0;">${package.description}</p>
+                    </div>
+                    ` : ''}
                     
-                    <div class="btn-group">
-                        <button class="btn btn-primary btn-flex" onclick="editPackage(${package.id})">
+                    ${package.package_info ? `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: white; font-size: 14px; margin: 0 0 8px 0; font-weight: 600;">Informasi Paket</h4>
+                        <div style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.8; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${package.package_info}</div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="btn-group" style="gap: 12px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                        <button class="btn btn-primary btn-flex" onclick="editPackage(${package.id})" style="flex: 1; padding: 10px 20px;">
                             <span class="material-icons">edit</span>
                             Edit
                         </button>
-                        <button class="btn btn-danger btn-flex" onclick="deletePackage(${package.id})">
+                        <button class="btn btn-info btn-flex" onclick="viewPackageDetails(${package.id})" style="flex: 1; padding: 10px 20px;">
+                            <span class="material-icons">visibility</span>
+                            Detail
+                        </button>
+                        <button class="btn btn-danger btn-flex" onclick="deletePackage(${package.id})" style="flex: 1; padding: 10px 20px;">
                             <span class="material-icons">delete</span>
                             Hapus
                         </button>
                     </div>
                 `;
+                
+                // Add hover effect
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '';
+                });
                 container.appendChild(card);
             });
             } catch (error) {
@@ -5599,6 +5768,50 @@
                 document.getElementById('packageMadinahNights').value = package.madinah_nights || 0;
                 document.getElementById('packageAirline').value = package.airline || '';
                 document.getElementById('packageDescription').value = package.description || '';
+                document.getElementById('packageInfo').value = package.package_info || '';
+                
+                // Populate flight details
+                document.getElementById('packageDepartureCity').value = package.departure_city || 'Jakarta';
+                document.getElementById('packageTransitDeparture').value = package.transit_city_departure || '';
+                document.getElementById('packageArrivalCity').value = package.arrival_city || 'Madinah';
+                document.getElementById('packageDepartureFlightNumber').value = package.departure_flight_number || '';
+                document.getElementById('packageReturnDepartureCity').value = package.return_departure_city || 'Jeddah';
+                document.getElementById('packageTransitReturn').value = package.transit_city_return || '';
+                document.getElementById('packageReturnArrivalCity').value = package.return_arrival_city || 'Jakarta';
+                document.getElementById('packageReturnFlightNumber').value = package.return_flight_number || '';
+                document.getElementById('packageFlightInfo').value = package.flight_info || '';
+                
+                // Show brochure preview if exists
+                if (package.brochure_image) {
+                    document.getElementById('brochureImg').src = package.brochure_image;
+                    document.getElementById('brochurePreview').style.display = 'block';
+                } else {
+                    document.getElementById('brochurePreview').style.display = 'none';
+                }
+                
+                // Load multiple images if exists
+                packageImagesData = [];
+                const previewContainer = document.getElementById('multipleImagesPreview');
+                previewContainer.innerHTML = '';
+                
+                if (package.package_images && Array.isArray(package.package_images)) {
+                    packageImagesData = package.package_images;
+                    package.package_images.forEach((img, index) => {
+                        const imageContainer = document.createElement('div');
+                        imageContainer.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(71, 85, 105, 0.4);';
+                        imageContainer.innerHTML = `
+                            <img src="${img.url}" style="width: 100%; height: 120px; object-fit: cover;">
+                            <div style="position: absolute; top: 5px; right: 5px;">
+                                <button type="button" onclick="removePackageImage(${index})" class="btn btn-danger btn-sm" style="padding: 5px 10px;">
+                                    <span class="material-icons" style="font-size: 16px;">close</span>
+                                </button>
+                            </div>
+                            <input type="text" placeholder="Caption..." value="${img.caption || ''}" onchange="updateImageCaption(${index}, this.value)" 
+                                style="width: 100%; padding: 5px; background: rgba(15, 23, 42, 0.8); border: none; color: #f8fafc; font-size: 12px;">
+                        `;
+                        previewContainer.appendChild(imageContainer);
+                    });
+                }
                 
                 openModal('packageModal');
             } catch (error) {
@@ -5611,10 +5824,7 @@
             if (confirm('Yakin ingin menghapus paket ini?')) {
                 try {
                     const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${getAuthToken()}`
-                        }
+                        method: 'DELETE'
                     });
                     
                     if (!response.ok) {
@@ -5637,6 +5847,18 @@
             const form = document.getElementById('packageForm');
             const isEditing = form.dataset.editId;
             
+            // Get brochure image if available
+            let brochureImage = null;
+            const brochureInput = document.getElementById('packageBrochure');
+            if (brochureInput.files.length > 0) {
+                const file = brochureInput.files[0];
+                const reader = new FileReader();
+                brochureImage = await new Promise((resolve) => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+            
             const formData = {
                 name: document.getElementById('packageName').value,
                 code: document.getElementById('packageCode').value,
@@ -5649,7 +5871,20 @@
                 makkah_nights: parseInt(document.getElementById('packageMakkahNights').value),
                 madinah_nights: parseInt(document.getElementById('packageMadinahNights').value),
                 airline: document.getElementById('packageAirline').value,
-                description: document.getElementById('packageDescription').value
+                description: document.getElementById('packageDescription').value,
+                package_info: document.getElementById('packageInfo').value,
+                brochure_image: brochureImage,
+                package_images: packageImagesData, // Add multiple images
+                // Flight details
+                departure_city: document.getElementById('packageDepartureCity').value,
+                transit_city_departure: document.getElementById('packageTransitDeparture').value,
+                arrival_city: document.getElementById('packageArrivalCity').value,
+                departure_flight_number: document.getElementById('packageDepartureFlightNumber').value,
+                return_departure_city: document.getElementById('packageReturnDepartureCity').value,
+                transit_city_return: document.getElementById('packageTransitReturn').value,
+                return_arrival_city: document.getElementById('packageReturnArrivalCity').value,
+                return_flight_number: document.getElementById('packageReturnFlightNumber').value,
+                flight_info: document.getElementById('packageFlightInfo').value
             };
             
             try {
@@ -5660,8 +5895,7 @@
                 const response = await fetch(url, {
                     method: isEditing ? 'PUT' : 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${getAuthToken()}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 });
@@ -5678,6 +5912,8 @@
                 // Reset form and clear edit ID
                 event.target.reset();
                 delete form.dataset.editId;
+                packageImagesData = [];
+                document.getElementById('multipleImagesPreview').innerHTML = '';
             } catch (error) {
                 console.error('Error saving package:', error);
                 showNotification('Gagal menyimpan paket: ' + error.message, 'error');
@@ -5695,7 +5931,7 @@
                     <td>${formatDate(payment.date)}</td>
                     <td>${payment.jamaah_name}</td>
                     <td>${payment.package}</td>
-                    <td>Rp ${(payment.amount || 0).toLocaleString()}</td>
+                    <td>Rp ${formatPrice(payment.amount || 0)}</td>
                     <td>${payment.method}</td>
                     <td><span class="status-badge status-${payment.status}">${getStatusText(payment.status)}</span></td>
                     <td>
@@ -7697,17 +7933,29 @@
                 // Focus trap - focus on the modal
                 modal.focus();
                 
-                // Reset form if opening jamaah modal - but NOT if we're editing
-                if (modalId === 'jamaahModal') {
+                // Reset form if opening modal - but NOT if we're editing
+                if (modalId === 'jamaahModal' || modalId === 'packageModal') {
                     const form = modal.querySelector('form');
                     if (form && !form.dataset.editId) {
                         // Only reset if NOT in edit mode
                         form.reset();
-                        document.getElementById('passportPreview').style.display = 'none';
-                        // Reset modal title
-                        const modalTitle = modal.querySelector('h2');
-                        if (modalTitle) {
-                            modalTitle.textContent = 'Tambah Jamaah Baru';
+                        
+                        if (modalId === 'jamaahModal') {
+                            document.getElementById('passportPreview').style.display = 'none';
+                            // Reset modal title
+                            const modalTitle = modal.querySelector('h3');
+                            if (modalTitle) {
+                                modalTitle.textContent = 'Tambah/Edit Jamaah';
+                            }
+                        } else if (modalId === 'packageModal') {
+                            document.getElementById('brochurePreview').style.display = 'none';
+                            packageImagesData = [];
+                            document.getElementById('multipleImagesPreview').innerHTML = '';
+                            // Reset modal title
+                            const modalTitle = modal.querySelector('h3');
+                            if (modalTitle) {
+                                modalTitle.textContent = 'Tambah/Edit Paket Umroh';
+                            }
                         }
                     }
                 }
@@ -7727,10 +7975,31 @@
                 const form = modal.querySelector('form');
                 if (form) {
                     form.reset();
+                    // Clear form dataset
+                    delete form.dataset.editId;
+                    
                     // Also clear any preview images
-                    const preview = modal.querySelector('#passportPreview');
-                    if (preview) {
-                        preview.style.display = 'none';
+                    const passportPreview = modal.querySelector('#passportPreview');
+                    if (passportPreview) {
+                        passportPreview.style.display = 'none';
+                    }
+                    
+                    const brochurePreview = modal.querySelector('#brochurePreview');
+                    if (brochurePreview) {
+                        brochurePreview.style.display = 'none';
+                    }
+                    
+                    // Reset modal titles
+                    if (modalId === 'jamaahModal') {
+                        const modalTitle = modal.querySelector('h3');
+                        if (modalTitle) {
+                            modalTitle.textContent = 'Tambah/Edit Jamaah';
+                        }
+                    } else if (modalId === 'packageModal') {
+                        const modalTitle = modal.querySelector('h3');
+                        if (modalTitle) {
+                            modalTitle.textContent = 'Tambah/Edit Paket Umroh';
+                        }
                     }
                 }
                 console.log('Modal closed:', modalId);
@@ -7761,6 +8030,13 @@
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end days
             return diffDays;
+        }
+        
+        function formatPrice(price) {
+            // Convert to number and remove decimals
+            const numPrice = parseInt(price);
+            // Convert to string and add thousand separators
+            return numPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
         // Date utility functions for ddmmyyyy format
@@ -7944,6 +8220,344 @@
                     document.getElementById('passportImg').src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            }
+        }
+        
+        function previewBrochure(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                if (file.size > maxSize) {
+                    showNotification('File brosur terlalu besar. Maksimal 5MB.', 'error');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('brochurePreview');
+                    const img = document.getElementById('brochureImg');
+                    img.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Global array to store multiple images data
+        let packageImagesData = [];
+        
+        function previewMultipleImages(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('multipleImagesPreview');
+            previewContainer.innerHTML = '';
+            packageImagesData = [];
+            
+            if (files.length > 10) {
+                showNotification('Maksimal 10 gambar yang dapat diupload', 'error');
+                event.target.value = '';
+                return;
+            }
+            
+            const maxSize = 5 * 1024 * 1024; // 5MB per file
+            let totalSize = 0;
+            
+            Array.from(files).forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    if (file.size > maxSize) {
+                        showNotification(`File ${file.name} terlalu besar. Maksimal 5MB per gambar.`, 'error');
+                        return;
+                    }
+                    
+                    totalSize += file.size;
+                    if (totalSize > 40 * 1024 * 1024) { // 40MB total
+                        showNotification('Total ukuran gambar terlalu besar. Maksimal 40MB untuk semua gambar.', 'error');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageData = {
+                            url: e.target.result,
+                            caption: file.name,
+                            order: index + 1
+                        };
+                        packageImagesData.push(imageData);
+                        
+                        const imageContainer = document.createElement('div');
+                        imageContainer.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(71, 85, 105, 0.4);';
+                        imageContainer.innerHTML = `
+                            <img src="${e.target.result}" style="width: 100%; height: 120px; object-fit: cover;">
+                            <div style="position: absolute; top: 5px; right: 5px;">
+                                <button type="button" onclick="removePackageImage(${index})" class="btn btn-danger btn-sm" style="padding: 5px 10px;">
+                                    <span class="material-icons" style="font-size: 16px;">close</span>
+                                </button>
+                            </div>
+                            <input type="text" placeholder="Caption..." onchange="updateImageCaption(${index}, this.value)" 
+                                style="width: 100%; padding: 5px; background: rgba(15, 23, 42, 0.8); border: none; color: #f8fafc; font-size: 12px;">
+                        `;
+                        previewContainer.appendChild(imageContainer);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        function removePackageImage(index) {
+            packageImagesData.splice(index, 1);
+            // Re-render preview
+            const previewContainer = document.getElementById('multipleImagesPreview');
+            const imageContainers = previewContainer.children;
+            if (imageContainers[index]) {
+                imageContainers[index].remove();
+            }
+            // Update order
+            packageImagesData.forEach((img, i) => {
+                img.order = i + 1;
+            });
+        }
+        
+        function updateImageCaption(index, caption) {
+            if (packageImagesData[index]) {
+                packageImagesData[index].caption = caption;
+            }
+        }
+        
+        async function viewPackageDetails(id) {
+            try {
+                const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`);
+                const package = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch package details');
+                }
+                
+                // Update modal title
+                document.getElementById('packageDetailTitle').textContent = package.name;
+                
+                // Build detail content
+                const content = document.getElementById('packageDetailContent');
+                content.innerHTML = `
+                    <div style="display: grid; gap: 25px;">
+                        <!-- Header with image -->
+                        ${package.brochure_image ? `
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <img src="${package.brochure_image}" alt="${package.name}" 
+                                 style="max-width: 100%; height: auto; max-height: 400px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Basic Info -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <h4 style="color: #3b82f6; margin: 0 0 15px 0; font-size: 16px;">Informasi Umum</h4>
+                                <div style="display: grid; gap: 10px;">
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Kode Paket</p>
+                                        <p style="margin: 0; color: white; font-weight: 600;">${package.code}</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Harga</p>
+                                        <p style="margin: 0; color: #4facfe; font-weight: 700; font-size: 20px;">Rp ${formatPrice(package.price)}</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Status</p>
+                                        <p style="margin: 0; color: ${package.status === 'active' ? '#22c55e' : '#ef4444'}; font-weight: 600;">
+                                            ${package.status === 'active' ? 'Aktif' : 'Tidak Aktif'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <h4 style="color: #10b981; margin: 0 0 15px 0; font-size: 16px;">Jadwal & Durasi</h4>
+                                <div style="display: grid; gap: 10px;">
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Keberangkatan</p>
+                                        <p style="margin: 0; color: white; font-weight: 600;">${formatDate(package.departure_date)}</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Kepulangan</p>
+                                        <p style="margin: 0; color: white; font-weight: 600;">${formatDate(package.return_date)}</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Durasi</p>
+                                        <p style="margin: 0; color: white; font-weight: 600;">${calculateDuration(package.departure_date, package.return_date)} hari</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <h4 style="color: #8b5cf6; margin: 0 0 15px 0; font-size: 16px;">Kuota & Booking</h4>
+                                <div style="display: grid; gap: 10px;">
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Total Kuota</p>
+                                        <p style="margin: 0; color: white; font-weight: 600;">${package.quota} seats</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Sudah Booking</p>
+                                        <p style="margin: 0; color: #f59e0b; font-weight: 600;">${package.booked || 0} jamaah</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Sisa Kuota</p>
+                                        <p style="margin: 0; color: #22c55e; font-weight: 600;">${package.available || (package.quota - (package.booked || 0))} seats</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hotel & Transportation -->
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <h4 style="color: #ec4899; margin: 0 0 20px 0; font-size: 16px;">Hotel & Transportasi</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div>
+                                    <p style="margin: 0 0 5px 0; color: rgba(255, 255, 255, 0.8);">
+                                        <strong>🏨 Hotel Makkah:</strong> ${package.makkah_hotel} (${package.makkah_nights} malam)
+                                    </p>
+                                </div>
+                                <div>
+                                    <p style="margin: 0 0 5px 0; color: rgba(255, 255, 255, 0.8);">
+                                        <strong>🏨 Hotel Madinah:</strong> ${package.madinah_hotel} (${package.madinah_nights} malam)
+                                    </p>
+                                </div>
+                                <div>
+                                    <p style="margin: 0; color: rgba(255, 255, 255, 0.8);">
+                                        <strong>✈️ Maskapai:</strong> ${package.airline}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Flight Details -->
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <h4 style="color: #3b82f6; margin: 0 0 20px 0; font-size: 16px;">Detail Penerbangan</h4>
+                            
+                            <!-- Departure Flight -->
+                            <div style="margin-bottom: 20px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px;">✈️ Penerbangan Berangkat</h5>
+                                <div style="display: grid; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">Starting From:</span>
+                                        <span style="color: white; font-weight: 600;">${package.departure_city || 'Jakarta'}</span>
+                                    </div>
+                                    ${package.transit_city_departure ? `
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">Transit:</span>
+                                        <span style="color: white; font-weight: 600;">${package.transit_city_departure}</span>
+                                    </div>
+                                    ` : ''}
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">Landing:</span>
+                                        <span style="color: white; font-weight: 600;">${package.arrival_city || 'Madinah'}</span>
+                                    </div>
+                                    ${package.departure_flight_number ? `
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">No. Penerbangan:</span>
+                                        <span style="color: white; font-weight: 600;">${package.departure_flight_number}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            <!-- Return Flight -->
+                            <div style="padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid #10b981;">
+                                <h5 style="color: white; margin: 0 0 12px 0; font-size: 14px;">✈️ Penerbangan Pulang</h5>
+                                <div style="display: grid; gap: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">Starting From:</span>
+                                        <span style="color: white; font-weight: 600;">${package.return_departure_city || 'Jeddah'}</span>
+                                    </div>
+                                    ${package.transit_city_return ? `
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">Transit:</span>
+                                        <span style="color: white; font-weight: 600;">${package.transit_city_return}</span>
+                                    </div>
+                                    ` : ''}
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">Landing:</span>
+                                        <span style="color: white; font-weight: 600;">${package.return_arrival_city || 'Jakarta'}</span>
+                                    </div>
+                                    ${package.return_flight_number ? `
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 13px; min-width: 120px;">No. Penerbangan:</span>
+                                        <span style="color: white; font-weight: 600;">${package.return_flight_number}</span>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            ${package.flight_info ? `
+                            <div style="margin-top: 15px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                                <p style="color: rgba(255, 255, 255, 0.8); font-size: 13px; line-height: 1.6; margin: 0;">
+                                    <strong>Catatan:</strong> ${package.flight_info}
+                                </p>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Description -->
+                        ${package.description ? `
+                        <div style="background: rgba(59, 130, 246, 0.05); padding: 20px; border-radius: 12px; border-left: 3px solid #3b82f6;">
+                            <h4 style="color: white; margin: 0 0 10px 0; font-size: 16px;">Deskripsi</h4>
+                            <p style="margin: 0; color: rgba(255, 255, 255, 0.9); line-height: 1.6;">${package.description}</p>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Package Info -->
+                        ${package.package_info ? `
+                        <div style="background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <h4 style="color: white; margin: 0 0 15px 0; font-size: 16px;">Informasi Lengkap Paket</h4>
+                            <div style="color: rgba(255, 255, 255, 0.85); line-height: 1.8; white-space: pre-wrap; font-size: 14px;">${package.package_info}</div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Jamaah List -->
+                        ${package.jamaah && package.jamaah.length > 0 ? `
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <h4 style="color: white; margin: 0 0 15px 0; font-size: 16px;">Jamaah Terdaftar (${package.jamaah.length})</h4>
+                            <div style="max-height: 300px; overflow-y: auto;">
+                                <table style="width: 100%; font-size: 13px;">
+                                    <thead>
+                                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                            <th style="text-align: left; padding: 8px; color: rgba(255, 255, 255, 0.7);">No</th>
+                                            <th style="text-align: left; padding: 8px; color: rgba(255, 255, 255, 0.7);">Nama</th>
+                                            <th style="text-align: left; padding: 8px; color: rgba(255, 255, 255, 0.7);">NIK</th>
+                                            <th style="text-align: left; padding: 8px; color: rgba(255, 255, 255, 0.7);">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${package.jamaah.map((j, idx) => `
+                                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                                                <td style="padding: 8px; color: rgba(255, 255, 255, 0.8);">${idx + 1}</td>
+                                                <td style="padding: 8px; color: rgba(255, 255, 255, 0.9);">${j.name}</td>
+                                                <td style="padding: 8px; color: rgba(255, 255, 255, 0.8);">${j.nik || '-'}</td>
+                                                <td style="padding: 8px;">
+                                                    <span class="status-badge status-${j.registration_status}">
+                                                        ${j.registration_status === 'registered' ? 'Terdaftar' : 
+                                                          j.registration_status === 'paid' ? 'Lunas' : 'Pending'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Meta Info -->
+                        <div style="display: flex; justify-content: space-between; color: rgba(255, 255, 255, 0.5); font-size: 12px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                            <span>Created: ${formatDate(package.created_at)}</span>
+                            <span>Last Updated: ${formatDate(package.updated_at)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                openModal('packageDetailModal');
+                
+            } catch (error) {
+                console.error('Error viewing package details:', error);
+                showNotification('Gagal memuat detail paket: ' + error.message, 'error');
             }
         }
 

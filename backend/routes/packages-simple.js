@@ -35,6 +35,7 @@ router.get('/', async (req, res) => {
                 
                 return {
                     ...pkg,
+                    package_images: typeof pkg.package_images === 'string' ? JSON.parse(pkg.package_images) : pkg.package_images || [],
                     booked: parseInt(bookingCount.rows[0].booked) || 0,
                     available: pkg.quota - (parseInt(bookingCount.rows[0].booked) || 0)
                 };
@@ -82,6 +83,7 @@ router.get('/:id', async (req, res) => {
         
         res.json({
             ...pkg,
+            package_images: typeof pkg.package_images === 'string' ? JSON.parse(pkg.package_images) : pkg.package_images || [],
             booked: parseInt(bookingCount.rows[0].booked) || 0,
             available: pkg.quota - (parseInt(bookingCount.rows[0].booked) || 0),
             jamaah_list: jamaahList.rows
@@ -98,7 +100,11 @@ router.post('/', async (req, res) => {
         const {
             name, code, description, price, departure_date, return_date,
             quota, makkah_hotel, madinah_hotel, makkah_nights, madinah_nights,
-            airline
+            airline, brochure_image, package_info, package_images,
+            // Flight details
+            departure_city, transit_city_departure, arrival_city, departure_flight_number,
+            return_departure_city, transit_city_return, return_arrival_city, return_flight_number,
+            flight_info
         } = req.body;
         
         // Validate required fields
@@ -116,13 +122,19 @@ router.post('/', async (req, res) => {
             `INSERT INTO core.packages (
                 name, code, description, price, departure_date, return_date,
                 quota, makkah_hotel, madinah_hotel, makkah_nights, madinah_nights,
-                airline, status
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                airline, brochure_image, package_info, package_images, status,
+                departure_city, transit_city_departure, arrival_city, departure_flight_number,
+                return_departure_city, transit_city_return, return_arrival_city, return_flight_number,
+                flight_info
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
             RETURNING *`,
             [
                 name, packageCode, description, price, departure_date, return_date,
                 quota, makkah_hotel, madinah_hotel, makkah_nights || 0, madinah_nights || 0,
-                airline, 'active'
+                airline, brochure_image, package_info, JSON.stringify(package_images || []), 'active',
+                departure_city, transit_city_departure, arrival_city, departure_flight_number,
+                return_departure_city, transit_city_return, return_arrival_city, return_flight_number,
+                flight_info
             ]
         );
         
