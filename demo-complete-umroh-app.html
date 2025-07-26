@@ -71,7 +71,7 @@
                 0 20px 40px rgba(0, 0, 0, 0.3),
                 0 1px 3px rgba(0, 0, 0, 0.2);
             position: relative;
-            z-index: 1000;
+            z-index: 10;
             flex-shrink: 0;
         }
 
@@ -101,6 +101,8 @@
             border: 1px solid rgba(71, 85, 105, 0.3);
             position: relative;
             overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .nav-item::before {
@@ -141,6 +143,11 @@
         .nav-item .material-icons {
             margin-right: 15px;
             font-size: 24px;
+            pointer-events: none;
+        }
+        
+        .nav-item span {
+            pointer-events: none;
         }
 
         /* Main Content */
@@ -1343,7 +1350,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
-            z-index: 1000;
+            z-index: 9999;
         }
 
         .modal.active {
@@ -1363,10 +1370,11 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
+            position: relative;
+            z-index: 10000;
             box-shadow: 
                 0 25px 80px rgba(0, 0, 0, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            position: relative;
         }
 
         .modal-content::before {
@@ -1764,49 +1772,49 @@
                 VT Manager
             </div>
             
-            <div class="nav-item active" onclick="showPage('dashboard')">
+            <div class="nav-item active" data-page="dashboard">
                 <span class="material-icons">dashboard</span>
                 Dashboard
             </div>
             
-            <div class="nav-item" onclick="showPage('jamaah')">
+            <div class="nav-item" data-page="jamaah">
                 <span class="material-icons">people</span>
                 Manajemen Jamaah
             </div>
             
-            <div class="nav-item" onclick="showPage('packages')">
+            <div class="nav-item" data-page="packages">
                 <span class="material-icons">card_travel</span>
                 Paket Umroh
             </div>
             
-            <div class="nav-item" onclick="showPage('payments')">
+            <div class="nav-item" data-page="payments">
                 <span class="material-icons">payment</span>
                 Pembayaran
             </div>
             
-            <div class="nav-item" onclick="showPage('documents')">
+            <div class="nav-item" data-page="documents">
                 <span class="material-icons">description</span>
                 Dokumen
             </div>
             
-            <div class="nav-item" onclick="showPage('groups')">
+            <div class="nav-item" data-page="groups">
                 <span class="material-icons">group</span>
                 Grup Keberangkatan
             </div>
             
-            <div class="nav-item" onclick="showPage('marketing')">
+            <div class="nav-item" data-page="marketing">
                 <span class="material-icons">campaign</span>
                 <span>Marketing</span>
                 <span class="badge" style="background: #EC4899; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">AI</span>
             </div>
             
-            <div class="nav-item" onclick="showPage('hotel')">
+            <div class="nav-item" data-page="hotel">
                 <span class="material-icons">hotel</span>
                 <span>Hotel</span>
                 <span class="badge" style="background: #059669; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
             </div>
             
-            <div class="nav-item" onclick="showPage('inventory')">
+            <div class="nav-item" data-page="inventory">
                 <span class="material-icons">inventory</span>
                 <span>Perlengkapan</span>
                 <span class="badge" style="background: #7C3AED; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
@@ -1818,7 +1826,7 @@
                 <span class="badge" style="background: #F59E0B; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
             </div>
             
-            <div class="nav-item" onclick="showPage('groundHandling')">
+            <div class="nav-item" data-page="groundHandling">
                 <span class="material-icons">flight_takeoff</span>
                 <span>Ground Handling</span>
                 <span class="badge" style="background: #3B82F6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: auto;">New</span>
@@ -3850,7 +3858,7 @@
                 <button class="close-btn">&times;</button>
             </div>
             
-            <form onsubmit="savePackage(event)">
+            <form id="packageForm" onsubmit="savePackage(event)">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Nama Paket</label>
@@ -3869,8 +3877,8 @@
                         <input type="date" id="packageDeparture" required>
                     </div>
                     <div class="form-group">
-                        <label>Durasi (Hari)</label>
-                        <input type="number" id="packageDuration" required>
+                        <label>Tanggal Kembali</label>
+                        <input type="date" id="packageReturn" required>
                     </div>
                     <div class="form-group">
                         <label>Kuota</label>
@@ -4908,7 +4916,13 @@
 
         // Navigation
         function showPage(pageId) {
-            console.log('Showing page:', pageId);
+            console.log('showPage called with:', pageId);
+            
+            // Prevent default if this is from an event
+            if (window.event) {
+                window.event.preventDefault();
+                window.event.stopPropagation();
+            }
             
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
@@ -4942,10 +4956,14 @@
             // Scroll to top of main content
             document.querySelector('.main-content').scrollTop = 0;
             
-            // Add active class to clicked nav item - handle both direct clicks and child element clicks
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.add('active');
-            }
+            // Add active class to the corresponding nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                const dataPage = item.getAttribute('data-page');
+                if (dataPage === pageId) {
+                    item.classList.add('active');
+                }
+            });
             
             // Load page specific data
             loadPageData(pageId);
@@ -4998,6 +5016,13 @@
                     break;
                 case 'reports':
                     loadReportCharts();
+                    break;
+                case 'marketing':
+                    // Marketing page - no specific data loading needed
+                    console.log('Marketing page loaded');
+                    break;
+                default:
+                    console.log('Page loaded:', pageId);
                     break;
             }
         }
@@ -5471,12 +5496,28 @@
         }
 
         // Package Management
-        function loadPackageCards() {
+        async function loadPackageCards() {
             const container = document.getElementById('packageGrid');
-            container.innerHTML = '';
+            container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.7);">Loading packages...</div>';
             
-            packageData.forEach(package => {
-                const remainingSeats = package.quota - package.booked;
+            try {
+                // Fetch packages from API
+                const response = await fetch(getApiBaseUrl() + '/api/packages');
+                const packages = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load packages');
+                }
+                
+                container.innerHTML = '';
+                
+                if (packages.length === 0) {
+                    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.7);">No packages available</div>';
+                    return;
+                }
+                
+                packages.forEach(package => {
+                const remainingSeats = package.available || (package.quota - (package.booked || 0));
                 const card = document.createElement('div');
                 card.className = 'glass-card';
                 card.innerHTML = `
@@ -5495,7 +5536,7 @@
                         </div>
                         <div>
                             <p style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Durasi</p>
-                            <p style="color: white;">${package.duration} hari</p>
+                            <p style="color: white;">${calculateDuration(package.departure_date, package.return_date)} hari</p>
                         </div>
                         <div>
                             <p style="color: rgba(255, 255, 255, 0.7); font-size: 12px;">Sisa Seat</p>
@@ -5527,45 +5568,81 @@
                 `;
                 container.appendChild(card);
             });
+            } catch (error) {
+                console.error('Error loading packages:', error);
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load packages: ' + error.message + '</div>';
+            }
         }
 
-        function editPackage(id) {
-            const package = packageData.find(p => p.id === id);
-            if (package) {
+        async function editPackage(id) {
+            try {
+                const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`);
+                const package = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch package');
+                }
+                
+                // Store ID for update
+                document.getElementById('packageForm').dataset.editId = id;
+                
+                // Populate form
                 document.getElementById('packageName').value = package.name;
                 document.getElementById('packageCode').value = package.code || '';
                 document.getElementById('packagePrice').value = package.price;
-                document.getElementById('packageDeparture').value = package.departure_date;
-                document.getElementById('packageDuration').value = package.duration;
+                document.getElementById('packageDeparture').value = package.departure_date.split('T')[0];
+                document.getElementById('packageReturn').value = package.return_date.split('T')[0];
                 document.getElementById('packageQuota').value = package.quota;
-                document.getElementById('packageMakkahHotel').value = package.makkah_hotel;
-                document.getElementById('packageMadinahHotel').value = package.madinah_hotel;
-                document.getElementById('packageMakkahNights').value = package.makkah_nights;
-                document.getElementById('packageMadinahNights').value = package.madinah_nights;
-                document.getElementById('packageAirline').value = package.airline;
-                document.getElementById('packageDescription').value = package.description;
+                document.getElementById('packageMakkahHotel').value = package.makkah_hotel || '';
+                document.getElementById('packageMadinahHotel').value = package.madinah_hotel || '';
+                document.getElementById('packageMakkahNights').value = package.makkah_nights || 0;
+                document.getElementById('packageMadinahNights').value = package.madinah_nights || 0;
+                document.getElementById('packageAirline').value = package.airline || '';
+                document.getElementById('packageDescription').value = package.description || '';
                 
                 openModal('packageModal');
+            } catch (error) {
+                console.error('Error editing package:', error);
+                showNotification('Gagal mengambil data paket: ' + error.message, 'error');
             }
         }
 
-        function deletePackage(id) {
+        async function deletePackage(id) {
             if (confirm('Yakin ingin menghapus paket ini?')) {
-                packageData = packageData.filter(p => p.id !== id);
-                loadPackageCards();
-                showNotification('Paket berhasil dihapus!');
+                try {
+                    const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${getAuthToken()}`
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Failed to delete package');
+                    }
+                    
+                    await loadPackageCards();
+                    showNotification('Paket berhasil dihapus!');
+                } catch (error) {
+                    console.error('Error deleting package:', error);
+                    showNotification('Gagal menghapus paket: ' + error.message, 'error');
+                }
             }
         }
 
-        function savePackage(event) {
+        async function savePackage(event) {
             event.preventDefault();
+            
+            const form = document.getElementById('packageForm');
+            const isEditing = form.dataset.editId;
             
             const formData = {
                 name: document.getElementById('packageName').value,
                 code: document.getElementById('packageCode').value,
                 price: parseInt(document.getElementById('packagePrice').value),
                 departure_date: document.getElementById('packageDeparture').value,
-                duration: parseInt(document.getElementById('packageDuration').value),
+                return_date: document.getElementById('packageReturn').value,
                 quota: parseInt(document.getElementById('packageQuota').value),
                 makkah_hotel: document.getElementById('packageMakkahHotel').value,
                 madinah_hotel: document.getElementById('packageMadinahHotel').value,
@@ -5575,17 +5652,36 @@
                 description: document.getElementById('packageDescription').value
             };
             
-            const newId = Math.max(...packageData.map(p => p.id)) + 1;
-            packageData.push({
-                id: newId,
-                ...formData,
-                booked: 0
-            });
-            
-            closeModal('packageModal');
-            loadPackageCards();
-            showNotification('Paket berhasil disimpan!');
-            event.target.reset();
+            try {
+                const url = isEditing 
+                    ? getApiBaseUrl() + `/api/packages/${isEditing}`
+                    : getApiBaseUrl() + '/api/packages';
+                    
+                const response = await fetch(url, {
+                    method: isEditing ? 'PUT' : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to save package');
+                }
+                
+                closeModal('packageModal');
+                await loadPackageCards();
+                showNotification(isEditing ? 'Paket berhasil diupdate!' : 'Paket berhasil disimpan!');
+                
+                // Reset form and clear edit ID
+                event.target.reset();
+                delete form.dataset.editId;
+            } catch (error) {
+                console.error('Error saving package:', error);
+                showNotification('Gagal menyimpan paket: ' + error.message, 'error');
+            }
         }
 
         // Payment Management
@@ -7595,6 +7691,7 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.add('active');
+                modal.style.display = 'flex'; // Force display
                 document.body.style.overflow = 'hidden'; // Prevent background scrolling
                 
                 // Focus trap - focus on the modal
@@ -7623,6 +7720,7 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.remove('active');
+                modal.style.display = 'none'; // Force hide
                 document.body.style.overflow = 'auto'; // Restore background scrolling
                 
                 // Clear any form data if it's a form modal
@@ -7655,6 +7753,14 @@
                 month: 'short',
                 day: 'numeric'
             });
+        }
+        
+        function calculateDuration(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end days
+            return diffDays;
         }
 
         // Date utility functions for ddmmyyyy format
@@ -8139,6 +8245,35 @@
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded - Initializing app');
+            
+            // Close any open modals on load
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+            
+            // Setup navigation click handlers
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Get page ID from data-page attribute
+                    const pageId = this.getAttribute('data-page');
+                    const onclickAttr = this.getAttribute('onclick');
+                    
+                    if (pageId) {
+                        console.log('Nav item clicked:', pageId);
+                        showPage(pageId);
+                    } else if (onclickAttr) {
+                        // Handle external links
+                        if (onclickAttr.includes('window.location.href')) {
+                            eval(onclickAttr);
+                        }
+                    }
+                });
+            });
+            
             loadDashboard();
             loadJamaahTable();
             

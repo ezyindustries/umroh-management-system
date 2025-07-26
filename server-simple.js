@@ -29,9 +29,11 @@ try {
   // Use the new jamaah routes
   app.use('/api/jamaah', require('./backend/routes/jamaah-new'));
   
+  // Use simple packages routes
+  app.use('/api/packages', require('./backend/routes/packages-simple'));
+  
   // Other routes (will add later)
   // app.use('/api/auth', require('./routes/auth'));
-  // app.use('/api/packages', require('./routes/packages'));
   // app.use('/api/payments', require('./routes/payments'));
   // app.use('/api/documents', require('./routes/documents'));
   // app.use('/api/users', require('./routes/users'));
