@@ -4157,6 +4157,19 @@
             </div>
         </div>
     </div>
+    
+    <!-- Image Preview Modal -->
+    <div id="imagePreviewModal" class="modal">
+        <div class="modal-content" style="max-width: 90%; max-height: 90vh; padding: 0; background: rgba(15, 23, 42, 0.95);">
+            <div class="modal-header" style="padding: 15px 20px;">
+                <h3 id="imagePreviewTitle" style="margin: 0;">Preview Gambar</h3>
+                <button class="close-btn" onclick="closeModal('imagePreviewModal')">&times;</button>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; padding: 20px;">
+                <img id="imagePreviewImg" src="" alt="" style="max-width: 100%; max-height: 70vh; border-radius: 8px;">
+            </div>
+        </div>
+    </div>
 
     <!-- Room Management Modal -->
     <div id="roomModal" class="modal">
@@ -8323,6 +8336,18 @@
             }
         }
         
+        function showImageModal(imageUrl, caption) {
+            const modal = document.getElementById('imagePreviewModal');
+            const img = document.getElementById('imagePreviewImg');
+            const title = document.getElementById('imagePreviewTitle');
+            
+            img.src = imageUrl;
+            img.alt = caption || 'Package Image';
+            title.textContent = caption || 'Preview Gambar';
+            
+            openModal('imagePreviewModal');
+        }
+        
         async function viewPackageDetails(id) {
             try {
                 const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`);
@@ -8344,6 +8369,29 @@
                         <div style="text-align: center; margin-bottom: 20px;">
                             <img src="${package.brochure_image}" alt="${package.name}" 
                                  style="max-width: 100%; height: auto; max-height: 400px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Gallery Images -->
+                        ${package.package_images && package.package_images.length > 0 ? `
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                            <h4 style="color: white; margin: 0 0 15px 0; font-size: 16px;">Galeri Gambar</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                                ${package.package_images.map((img, index) => {
+                                    const safeCaption = (img.caption || '').replace(/'/g, "\\'");
+                                    return `
+                                    <div style="position: relative; border-radius: 8px; overflow: hidden; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(71, 85, 105, 0.4);">
+                                        <img src="${img.url}" alt="${img.caption || 'Image ' + (index + 1)}" 
+                                             style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;"
+                                             onclick="showImageModal('${img.url}', '${safeCaption}')">
+                                        ${img.caption ? `
+                                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 10px;">
+                                            <p style="margin: 0; color: white; font-size: 12px; text-align: center;">${img.caption}</p>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                `;}).join('')}
+                            </div>
                         </div>
                         ` : ''}
                         
