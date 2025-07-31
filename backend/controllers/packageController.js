@@ -5,7 +5,14 @@ class PackageController {
   // Create new package
   static async create(req, res, next) {
     try {
-      const packageData = await Package.create(req.body, req.user.id);
+      console.log('PackageController.create - Request body:', req.body);
+      console.log('PackageController.create - User:', req.user);
+      
+      // Use default user ID if authentication is disabled
+      const userId = req.user?.id || 1;
+      console.log('PackageController.create - Using userId:', userId);
+      
+      const packageData = await Package.create(req.body, userId);
       
       res.status(201).json({
         success: true,
@@ -125,7 +132,7 @@ class PackageController {
       
       res.json({
         success: true,
-        data: packageDatas
+        data: packages
       });
     } catch (error) {
       next(error);
@@ -148,7 +155,7 @@ class PackageController {
       
       res.json({
         success: true,
-        data: packageDatas
+        data: packages
       });
     } catch (error) {
       next(error);
@@ -177,7 +184,7 @@ class PackageController {
       
       res.json({
         success: true,
-        data: packageDatas
+        data: packages
       });
     } catch (error) {
       next(error);

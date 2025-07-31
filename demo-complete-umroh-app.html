@@ -1581,6 +1581,97 @@
             letter-spacing: 0.5px;
         }
         
+        /* Glassmorphism form inputs */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px);
+            color: white !important;
+            padding: 12px 16px !important;
+            border-radius: 12px !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .glass-input:focus {
+            border-color: #3b82f6 !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        }
+        
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+        
+        .glass-label {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500 !important;
+            margin-bottom: 8px !important;
+            display: block !important;
+            font-size: 14px !important;
+        }
+        
+        .glass-textarea {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px);
+            color: white !important;
+            padding: 12px 16px !important;
+            border-radius: 12px !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            resize: vertical !important;
+        }
+        
+        .glass-textarea:focus {
+            border-color: #3b82f6 !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        }
+        
+        /* Custom file input */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            color: #60a5fa;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .file-input-label:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-selected {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1)) !important;
+            border-color: rgba(16, 185, 129, 0.3) !important;
+            color: #34d399 !important;
+        }
+        
         /* Marketing Page Styles */
         .marketing-stat-card {
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.7));
@@ -4086,138 +4177,261 @@
 
     <!-- Package Modal -->
     <div id="packageModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
-            <div class="modal-header">
-                <h3>Tambah/Edit Paket Umroh</h3>
-                <button class="close-btn">&times;</button>
+        <div class="modal-content" style="
+            max-width: 800px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        ">
+            <div class="modal-header" style="
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.15));
+                margin: -30px -30px 20px -30px;
+                padding: 24px 30px;
+                border-radius: 24px 24px 0 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <div>
+                    <h3 style="
+                        margin: 0;
+                        font-size: 24px;
+                        font-weight: 700;
+                        background: linear-gradient(135deg, #3b82f6, #9333ea);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    ">Tambah/Edit Paket Umroh</h3>
+                    <p style="
+                        margin: 5px 0 0 0;
+                        font-size: 14px;
+                        color: rgba(255, 255, 255, 0.6);
+                    ">Kelola informasi paket perjalanan umroh</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button type="button" onclick="clearPackageForm()" style="
+                        background: rgba(239, 68, 68, 0.2);
+                        border: 1px solid rgba(239, 68, 68, 0.3);
+                        color: #ef4444;
+                        padding: 8px 16px;
+                        border-radius: 12px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        font-size: 14px;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
+                        <span class="material-icons" style="font-size: 18px;">clear_all</span>
+                        Hapus Semua
+                    </button>
+                    <button class="close-btn" style="
+                        background: rgba(255, 255, 255, 0.1);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                        width: 36px;
+                        height: 36px;
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">&times;</button>
+                </div>
             </div>
             
             <form id="packageForm" onsubmit="savePackage(event)">
-                <div class="form-grid">
+                <div class="form-grid" style="margin-top: 10px;">
                     <div class="form-group">
-                        <label>Nama Paket</label>
-                        <input type="text" id="packageName" required>
+                        <label class="glass-label">Nama Paket</label>
+                        <input type="text" id="packageName" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Kode Paket</label>
-                        <input type="text" id="packageCode" placeholder="Contoh: PKG001" required>
+                        <label class="glass-label">Kode Paket</label>
+                        <input type="text" id="packageCode" class="glass-input" placeholder="Contoh: PKG001" required>
                     </div>
                     <div class="form-group">
-                        <label>Harga (IDR)</label>
-                        <input type="number" id="packagePrice" required>
+                        <label class="glass-label">Harga (IDR)</label>
+                        <input type="number" id="packagePrice" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Tanggal Keberangkatan</label>
-                        <input type="date" id="packageDeparture" required>
+                        <label class="glass-label">Tanggal Keberangkatan</label>
+                        <input type="date" id="packageDeparture" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Tanggal Kembali</label>
-                        <input type="date" id="packageReturn" required>
+                        <label class="glass-label">Tanggal Kembali</label>
+                        <input type="date" id="packageReturn" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Kuota</label>
-                        <input type="number" id="packageQuota" required>
+                        <label class="glass-label">Kuota</label>
+                        <input type="number" id="packageQuota" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Hotel Makkah</label>
-                        <input type="text" id="packageMakkahHotel" required>
+                        <label class="glass-label">Hotel Makkah</label>
+                        <input type="text" id="packageMakkahHotel" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Hotel Madinah</label>
-                        <input type="text" id="packageMadinahHotel" required>
+                        <label class="glass-label">Hotel Madinah</label>
+                        <input type="text" id="packageMadinahHotel" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Malam di Makkah</label>
-                        <input type="number" id="packageMakkahNights" required>
+                        <label class="glass-label">Malam di Makkah</label>
+                        <input type="number" id="packageMakkahNights" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Malam di Madinah</label>
-                        <input type="number" id="packageMadinahNights" required>
+                        <label class="glass-label">Malam di Madinah</label>
+                        <input type="number" id="packageMadinahNights" class="glass-input" required>
                     </div>
                     <div class="form-group">
-                        <label>Maskapai</label>
-                        <input type="text" id="packageAirline" required>
+                        <label class="glass-label">Maskapai</label>
+                        <input type="text" id="packageAirline" class="glass-input" required>
                     </div>
                 </div>
                 
                 <!-- Flight Details Section -->
-                <h4 style="color: #3b82f6; margin: 20px 0 15px 0; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">Detail Penerbangan</h4>
+                <h4 style="
+                    background: linear-gradient(135deg, #3b82f6, #10b981);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin: 30px 0 20px 0;
+                    padding-top: 30px;
+                    border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    font-size: 18px;
+                    font-weight: 600;
+                ">Detail Penerbangan</h4>
                 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Kota Keberangkatan</label>
-                        <input type="text" id="packageDepartureCity" placeholder="Contoh: Jakarta" value="Jakarta">
+                        <label class="glass-label">Kota Keberangkatan</label>
+                        <select id="packageDepartureCity" class="glass-input" onchange="handleCitySelectChange(this, 'departure')">
+                            <option value="Jakarta">Jakarta</option>
+                            <option value="Surabaya">Surabaya</option>
+                            <option value="add_new" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; font-weight: 500;">+ Tambah Kota Baru</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Transit Berangkat</label>
-                        <input type="text" id="packageTransitDeparture" placeholder="Contoh: Istanbul (opsional)">
+                        <label class="glass-label">Transit Berangkat</label>
+                        <input type="text" id="packageTransitDeparture" class="glass-input" placeholder="Contoh: Istanbul (opsional)">
                     </div>
                     <div class="form-group">
-                        <label>Kota Tiba</label>
-                        <input type="text" id="packageArrivalCity" placeholder="Contoh: Madinah" value="Madinah">
+                        <label class="glass-label">Kota Tiba</label>
+                        <select id="packageArrivalCity" class="glass-input" onchange="handleCitySelectChange(this, 'arrival')">
+                            <option value="Jeddah">Jeddah</option>
+                            <option value="Madinah" selected>Madinah</option>
+                            <option value="Taif">Taif</option>
+                            <option value="add_new" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; font-weight: 500;">+ Tambah Kota Baru</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>No. Penerbangan Berangkat</label>
-                        <input type="text" id="packageDepartureFlightNumber" placeholder="Contoh: TK057 (opsional)">
+                        <label class="glass-label">No. Penerbangan Berangkat</label>
+                        <input type="text" id="packageDepartureFlightNumber" class="glass-input" placeholder="Contoh: TK057 (opsional)">
                     </div>
                 </div>
                 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Kota Pulang Dari</label>
-                        <input type="text" id="packageReturnDepartureCity" placeholder="Contoh: Jeddah" value="Jeddah">
+                        <label class="glass-label">Kota Pulang Dari</label>
+                        <select id="packageReturnDepartureCity" class="glass-input" onchange="handleCitySelectChange(this, 'returnDeparture')">
+                            <option value="Jeddah" selected>Jeddah</option>
+                            <option value="Madinah">Madinah</option>
+                            <option value="Taif">Taif</option>
+                            <option value="add_new" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; font-weight: 500;">+ Tambah Kota Baru</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Transit Pulang</label>
-                        <input type="text" id="packageTransitReturn" placeholder="Contoh: Istanbul (opsional)">
+                        <label class="glass-label">Transit Pulang</label>
+                        <input type="text" id="packageTransitReturn" class="glass-input" placeholder="Contoh: Istanbul (opsional)">
                     </div>
                     <div class="form-group">
-                        <label>Kota Tiba Pulang</label>
-                        <input type="text" id="packageReturnArrivalCity" placeholder="Contoh: Jakarta" value="Jakarta">
+                        <label class="glass-label">Kota Tiba Pulang</label>
+                        <select id="packageReturnArrivalCity" class="glass-input" onchange="handleCitySelectChange(this, 'returnArrival')">
+                            <option value="Jakarta">Jakarta</option>
+                            <option value="Surabaya">Surabaya</option>
+                            <option value="add_new" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; font-weight: 500;">+ Tambah Kota Baru</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>No. Penerbangan Pulang</label>
-                        <input type="text" id="packageReturnFlightNumber" placeholder="Contoh: TK058 (opsional)">
+                        <label class="glass-label">No. Penerbangan Pulang</label>
+                        <input type="text" id="packageReturnFlightNumber" class="glass-input" placeholder="Contoh: TK058 (opsional)">
                     </div>
                 </div>
                 
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Catatan Penerbangan</label>
-                    <textarea id="packageFlightInfo" rows="2" placeholder="Informasi tambahan tentang penerbangan (opsional)"></textarea>
+                    <label class="glass-label">Catatan Penerbangan</label>
+                    <textarea id="packageFlightInfo" class="glass-textarea" rows="2" placeholder="Informasi tambahan tentang penerbangan (opsional)"></textarea>
                 </div>
                 
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Gambar Brosur Utama</label>
-                    <input type="file" id="packageBrochure" accept="image/*" onchange="previewBrochure(event)">
-                    <div id="brochurePreview" style="margin-top: 10px; display: none;">
-                        <img id="brochureImg" style="width: 200px; height: 120px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(71, 85, 105, 0.4);">
+                    <label class="glass-label">Gambar Brosur Utama</label>
+                    <div class="file-input-wrapper">
+                        <label for="packageBrochure" class="file-input-label" id="brochureLabel">
+                            <span class="material-icons">cloud_upload</span>
+                            <span id="brochureText">Pilih Gambar Brosur</span>
+                        </label>
+                        <input type="file" id="packageBrochure" accept="image/*" onchange="handleBrochureChange(event)">
+                    </div>
+                    <div id="brochurePreview" style="margin-top: 15px; display: none;">
+                        <img id="brochureImg" style="width: 100%; max-width: 300px; height: auto; border-radius: 12px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);">
                     </div>
                 </div>
                 
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Gambar Tambahan (Multiple)</label>
-                    <input type="file" id="packageImages" accept="image/*" multiple onchange="previewMultipleImages(event)">
-                    <small style="color: #94a3b8;">Anda dapat memilih beberapa gambar sekaligus (maks. 10 gambar)</small>
+                    <label class="glass-label">Gambar Tambahan (Multiple)</label>
+                    <div class="file-input-wrapper">
+                        <label for="packageImages" class="file-input-label" id="imagesLabel">
+                            <span class="material-icons">add_photo_alternate</span>
+                            <span id="imagesText">Pilih Beberapa Gambar</span>
+                        </label>
+                        <input type="file" id="packageImages" accept="image/*" multiple onchange="handleImagesChange(event)">
+                    </div>
+                    <small style="color: rgba(255, 255, 255, 0.5); display: block; margin-top: 8px;">Anda dapat memilih beberapa gambar sekaligus (maks. 10 gambar)</small>
                     <div id="multipleImagesPreview" style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
                     </div>
                 </div>
                 
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Deskripsi Singkat</label>
-                    <textarea id="packageDescription" rows="3" placeholder="Deskripsi singkat paket (maks. 200 karakter)"></textarea>
+                    <label class="glass-label">Deskripsi Singkat</label>
+                    <textarea id="packageDescription" class="glass-textarea" rows="3" placeholder="Deskripsi singkat paket (maks. 200 karakter)"></textarea>
                 </div>
                 
                 <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Informasi Detail Paket</label>
-                    <textarea id="packageInfo" rows="5" placeholder="Informasi lengkap tentang paket ini, fasilitas, itinerary, dll."></textarea>
+                    <label class="glass-label">Informasi Detail Paket</label>
+                    <textarea id="packageInfo" class="glass-textarea" rows="5" placeholder="Informasi lengkap tentang paket ini, fasilitas, itinerary, dll."></textarea>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn btn-primary">
+                <div style="display: flex; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <button type="submit" class="btn btn-primary" style="
+                        background: linear-gradient(135deg, #3b82f6, #2563eb);
+                        border: 1px solid rgba(59, 130, 246, 0.3);
+                        color: white;
+                        padding: 12px 24px;
+                        border-radius: 12px;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.2)'">
                         <span class="material-icons">save</span>
                         Simpan
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="closeModal('packageModal')">
+                    <button type="button" class="btn btn-danger" onclick="closeModal('packageModal')" style="
+                        background: rgba(239, 68, 68, 0.2);
+                        border: 1px solid rgba(239, 68, 68, 0.3);
+                        color: #ef4444;
+                        padding: 12px 24px;
+                        border-radius: 12px;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
                         <span class="material-icons">cancel</span>
                         Batal
                     </button>
@@ -5883,8 +6097,14 @@
             
             try {
                 // Fetch packages from API
-                const response = await fetch(getApiBaseUrl() + '/api/packages');
+                const apiUrl = getApiBaseUrl() + '/api/packages';
+                console.log('Loading packages from:', apiUrl);
+                
+                const response = await fetch(apiUrl);
+                console.log('Response status:', response.status, 'OK:', response.ok);
+                
                 const result = await response.json();
+                console.log('API Result:', result);
                 
                 if (!response.ok) {
                     throw new Error('Failed to load packages');
@@ -5892,6 +6112,8 @@
                 
                 // Extract data array from response
                 const packages = result.data || result || [];
+                console.log('Total packages:', packages.length);
+                console.log('Packages:', packages);
                 
                 container.innerHTML = '';
                 
@@ -5902,6 +6124,8 @@
                 
                 // Filter only active packages for normal users
                 const activePackages = packages.filter(p => p.status === 'active');
+                console.log('Active packages:', activePackages.length);
+                console.log('Active packages data:', activePackages);
                 
                 if (activePackages.length === 0) {
                     container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: rgba(255,255,255,0.7);">Tidak ada paket aktif saat ini</div>';
@@ -5909,15 +6133,18 @@
                 }
                 
                 activePackages.forEach(package => {
-                const remainingSeats = package.available || (package.quota - (package.booked || 0));
+                // Map database fields to frontend fields
+                const packageName = package.name || package.nama_paket || 'Paket Umroh';
+                const packageCode = package.code || package.kode_paket || '';
+                const remainingSeats = package.available || package.sisa_seat || (package.quota - (package.booked || 0));
                 const card = document.createElement('div');
                 card.className = 'glass-card';
                 card.style.cssText = 'padding: 25px; transition: all 0.3s ease; cursor: pointer;';
                 card.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
                         <div style="flex: 1;">
-                            <h3 style="color: white; margin: 0 0 8px 0; font-size: 20px;">${package.name}</h3>
-                            <span style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.1)); color: #3b82f6; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block;">${package.code}</span>
+                            <h3 style="color: white; margin: 0 0 8px 0; font-size: 20px;">${packageName}</h3>
+                            <span style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.1)); color: #3b82f6; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block;">${packageCode}</span>
                         </div>
                         ${package.brochure_image ? `
                         <div style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; margin-left: 15px; flex-shrink: 0;">
@@ -6020,30 +6247,41 @@
 
         async function editPackage(id) {
             try {
+                console.log('Editing package ID:', id);
                 const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`);
-                const package = await response.json();
+                const result = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch package');
+                    throw new Error(result.error || 'Failed to fetch package');
                 }
+                
+                // Extract package data
+                const package = result.data || result;
+                console.log('Package data for edit:', package);
                 
                 // Store ID for update
                 document.getElementById('packageForm').dataset.editId = id;
                 
-                // Populate form
-                document.getElementById('packageName').value = package.name;
-                document.getElementById('packageCode').value = package.code || '';
-                document.getElementById('packagePrice').value = package.price;
-                document.getElementById('packageDeparture').value = package.departure_date.split('T')[0];
-                document.getElementById('packageReturn').value = package.return_date.split('T')[0];
-                document.getElementById('packageQuota').value = package.quota;
+                // Update modal title
+                const modalTitle = document.querySelector('#packageModal h3');
+                if (modalTitle) {
+                    modalTitle.textContent = 'Edit Paket Umroh';
+                }
+                
+                // Populate form - using correct field names from database
+                document.getElementById('packageName').value = package.name || package.nama_paket || '';
+                document.getElementById('packageCode').value = package.code || package.kode_paket || '';
+                document.getElementById('packagePrice').value = package.price || 0;
+                document.getElementById('packageDeparture').value = package.departure_date ? package.departure_date.split('T')[0] : '';
+                document.getElementById('packageReturn').value = package.return_date ? package.return_date.split('T')[0] : '';
+                document.getElementById('packageQuota').value = package.quota || 0;
                 document.getElementById('packageMakkahHotel').value = package.makkah_hotel || '';
-                document.getElementById('packageMadinahHotel').value = package.madinah_hotel || '';
-                document.getElementById('packageMakkahNights').value = package.makkah_nights || 0;
-                document.getElementById('packageMadinahNights').value = package.madinah_nights || 0;
-                document.getElementById('packageAirline').value = package.airline || '';
-                document.getElementById('packageDescription').value = package.description || '';
-                document.getElementById('packageInfo').value = package.package_info || '';
+                document.getElementById('packageMadinahHotel').value = package.madinah_hotel || package.hotel_madinah || '';
+                document.getElementById('packageMakkahNights').value = package.makkah_nights || package.malam_makkah || 0;
+                document.getElementById('packageMadinahNights').value = package.madinah_nights || package.malam_madinah || 0;
+                document.getElementById('packageAirline').value = package.airline || package.maskapai || '';
+                document.getElementById('packageDescription').value = package.description || package.deskripsi_singkat || '';
+                document.getElementById('packageInfo').value = package.package_info || package.informasi_detail || '';
                 
                 // Populate flight details
                 document.getElementById('packageDepartureCity').value = package.departure_city || 'Jakarta';
@@ -6116,6 +6354,248 @@
             }
         }
 
+        // Save form data to localStorage
+        function savePackageFormData() {
+            const formData = {
+                packageName: document.getElementById('packageName').value,
+                packageCode: document.getElementById('packageCode').value,
+                packagePrice: document.getElementById('packagePrice').value,
+                packageDeparture: document.getElementById('packageDeparture').value,
+                packageReturn: document.getElementById('packageReturn').value,
+                packageQuota: document.getElementById('packageQuota').value,
+                packageMakkahHotel: document.getElementById('packageMakkahHotel').value,
+                packageMadinahHotel: document.getElementById('packageMadinahHotel').value,
+                packageMakkahNights: document.getElementById('packageMakkahNights').value,
+                packageMadinahNights: document.getElementById('packageMadinahNights').value,
+                packageAirline: document.getElementById('packageAirline').value,
+                packageDepartureCity: document.getElementById('packageDepartureCity').value,
+                packageTransitDeparture: document.getElementById('packageTransitDeparture').value,
+                packageArrivalCity: document.getElementById('packageArrivalCity').value,
+                packageDepartureFlightNumber: document.getElementById('packageDepartureFlightNumber').value,
+                packageReturnDepartureCity: document.getElementById('packageReturnDepartureCity').value,
+                packageTransitReturn: document.getElementById('packageTransitReturn').value,
+                packageReturnArrivalCity: document.getElementById('packageReturnArrivalCity').value,
+                packageReturnFlightNumber: document.getElementById('packageReturnFlightNumber').value,
+                packageFlightInfo: document.getElementById('packageFlightInfo').value,
+                packageDescription: document.getElementById('packageDescription').value,
+                packageInfo: document.getElementById('packageInfo').value
+            };
+            localStorage.setItem('packageFormData', JSON.stringify(formData));
+        }
+
+        // Load form data from localStorage
+        function loadPackageFormData() {
+            const savedData = localStorage.getItem('packageFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                Object.keys(formData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = formData[key];
+                    }
+                });
+            }
+        }
+
+        // Clear form and localStorage
+        function clearPackageForm() {
+            // Clear all text inputs
+            document.getElementById('packageName').value = '';
+            document.getElementById('packageCode').value = '';
+            document.getElementById('packagePrice').value = '';
+            document.getElementById('packageDeparture').value = '';
+            document.getElementById('packageReturn').value = '';
+            document.getElementById('packageQuota').value = '';
+            document.getElementById('packageMakkahHotel').value = '';
+            document.getElementById('packageMadinahHotel').value = '';
+            document.getElementById('packageMakkahNights').value = '';
+            document.getElementById('packageMadinahNights').value = '';
+            document.getElementById('packageAirline').value = '';
+            
+            // Clear flight details (reset to default values)
+            document.getElementById('packageDepartureCity').value = 'Jakarta';
+            document.getElementById('packageTransitDeparture').value = '';
+            document.getElementById('packageArrivalCity').value = 'Madinah';
+            document.getElementById('packageDepartureFlightNumber').value = '';
+            document.getElementById('packageReturnDepartureCity').value = 'Jeddah';
+            document.getElementById('packageTransitReturn').value = '';
+            document.getElementById('packageReturnArrivalCity').value = 'Jakarta';
+            document.getElementById('packageReturnFlightNumber').value = '';
+            
+            // Clear textareas
+            document.getElementById('packageFlightInfo').value = '';
+            document.getElementById('packageDescription').value = '';
+            document.getElementById('packageInfo').value = '';
+            
+            // Clear file inputs
+            document.getElementById('packageBrochure').value = '';
+            document.getElementById('packageImages').value = '';
+            
+            // Clear image previews
+            document.getElementById('brochurePreview').style.display = 'none';
+            document.getElementById('multipleImagesPreview').innerHTML = '';
+            
+            // Reset file input labels
+            document.getElementById('brochureLabel').classList.remove('file-selected');
+            document.getElementById('brochureText').textContent = 'Pilih Gambar Brosur';
+            document.getElementById('imagesLabel').classList.remove('file-selected');
+            document.getElementById('imagesText').textContent = 'Pilih Beberapa Gambar';
+            
+            // Clear localStorage
+            localStorage.removeItem('packageFormData');
+            
+            showNotification('Semua field telah dikosongkan', 'success');
+        }
+
+        // Handle brochure file change
+        function handleBrochureChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('brochureLabel').classList.add('file-selected');
+                document.getElementById('brochureText').textContent = file.name;
+                previewBrochure(event);
+            }
+            savePackageFormData();
+        }
+
+        // Handle multiple images change
+        function handleImagesChange(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                document.getElementById('imagesLabel').classList.add('file-selected');
+                document.getElementById('imagesText').textContent = `${files.length} gambar dipilih`;
+                previewMultipleImages(event);
+            }
+            savePackageFormData();
+        }
+
+        // Load saved cities from localStorage
+        function loadSavedCities() {
+            const savedCities = localStorage.getItem('customCities');
+            if (savedCities) {
+                return JSON.parse(savedCities);
+            }
+            return {
+                departure: [],
+                arrival: [],
+                returnDeparture: [],
+                returnArrival: []
+            };
+        }
+
+        // Save custom cities to localStorage
+        function saveCustomCities(cities) {
+            localStorage.setItem('customCities', JSON.stringify(cities));
+        }
+
+        // Handle city select change
+        function handleCitySelectChange(selectElement, type) {
+            if (selectElement.value === 'add_new') {
+                // Store reference to the select element
+                document.getElementById('citySelectType').value = type;
+                document.getElementById('citySelectElement').value = selectElement.id;
+                
+                // Reset to previous value temporarily
+                const previousValue = selectElement.dataset.previousValue || 
+                    (type === 'departure' || type === 'returnArrival' ? 'Jakarta' : 
+                     type === 'returnDeparture' ? 'Jeddah' : 'Madinah');
+                selectElement.value = previousValue;
+                
+                // Open modal
+                openModal('addCityModal');
+                document.getElementById('newCityName').focus();
+            } else {
+                // Store the current value for future reference
+                selectElement.dataset.previousValue = selectElement.value;
+                savePackageFormData();
+            }
+        }
+
+        // Add new city to dropdown
+        function addNewCity(event) {
+            event.preventDefault();
+            
+            const cityName = document.getElementById('newCityName').value.trim();
+            const type = document.getElementById('citySelectType').value;
+            const selectId = document.getElementById('citySelectElement').value;
+            const selectElement = document.getElementById(selectId);
+            
+            if (cityName && selectElement) {
+                // Check if city already exists
+                const existingOption = Array.from(selectElement.options).find(
+                    option => option.value === cityName && option.value !== 'add_new'
+                );
+                
+                if (existingOption) {
+                    showNotification('Kota sudah ada dalam daftar', 'warning');
+                    selectElement.value = cityName;
+                } else {
+                    // Add new option before the "add new" option
+                    const newOption = document.createElement('option');
+                    newOption.value = cityName;
+                    newOption.textContent = cityName;
+                    
+                    const addNewOption = selectElement.querySelector('option[value="add_new"]');
+                    selectElement.insertBefore(newOption, addNewOption);
+                    
+                    // Select the new option
+                    selectElement.value = cityName;
+                    selectElement.dataset.previousValue = cityName;
+                    
+                    // Save to localStorage
+                    const customCities = loadSavedCities();
+                    if (!customCities[type]) {
+                        customCities[type] = [];
+                    }
+                    customCities[type].push(cityName);
+                    saveCustomCities(customCities);
+                    
+                    showNotification(`Kota "${cityName}" berhasil ditambahkan`, 'success');
+                }
+                
+                // Save form data
+                savePackageFormData();
+                
+                // Close modal and reset form
+                closeModal('addCityModal');
+                document.getElementById('newCityName').value = '';
+            }
+        }
+
+        // Load custom cities on page load
+        function loadCustomCitiesIntoDropdowns() {
+            const customCities = loadSavedCities();
+            
+            // Map of dropdown types to select IDs
+            const dropdownMap = {
+                departure: 'packageDepartureCity',
+                arrival: 'packageArrivalCity',
+                returnDeparture: 'packageReturnDepartureCity',
+                returnArrival: 'packageReturnArrivalCity'
+            };
+            
+            Object.entries(dropdownMap).forEach(([type, selectId]) => {
+                const selectElement = document.getElementById(selectId);
+                if (selectElement && customCities[type]) {
+                    customCities[type].forEach(cityName => {
+                        // Check if city doesn't already exist
+                        const exists = Array.from(selectElement.options).some(
+                            option => option.value === cityName
+                        );
+                        
+                        if (!exists) {
+                            const newOption = document.createElement('option');
+                            newOption.value = cityName;
+                            newOption.textContent = cityName;
+                            
+                            const addNewOption = selectElement.querySelector('option[value="add_new"]');
+                            selectElement.insertBefore(newOption, addNewOption);
+                        }
+                    });
+                }
+            });
+        }
+
         async function savePackage(event) {
             event.preventDefault();
             
@@ -6135,37 +6615,43 @@
             }
             
             const formData = {
-                name: document.getElementById('packageName').value,
-                code: document.getElementById('packageCode').value,
+                nama_paket: document.getElementById('packageName').value,
+                kode_paket: document.getElementById('packageCode').value,
                 price: parseInt(document.getElementById('packagePrice').value),
-                departure_date: document.getElementById('packageDeparture').value,
-                return_date: document.getElementById('packageReturn').value,
-                quota: parseInt(document.getElementById('packageQuota').value),
-                makkah_hotel: document.getElementById('packageMakkahHotel').value,
-                madinah_hotel: document.getElementById('packageMadinahHotel').value,
-                makkah_nights: parseInt(document.getElementById('packageMakkahNights').value),
-                madinah_nights: parseInt(document.getElementById('packageMadinahNights').value),
-                airline: document.getElementById('packageAirline').value,
-                description: document.getElementById('packageDescription').value,
-                package_info: document.getElementById('packageInfo').value,
-                brochure_image: brochureImage,
-                package_images: packageImagesData, // Add multiple images
+                tanggal_berangkat: document.getElementById('packageDeparture').value,
+                tanggal_pulang: document.getElementById('packageReturn').value,
+                kuota: parseInt(document.getElementById('packageQuota').value),
+                hotel_makkah: document.getElementById('packageMakkahHotel').value,
+                hotel_madinah: document.getElementById('packageMadinahHotel').value,
+                malam_makkah: parseInt(document.getElementById('packageMakkahNights').value),
+                malam_madinah: parseInt(document.getElementById('packageMadinahNights').value),
+                maskapai: document.getElementById('packageAirline').value,
+                deskripsi_singkat: document.getElementById('packageDescription').value,
+                informasi_detail: document.getElementById('packageInfo').value,
+                gambar_utama: brochureImage,
+                gambar_tambahan: packageImagesData.map(img => typeof img === 'string' ? img : (img.url || '')), // Extract URLs from image objects
                 // Flight details
-                departure_city: document.getElementById('packageDepartureCity').value,
-                transit_city_departure: document.getElementById('packageTransitDeparture').value,
-                arrival_city: document.getElementById('packageArrivalCity').value,
-                departure_flight_number: document.getElementById('packageDepartureFlightNumber').value,
-                return_departure_city: document.getElementById('packageReturnDepartureCity').value,
-                transit_city_return: document.getElementById('packageTransitReturn').value,
-                return_arrival_city: document.getElementById('packageReturnArrivalCity').value,
-                return_flight_number: document.getElementById('packageReturnFlightNumber').value,
-                flight_info: document.getElementById('packageFlightInfo').value
+                kota_keberangkatan: document.getElementById('packageDepartureCity').value,
+                transit_berangkat: document.getElementById('packageTransitDeparture').value,
+                kota_tiba: document.getElementById('packageArrivalCity').value,
+                nomor_penerbangan_berangkat: document.getElementById('packageDepartureFlightNumber').value,
+                kota_pulang_dari: document.getElementById('packageReturnDepartureCity').value,
+                transit_pulang: document.getElementById('packageTransitReturn').value,
+                kota_tiba_pulang: document.getElementById('packageReturnArrivalCity').value,
+                nomor_penerbangan_pulang: document.getElementById('packageReturnFlightNumber').value,
+                catatan_penerbangan: document.getElementById('packageFlightInfo').value
             };
+            
+            console.log('Package form data:', formData);
             
             try {
                 const url = isEditing 
                     ? getApiBaseUrl() + `/api/packages/${isEditing}`
                     : getApiBaseUrl() + '/api/packages';
+                
+                console.log('Sending package to:', url);
+                console.log('Method:', isEditing ? 'PUT' : 'POST');
+                console.log('Request body:', JSON.stringify(formData));
                     
                 const response = await fetch(url, {
                     method: isEditing ? 'PUT' : 'POST',
@@ -6175,9 +6661,14 @@
                     body: JSON.stringify(formData)
                 });
                 
+                console.log('Response status:', response.status);
+                console.log('Response OK:', response.ok);
+                
+                const responseData = await response.json();
+                console.log('Response data:', responseData);
+                
                 if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Failed to save package');
+                    throw new Error(responseData.error || 'Failed to save package');
                 }
                 
                 closeModal('packageModal');
@@ -6188,6 +6679,9 @@
                 event.target.reset();
                 delete form.dataset.editId;
                 packageImagesData = [];
+                
+                // Clear saved form data from localStorage
+                localStorage.removeItem('packageFormData');
                 document.getElementById('multipleImagesPreview').innerHTML = '';
             } catch (error) {
                 console.error('Error saving package:', error);
@@ -8212,10 +8706,9 @@
                 if (modalId === 'jamaahModal' || modalId === 'packageModal') {
                     const form = modal.querySelector('form');
                     if (form && !form.dataset.editId) {
-                        // Only reset if NOT in edit mode
-                        form.reset();
-                        
+                        // Only reset if NOT in edit mode for jamaah
                         if (modalId === 'jamaahModal') {
+                            form.reset();
                             document.getElementById('passportPreview').style.display = 'none';
                             // Reset modal title
                             const modalTitle = modal.querySelector('h3');
@@ -8223,9 +8716,10 @@
                                 modalTitle.textContent = 'Tambah/Edit Jamaah';
                             }
                         } else if (modalId === 'packageModal') {
-                            document.getElementById('brochurePreview').style.display = 'none';
-                            packageImagesData = [];
-                            document.getElementById('multipleImagesPreview').innerHTML = '';
+                            // Load custom cities first
+                            loadCustomCitiesIntoDropdowns();
+                            // Load saved data for package modal
+                            loadPackageFormData();
                             // Reset modal title
                             const modalTitle = modal.querySelector('h3');
                             if (modalTitle) {
@@ -9276,15 +9770,20 @@
         
         async function viewPackageDetails(id) {
             try {
+                console.log('Viewing package details ID:', id);
                 const response = await fetch(getApiBaseUrl() + `/api/packages/${id}`);
-                const package = await response.json();
+                const result = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch package details');
+                    throw new Error(result.error || 'Failed to fetch package details');
                 }
                 
+                // Extract package data
+                const package = result.data || result;
+                console.log('Package details:', package);
+                
                 // Update modal title
-                document.getElementById('packageDetailTitle').textContent = package.name;
+                document.getElementById('packageDetailTitle').textContent = package.name || package.nama_paket || 'Package Details';
                 
                 // Build detail content
                 const content = document.getElementById('packageDetailContent');
@@ -9328,11 +9827,11 @@
                                 <div style="display: grid; gap: 10px;">
                                     <div>
                                         <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Kode Paket</p>
-                                        <p style="margin: 0; color: white; font-weight: 600;">${package.code}</p>
+                                        <p style="margin: 0; color: white; font-weight: 600;">${package.code || package.kode_paket || ''}</p>
                                     </div>
                                     <div>
                                         <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Harga</p>
-                                        <p style="margin: 0; color: #4facfe; font-weight: 700; font-size: 20px;">Rp ${formatPrice(package.price)}</p>
+                                        <p style="margin: 0; color: #4facfe; font-weight: 700; font-size: 20px;">Rp ${formatPrice(package.price || 0)}</p>
                                     </div>
                                     <div>
                                         <p style="margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 12px;">Status</p>
@@ -9840,6 +10339,27 @@
                 modal.style.display = 'none';
             });
             
+            // Add event listeners for package form fields to save on change
+            const packageFields = [
+                'packageName', 'packageCode', 'packagePrice', 'packageDeparture',
+                'packageReturn', 'packageQuota', 'packageMakkahHotel', 'packageMadinahHotel',
+                'packageMakkahNights', 'packageMadinahNights', 'packageAirline',
+                'packageDepartureCity', 'packageTransitDeparture', 'packageArrivalCity',
+                'packageDepartureFlightNumber', 'packageReturnDepartureCity',
+                'packageTransitReturn', 'packageReturnArrivalCity', 'packageReturnFlightNumber',
+                'packageFlightInfo', 'packageDescription', 'packageInfo'
+            ];
+            
+            packageFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', savePackageFormData);
+                }
+            });
+            
+            // Load custom cities into dropdowns
+            loadCustomCitiesIntoDropdowns();
+            
             // Setup navigation click handlers
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function(e) {
@@ -9925,6 +10445,102 @@
         });
     </script>
     
+    <!-- Add City Modal -->
+    <div id="addCityModal" class="modal">
+        <div class="modal-content" style="
+            max-width: 400px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        ">
+            <div class="modal-header" style="
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.15));
+                margin: -30px -30px 20px -30px;
+                padding: 24px 30px;
+                border-radius: 24px 24px 0 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <div>
+                    <h3 style="
+                        margin: 0;
+                        font-size: 20px;
+                        font-weight: 700;
+                        background: linear-gradient(135deg, #3b82f6, #9333ea);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    ">Tambah Kota Baru</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('addCityModal')" style="
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">&times;</button>
+            </div>
+            
+            <form onsubmit="addNewCity(event)">
+                <input type="hidden" id="citySelectType">
+                <input type="hidden" id="citySelectElement">
+                
+                <div class="form-group">
+                    <label class="glass-label">Nama Kota</label>
+                    <input type="text" id="newCityName" class="glass-input" placeholder="Masukkan nama kota" required>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="
+                        background: linear-gradient(135deg, #3b82f6, #2563eb);
+                        border: 1px solid rgba(59, 130, 246, 0.3);
+                        color: white;
+                        padding: 12px 24px;
+                        border-radius: 12px;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+                        flex: 1;
+                        justify-content: center;
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.2)'">
+                        <span class="material-icons">add</span>
+                        Tambah
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="closeModal('addCityModal')" style="
+                        background: rgba(239, 68, 68, 0.2);
+                        border: 1px solid rgba(239, 68, 68, 0.3);
+                        color: #ef4444;
+                        padding: 12px 24px;
+                        border-radius: 12px;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                        flex: 1;
+                        justify-content: center;
+                    " onmouseover="this.style.background='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.2)'">
+                        <span class="material-icons">cancel</span>
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal for Special Requests -->
     <div id="specialRequestsModal" class="modal">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px;">

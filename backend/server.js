@@ -115,9 +115,6 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Static files for uploads
 app.use('/uploads', express.static('uploads'));
 
-// Serve React build files
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
 // Health check endpoints
 app.get('/health', (req, res) => {
   res.json({ 
@@ -161,6 +158,9 @@ app.use('/api/flights', flightsRoutes);
 app.use('/api/ground-handling', groundHandlingRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 
+// Serve React build files (MUST be after API routes)
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
 // Catch-all route for React SPA (must be after API routes)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
@@ -171,8 +171,15 @@ app.get('*', (req, res) => {
 
 // Basic error handler
 app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  
+  // Send JSON error response
+  res.status(err.status || 500).json({
+    success: false,
+    error: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
 });
 
 // Initialize database and start server

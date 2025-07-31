@@ -5,32 +5,35 @@ class Package {
   
   static getValidationSchema() {
     return Joi.object({
-      // Required fields based on new structure
-      kode_paket: Joi.string().max(50).required().pattern(/^#\d{4}_\d+H_[A-Z]{3}_\d{4}$/),
+      // Required fields
+      kode_paket: Joi.string().max(50).required(),
       nama_paket: Joi.string().max(255).required(),
-      jumlah_hari: Joi.number().integer().min(1).required(),
-      kota_asal: Joi.string().max(100).required(),
-      maskapai: Joi.string().max(100).required(),
+      tanggal_berangkat: Joi.date().required(),
+      tanggal_pulang: Joi.date().required(),
+      kuota: Joi.number().integer().min(1).required(),
+      price: Joi.number().min(0).required(),
       hotel_makkah: Joi.string().max(255).required(),
-      jumlah_malam_makkah: Joi.number().integer().min(1).required(),
-      hotel_medina: Joi.string().max(255).required(),
-      jumlah_malam_medina: Joi.number().integer().min(1).required(),
-      jumlah_seat_total: Joi.number().integer().min(1).required(),
-      sisa_seat: Joi.number().integer().min(0).max(Joi.ref('jumlah_seat_total')).required(),
+      hotel_madinah: Joi.string().max(255).required(),
+      maskapai: Joi.string().max(100).required(),
+      malam_makkah: Joi.number().integer().min(1).required(),
+      malam_madinah: Joi.number().integer().min(1).required(),
       
       // Optional fields
-      kota_transit: Joi.string().max(100).allow('', null),
-      jumlah_malam_transit: Joi.number().integer().min(0).default(0),
-      kereta_cepat: Joi.boolean().default(false),
-      thaif: Joi.boolean().default(false),
+      deskripsi_singkat: Joi.string().max(2000).allow('', null),
+      informasi_detail: Joi.string().allow('', null),
+      gambar_utama: Joi.string().allow('', null),
+      gambar_tambahan: Joi.array().items(Joi.string()).allow(null),
       
-      // Additional fields for internal use
-      price: Joi.number().precision(2).min(0).allow(null),
-      description: Joi.string().max(2000).allow(''),
-      departure_date: Joi.date().allow(null),
-      return_date: Joi.date().greater(Joi.ref('departure_date')).allow(null),
-      max_capacity: Joi.number().integer().min(1).allow(null), // Deprecated
-      is_active: Joi.boolean().default(true)
+      // Flight details
+      kota_keberangkatan: Joi.string().max(100).allow('', null),
+      transit_berangkat: Joi.string().max(100).allow('', null),
+      kota_tiba: Joi.string().max(100).allow('', null),
+      nomor_penerbangan_berangkat: Joi.string().max(50).allow('', null),
+      kota_pulang_dari: Joi.string().max(100).allow('', null),
+      transit_pulang: Joi.string().max(100).allow('', null),
+      kota_tiba_pulang: Joi.string().max(100).allow('', null),
+      nomor_penerbangan_pulang: Joi.string().max(50).allow('', null),
+      catatan_penerbangan: Joi.string().allow('', null)
     });
   }
 
@@ -42,42 +45,92 @@ class Package {
 
   // Create new package
   static async create(packageData, createdBy) {
+    console.log('Package.create - Input data:', packageData);
+    console.log('Package.create - Created by:', createdBy);
+    
     const { error, value } = this.getValidationSchema().validate(packageData);
     if (error) {
+      console.error('Package.create - Validation error:', error.details[0].message);
       throw new Error(`Validation error: ${error.details[0].message}`);
     }
+    
+    console.log('Package.create - Validated data:', value);
+
+    // First create the schema if it doesn't exist
+    await query(`CREATE SCHEMA IF NOT EXISTS core`);
+    
+    // Then create the table if it doesn't exist
+    await query(`
+      CREATE TABLE IF NOT EXISTS core.packages (
+        id SERIAL PRIMARY KEY,
+        kode_paket VARCHAR(50) UNIQUE NOT NULL,
+        nama_paket VARCHAR(255) NOT NULL,
+        jumlah_hari INTEGER,
+        kota_asal VARCHAR(100),
+        maskapai VARCHAR(100),
+        kota_transit VARCHAR(100),
+        jumlah_malam_transit INTEGER DEFAULT 0,
+        hotel_makkah VARCHAR(255),
+        jumlah_malam_makkah INTEGER,
+        hotel_medina VARCHAR(255),
+        jumlah_malam_medina INTEGER,
+        kereta_cepat BOOLEAN DEFAULT false,
+        thaif BOOLEAN DEFAULT false,
+        jumlah_seat_total INTEGER,
+        sisa_seat INTEGER,
+        price DECIMAL(15,2),
+        description TEXT,
+        departure_date DATE,
+        return_date DATE,
+        max_capacity INTEGER,
+        current_capacity INTEGER DEFAULT 0,
+        is_active BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Calculate duration days
+    const departureDate = new Date(value.tanggal_berangkat);
+    const returnDate = new Date(value.tanggal_pulang);
+    const duration = Math.ceil((returnDate - departureDate) / (1000 * 60 * 60 * 24)) + 1;
 
     const result = await query(
-      `INSERT INTO packages (
-        kode_paket, nama_paket, jumlah_hari, kota_asal, maskapai, kota_transit, 
-        jumlah_malam_transit, hotel_makkah, jumlah_malam_makkah, 
-        hotel_medina, jumlah_malam_medina, kereta_cepat, thaif,
-        jumlah_seat_total, sisa_seat, price, description, departure_date, 
-        return_date, max_capacity, is_active
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
+      `INSERT INTO core.packages (
+        code, name, price, description, departure_date, 
+        return_date, quota, makkah_hotel, madinah_hotel,
+        makkah_nights, madinah_nights, airline, status,
+        departure_city, transit_city_departure, arrival_city, departure_flight_number,
+        return_departure_city, transit_city_return, return_arrival_city, return_flight_number,
+        flight_info, brochure_image, package_info, package_images
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
       RETURNING *`,
       [
         value.kode_paket,
         value.nama_paket,
-        value.jumlah_hari,
-        value.kota_asal,
-        value.maskapai,
-        value.kota_transit,
-        value.jumlah_malam_transit,
-        value.hotel_makkah,
-        value.jumlah_malam_makkah,
-        value.hotel_medina,
-        value.jumlah_malam_medina,
-        value.kereta_cepat,
-        value.thaif,
-        value.jumlah_seat_total,
-        value.sisa_seat,
         value.price,
-        value.description,
-        value.departure_date,
-        value.return_date,
-        value.max_capacity,
-        value.is_active
+        value.deskripsi_singkat || '',
+        value.tanggal_berangkat,
+        value.tanggal_pulang,
+        value.kuota,
+        value.hotel_makkah,
+        value.hotel_madinah || value.hotel_medina,
+        value.malam_makkah || 0,
+        value.malam_madinah || value.malam_medina || 0,
+        value.maskapai,
+        'active',
+        value.kota_keberangkatan || null,
+        value.transit_berangkat || null,
+        value.kota_tiba || null,
+        value.nomor_penerbangan_berangkat || null,
+        value.kota_pulang_dari || null,
+        value.transit_pulang || null,
+        value.kota_tiba_pulang || null,
+        value.nomor_penerbangan_pulang || null,
+        value.catatan_penerbangan || null,
+        value.gambar_utama || null,
+        value.informasi_detail || null,
+        JSON.stringify(value.gambar_tambahan || [])
       ]
     );
 
@@ -162,15 +215,49 @@ class Package {
       throw new Error(`Validation error: ${error.details[0].message}`);
     }
 
+    // Map frontend fields to database columns
+    const fieldMapping = {
+      'kode_paket': 'code',
+      'nama_paket': 'name',
+      'tanggal_berangkat': 'departure_date',
+      'tanggal_pulang': 'return_date',
+      'kuota': 'quota',
+      'hotel_makkah': 'makkah_hotel',
+      'hotel_madinah': 'madinah_hotel',
+      'malam_makkah': 'makkah_nights',
+      'malam_madinah': 'madinah_nights',
+      'maskapai': 'airline',
+      'deskripsi_singkat': 'description',
+      'informasi_detail': 'package_info',
+      'gambar_utama': 'brochure_image',
+      'gambar_tambahan': 'package_images',
+      'kota_keberangkatan': 'departure_city',
+      'transit_berangkat': 'transit_city_departure',
+      'kota_tiba': 'arrival_city',
+      'nomor_penerbangan_berangkat': 'departure_flight_number',
+      'kota_pulang_dari': 'return_departure_city',
+      'transit_pulang': 'transit_city_return',
+      'kota_tiba_pulang': 'return_arrival_city',
+      'nomor_penerbangan_pulang': 'return_flight_number',
+      'catatan_penerbangan': 'flight_info'
+    };
+
     // Build update query dynamically
     const updateFields = [];
     const updateValues = [];
     let paramCount = 0;
 
     for (const [key, val] of Object.entries(value)) {
+      const dbField = fieldMapping[key] || key;
       paramCount++;
-      updateFields.push(`${key} = $${paramCount}`);
-      updateValues.push(val);
+      updateFields.push(`${dbField} = $${paramCount}`);
+      
+      // Handle special cases
+      if (key === 'gambar_tambahan') {
+        updateValues.push(JSON.stringify(val || []));
+      } else {
+        updateValues.push(val);
+      }
     }
 
     paramCount++;
@@ -181,7 +268,7 @@ class Package {
     updateValues.push(id);
 
     const updateQuery = `
-      UPDATE packages 
+      UPDATE core.packages 
       SET ${updateFields.join(', ')}
       WHERE id = $${paramCount}
       RETURNING *
@@ -268,7 +355,7 @@ class Package {
   // Update package seat availability (called when jamaah is assigned/removed)
   static async updateSeatAvailability(id) {
     const result = await query(`
-      UPDATE packages 
+      UPDATE core.packages 
       SET sisa_seat = jumlah_seat_total - (
         SELECT COUNT(*) 
         FROM jamaah 
