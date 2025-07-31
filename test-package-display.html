@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Package Display</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .package-card {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .error {
+            color: red;
+            background: rgba(255,0,0,0.1);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid red;
+        }
+        .success {
+            color: lime;
+            background: rgba(0,255,0,0.1);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid lime;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Package Display</h1>
+    <button onclick="testAPI()">Test API Direct</button>
+    <button onclick="testWithCORS()">Test with CORS</button>
+    <button onclick="testPackageDisplay()">Test Package Display Logic</button>
+    
+    <div id="results"></div>
+
+    <script>
+        function getApiBaseUrl() {
+            return window.location.hostname === 'localhost' 
+                ? 'http://localhost:5000'
+                : 'http://103.181.143.223:5000';
+        }
+
+        async function testAPI() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing API directly...</p>';
+            
+            try {
+                const url = getApiBaseUrl() + '/api/packages';
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                results.innerHTML += `
+                    <div class="success">
+                        <p>✓ API Response OK</p>
+                        <p>Status: ${response.status}</p>
+                        <p>Success: ${data.success}</p>
+                        <p>Packages found: ${data.data ? data.data.length : 0}</p>
+                    </div>
+                `;
+                
+                if (data.data) {
+                    results.innerHTML += '<h3>Packages:</h3>';
+                    data.data.forEach(pkg => {
+                        results.innerHTML += `
+                            <div class="package-card">
+                                <h4>${pkg.name}</h4>
+                                <p>Code: ${pkg.code}</p>
+                                <p>Status: ${pkg.status}</p>
+                                <p>Price: ${pkg.price}</p>
+                                <p>Quota: ${pkg.quota}</p>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (error) {
+                results.innerHTML += `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testWithCORS() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing with CORS headers...</p>';
+            
+            try {
+                const url = getApiBaseUrl() + '/api/packages';
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+                
+                const data = await response.json();
+                results.innerHTML += `<div class="success">✓ CORS test passed. Found ${data.data.length} packages</div>`;
+            } catch (error) {
+                results.innerHTML += `<div class="error">CORS Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testPackageDisplay() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing package display logic...</p>';
+            
+            try {
+                const response = await fetch(getApiBaseUrl() + '/api/packages');
+                const result = await response.json();
+                
+                // Same logic as in the main app
+                const packages = result.data || result || [];
+                results.innerHTML += `<p>Total packages: ${packages.length}</p>`;
+                
+                const activePackages = packages.filter(p => p.status === 'active');
+                results.innerHTML += `<p>Active packages: ${activePackages.length}</p>`;
+                
+                if (activePackages.length === 0) {
+                    results.innerHTML += '<div class="error">No active packages found!</div>';
+                } else {
+                    results.innerHTML += '<div class="success">✓ Active packages found</div>';
+                    activePackages.forEach(pkg => {
+                        results.innerHTML += `<p>- ${pkg.name} (${pkg.status})</p>`;
+                    });
+                }
+                
+                // Check if any packages have different status
+                const inactivePackages = packages.filter(p => p.status !== 'active');
+                if (inactivePackages.length > 0) {
+                    results.innerHTML += `<p>Inactive packages: ${inactivePackages.length}</p>`;
+                    inactivePackages.forEach(pkg => {
+                        results.innerHTML += `<p>- ${pkg.name} (${pkg.status})</p>`;
+                    });
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<div class="error">Display Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

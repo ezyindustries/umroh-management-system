@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Packages</title>
+</head>
+<body>
+    <h1>Test Package Loading</h1>
+    <button onclick="loadPackages()">Load Packages</button>
+    <button onclick="createTestPackage()">Create Test Package</button>
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+        
+        async function loadPackages() {
+            try {
+                const response = await fetch(API_BASE + '/api/packages');
+                const result = await response.json();
+                
+                document.getElementById('results').innerHTML = '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                console.log('Packages loaded:', result);
+            } catch (error) {
+                document.getElementById('results').innerHTML = 'Error: ' + error.message;
+                console.error('Error:', error);
+            }
+        }
+        
+        async function createTestPackage() {
+            const packageData = {
+                kode_paket: 'TEST-' + Date.now(),
+                nama_paket: 'Test Package Created at ' + new Date().toLocaleTimeString(),
+                tanggal_berangkat: '2025-04-01',
+                tanggal_pulang: '2025-04-15',
+                kuota: 40,
+                price: 28000000,
+                hotel_makkah: 'Test Hotel Makkah',
+                hotel_madinah: 'Test Hotel Madinah',
+                maskapai: 'Test Airlines',
+                malam_makkah: 7,
+                malam_madinah: 7,
+                deskripsi_singkat: 'Test package description',
+                gambar_tambahan: []
+            };
+            
+            try {
+                const response = await fetch(API_BASE + '/api/packages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(packageData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('results').innerHTML = '<p style="color: green;">Package created successfully!</p><pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                    // Reload packages after 1 second
+                    setTimeout(loadPackages, 1000);
+                } else {
+                    document.getElementById('results').innerHTML = '<p style="color: red;">Error creating package:</p><pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML = 'Error: ' + error.message;
+                console.error('Error:', error);
+            }
+        }
+        
+        // Load packages on page load
+        window.addEventListener('load', loadPackages);
+    </script>
+</body>
+</html>

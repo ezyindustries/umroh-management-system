@@ -31,6 +31,23 @@ async function wahaAPI(endpoint, method = 'GET', data = null) {
     }
 }
 
+// Helper function to update webhook configuration
+async function updateWebhookConfig() {
+    try {
+        await wahaAPI(`/api/sessions/${SESSION_NAME}/webhook`, 'POST', {
+            webhooks: [
+                {
+                    url: `http://103.181.143.223:5000/api/whatsapp/webhook`,
+                    events: ['*']
+                }
+            ]
+        });
+        console.log('Webhook configuration updated successfully');
+    } catch (error) {
+        console.error('Error updating webhook configuration:', error);
+    }
+}
+
 // GET /api/whatsapp/status - Check WhatsApp connection status
 router.get('/status', async (req, res) => {
     try {
@@ -81,6 +98,8 @@ router.post('/start', async (req, res) => {
             
             if (existingSession) {
                 if (existingSession.status === 'WORKING') {
+                    // Update webhook configuration for existing session
+                    await updateWebhookConfig();
                     return res.json({ 
                         success: true, 
                         message: 'Already connected',
@@ -102,8 +121,8 @@ router.post('/start', async (req, res) => {
                     config: {
                         webhooks: [
                             {
-                                url: `${process.env.BACKEND_URL || 'http://localhost:5000'}/api/whatsapp/webhook`,
-                                events: ['message', 'session.status']
+                                url: `http://103.181.143.223:5000/api/whatsapp/webhook`,
+                                events: ['*']
                             }
                         ]
                     }
@@ -247,6 +266,7 @@ router.post('/send', async (req, res) => {
         }
         
         const payload = {
+            session: SESSION_NAME,
             chatId: `${phoneNumber}@c.us`,
             text: message
         };
@@ -412,6 +432,75 @@ router.get('/messages/:chatId', async (req, res) => {
     }
 });
 
+// GET /api/whatsapp/conversations - Get all conversations with details
+router.get('/conversations', async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 10;
+        
+        // Get chat list
+        const chats = await wahaAPI(`/api/${SESSION_NAME}/chats?limit=${limit}`);
+        
+        // Get conversations with messages
+        const conversations = [];
+        
+        for (const chat of chats.slice(0, limit)) {
+            try {
+                // Extract chat ID properly
+                const chatId = typeof chat.id === 'object' ? chat.id._serialized : chat.id;
+                
+                // Skip getting messages for now to speed up response
+                let messages = [];
+                // Comment out for performance - we can get messages when user selects a chat
+                /*
+                try {
+                    messages = await wahaAPI(`/api/${SESSION_NAME}/chats/${encodeURIComponent(chatId)}/messages?limit=5`);
+                } catch (msgError) {
+                    console.log(`Could not get messages for ${chatId}: ${msgError.message}`);
+                }
+                */
+                
+                // Extract name
+                let name = chat.name || chat.contact?.name || chat.contact?.pushname || '';
+                if (!name && chatId) {
+                    name = chatId.replace('@c.us', '').replace('@g.us', '');
+                    if (name.startsWith('62')) {
+                        name = '+' + name;
+                    }
+                }
+                
+                conversations.push({
+                    chatId: chatId,
+                    name: name,
+                    isGroup: chatId.includes('@g.us'),
+                    lastMessage: chat.lastMessage?.body || chat.lastMessage?.caption || '',
+                    lastMessageTime: chat.lastMessage?.timestamp ? 
+                        new Date(chat.lastMessage.timestamp * 1000).toISOString() : null,
+                    unreadCount: chat.unreadCount || 0,
+                    messages: messages.map(msg => ({
+                        id: msg.id,
+                        fromMe: msg.fromMe || false,
+                        body: msg.body || msg.caption || '',
+                        timestamp: msg.timestamp ? 
+                            new Date(msg.timestamp * 1000).toISOString() : 
+                            new Date().toISOString(),
+                        type: msg.type || 'chat'
+                    })).reverse() // Show newest first
+                });
+            } catch (error) {
+                console.error(`Error processing chat ${chat.id}:`, error.message);
+            }
+        }
+        
+        res.json({
+            total: conversations.length,
+            conversations: conversations
+        });
+    } catch (error) {
+        console.error('Error getting conversations:', error.response?.data || error.message);
+        res.status(500).json({ error: 'Failed to get conversations' });
+    }
+});
+
 // Handle incoming messages
 async function handleIncomingMessage(message) {
     try {
@@ -438,6 +527,7 @@ async function handleIncomingMessage(message) {
                 console.log('Detected greeting from personal chat, sending reply...');
                 try {
                     const result = await wahaAPI('/api/sendText', 'POST', {
+                        session: SESSION_NAME,
                         chatId: message.from,
                         text: 'Waalaikumsalam'
                     });
@@ -482,6 +572,7 @@ async function handleIncomingMessage(message) {
                         
                         // Send package details
                         await wahaAPI('/api/sendText', 'POST', {
+                            session: SESSION_NAME,
                             chatId: message.from,
                             text: replyMessage
                         });
@@ -489,6 +580,7 @@ async function handleIncomingMessage(message) {
                         // Send package images if available
                         if (pkg.gambar_utama) {
                             await wahaAPI('/api/sendFile', 'POST', {
+                                session: SESSION_NAME,
                                 chatId: message.from,
                                 file: {
                                     url: `${process.env.BACKEND_URL || 'http://localhost:5000'}${pkg.gambar_utama}`
@@ -501,6 +593,7 @@ async function handleIncomingMessage(message) {
                     } else {
                         // Package not found
                         await wahaAPI('/api/sendText', 'POST', {
+                            session: SESSION_NAME,
                             chatId: message.from,
                             text: `Mohon maaf, paket dengan kode *#${packageCode}* tidak ditemukan. Silakan cek kembali kode paket atau hubungi tim marketing kami untuk informasi paket yang tersedia.`
                         });
@@ -509,6 +602,7 @@ async function handleIncomingMessage(message) {
                     console.error('Database error:', dbError);
                     // Send error message
                     await wahaAPI('/api/sendText', 'POST', {
+                        session: SESSION_NAME,
                         chatId: message.from,
                         text: 'Mohon maaf, terjadi kesalahan sistem. Silakan coba beberapa saat lagi atau hubungi tim kami.'
                     });
@@ -525,6 +619,7 @@ Untuk informasi paket umroh, silakan kunjungi website kami atau hubungi CS kami 
 Jazakallah khair 🙏`;
             
             await wahaAPI('/api/sendText', 'POST', {
+                session: SESSION_NAME,
                 chatId: message.from,
                 text: autoReplyMessage
             });

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Flight Cards</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Flight Cards Display</h1>
+    
+    <button class="btn" onclick="testLoadPackages()">
+        <span class="material-icons">refresh</span>
+        Load Packages
+    </button>
+    
+    <div id="package-flight-cards" class="cards-grid">
+        <!-- Cards will be loaded here -->
+    </div>
+    
+    <script>
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+        
+        async function testLoadPackages() {
+            console.log('Loading packages...');
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/packages');
+                console.log('Response status:', response.status);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Packages received:', result);
+                    renderPackageFlightCards(result);
+                } else {
+                    console.error('Failed to load packages');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        function renderPackageFlightCards(packages) {
+            const container = document.getElementById('package-flight-cards');
+            if (!container) {
+                console.error('Container not found!');
+                return;
+            }
+            
+            // Handle both array and object with data property
+            const packageList = Array.isArray(packages) ? packages : (packages.data || []);
+            console.log('Rendering packages:', packageList);
+            
+            if (packageList.length === 0) {
+                container.innerHTML = '<p>No packages found</p>';
+                return;
+            }
+            
+            container.innerHTML = packageList.map(pkg => {
+                let mainImage = pkg.brochure_image || pkg.gambar_utama || '';
+                
+                return `
+                    <div class="card">
+                        ${mainImage ? `
+                            <div style="height: 200px; background: url('${mainImage}') center/cover; border-radius: 12px; margin: -20px -20px 20px -20px;"></div>
+                        ` : `
+                            <div style="height: 200px; background: linear-gradient(135deg, #3B82F6, #10B981); border-radius: 12px; margin: -20px -20px 20px -20px; display: flex; align-items: center; justify-content: center;">
+                                <span class="material-icons" style="font-size: 72px; color: rgba(255, 255, 255, 0.3);">image</span>
+                            </div>
+                        `}
+                        
+                        <h4>${pkg.name || pkg.nama_paket || 'Package'}</h4>
+                        <p>Code: ${pkg.code || pkg.kode_paket || '-'}</p>
+                        <p>Airline: ${pkg.airline || pkg.maskapai || 'Not specified'}</p>
+                        <p>Departure: ${formatDate(pkg.departure_date)}</p>
+                        <p>Return: ${formatDate(pkg.return_date)}</p>
+                        
+                        <div class="form-group">
+                            <label>PNR Number</label>
+                            <input type="text" value="${pkg.pnr_code || ''}" placeholder="Enter PNR">
+                        </div>
+                        
+                        <button class="btn">Save</button>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('Rendering complete');
+        }
+        
+        // Load packages on page load
+        testLoadPackages();
+    </script>
+</body>
+</html>

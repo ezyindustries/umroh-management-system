@@ -797,7 +797,28 @@
                     document.getElementById('chatList').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
                 }
                 
-                const response = await fetch(`${API_BASE_URL}/api/whatsapp/chats`);
+                // Try conversations endpoint first for more detailed data
+                let response = await fetch(`${API_BASE_URL}/api/whatsapp/conversations?limit=100`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.conversations && Array.isArray(data.conversations)) {
+                        // Convert conversations format to chats format
+                        chats = data.conversations.map(conv => ({
+                            id: conv.chatId,
+                            name: conv.name || conv.chatId.replace('@c.us', '').replace('@g.us', ''),
+                            lastMessage: conv.lastMessage || 'No messages',
+                            timestamp: conv.lastMessageTime || new Date().toISOString(),
+                            unread: conv.unreadCount || 0,
+                            isGroup: conv.isGroup || false,
+                            messages: conv.messages || []
+                        }));
+                        displayChats();
+                        return;
+                    }
+                }
+                
+                // Fallback to chats endpoint
+                response = await fetch(`${API_BASE_URL}/api/whatsapp/chats`);
                 if (response.ok) {
                     chats = await response.json();
                     displayChats();
@@ -856,29 +877,111 @@
         }
         
         // Display chats
-        function displayChats() {
+        function displayChats(silent = false) {
             const chatList = document.getElementById('chatList');
+            
+            // If silent update, preserve existing structure and update only changed data
+            if (silent && chatList.children.length > 0) {
+                // Update summary
+                const summary = chatList.querySelector('div:first-child');
+                if (summary && chats.length > 0) {
+                    const groupCount = chats.filter(c => c.isGroup).length;
+                    const personalCount = chats.filter(c => !c.isGroup).length;
+                    const unreadTotal = chats.reduce((sum, c) => sum + (c.unread || 0), 0);
+                    summary.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>Total: ${chats.length} percakapan</div>
+                            <div style="display: flex; gap: 15px; font-size: 13px; color: rgba(255, 255, 255, 0.6);">
+                                <span>👤 Personal: ${personalCount}</span>
+                                <span>👥 Group: ${groupCount}</span>
+                                ${unreadTotal > 0 ? `<span style="color: #FF8C42;">● ${unreadTotal} belum dibaca</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Update existing chat items
+                const chatItems = chatList.querySelectorAll('.chat-item');
+                chats.forEach((chat, index) => {
+                    const existingItem = Array.from(chatItems).find(item => 
+                        item.dataset.chatId === chat.id
+                    );
+                    
+                    if (existingItem) {
+                        // Update existing item
+                        const timeEl = existingItem.querySelector('.chat-time');
+                        const messageEl = existingItem.querySelector('.chat-message');
+                        const unreadEl = existingItem.querySelector('.unread-badge');
+                        
+                        if (timeEl) timeEl.textContent = formatTime(chat.timestamp);
+                        if (messageEl) messageEl.textContent = chat.lastMessage;
+                        
+                        // Update unread badge
+                        const previewEl = existingItem.querySelector('.chat-preview');
+                        if (chat.unread > 0) {
+                            if (unreadEl) {
+                                unreadEl.textContent = chat.unread > 99 ? '99+' : chat.unread;
+                            } else if (previewEl) {
+                                const newBadge = document.createElement('div');
+                                newBadge.className = 'unread-badge';
+                                newBadge.textContent = chat.unread > 99 ? '99+' : chat.unread;
+                                previewEl.appendChild(newBadge);
+                            }
+                        } else if (unreadEl) {
+                            unreadEl.remove();
+                        }
+                    }
+                });
+                
+                return; // Exit early for silent updates
+            }
+            
+            // Full redraw for non-silent updates
             chatList.innerHTML = '';
+            
+            // Add summary at the top
+            if (chats.length > 0) {
+                const summary = document.createElement('div');
+                summary.style.cssText = 'padding: 12px 20px; background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05)); border-radius: 16px; margin-bottom: 15px; font-size: 14px; border: 1px solid rgba(255, 140, 66, 0.2); color: rgba(255, 255, 255, 0.8);';
+                const groupCount = chats.filter(c => c.isGroup).length;
+                const personalCount = chats.filter(c => !c.isGroup).length;
+                const unreadTotal = chats.reduce((sum, c) => sum + (c.unread || 0), 0);
+                summary.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>Total: ${chats.length} percakapan</div>
+                        <div style="display: flex; gap: 15px; font-size: 13px; color: rgba(255, 255, 255, 0.6);">
+                            <span>👤 Personal: ${personalCount}</span>
+                            <span>👥 Group: ${groupCount}</span>
+                            ${unreadTotal > 0 ? `<span style="color: #FF8C42;">● ${unreadTotal} belum dibaca</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                chatList.appendChild(summary);
+            }
             
             chats.forEach(chat => {
                 const chatItem = document.createElement('div');
                 chatItem.className = 'chat-item';
+                chatItem.dataset.chatId = chat.id; // Add data attribute for tracking
                 if (currentChat && currentChat.id === chat.id) {
                     chatItem.classList.add('active');
                 }
                 
                 chatItem.innerHTML = `
-                    <div class="chat-avatar">
-                        <span class="material-icons">person</span>
+                    <div class="chat-avatar" style="${chat.isGroup ? 'background: linear-gradient(135deg, rgba(255, 167, 38, 0.2), rgba(255, 140, 66, 0.1));' : ''}">
+                        <span class="material-icons">${chat.isGroup ? 'groups' : 'person'}</span>
                     </div>
                     <div class="chat-info">
                         <div class="chat-header">
-                            <div class="chat-name">${chat.name}</div>
+                            <div class="chat-name">
+                                ${chat.name}
+                                ${chat.isGroup ? '<span style="color: #FFA726; font-size: 11px; margin-left: 6px; opacity: 0.8;">(Group)</span>' : ''}
+                            </div>
                             <div class="chat-time">${formatTime(chat.timestamp)}</div>
                         </div>
                         <div class="chat-preview">
                             <div class="chat-message">${chat.lastMessage}</div>
-                            ${chat.unread > 0 ? `<div class="unread-badge">${chat.unread}</div>` : ''}
+                            ${chat.unread > 0 ? `<div class="unread-badge">${chat.unread > 99 ? '99+' : chat.unread}</div>` : ''}
                         </div>
                     </div>
                 `;
@@ -886,6 +989,17 @@
                 chatItem.onclick = () => selectChat(chat);
                 chatList.appendChild(chatItem);
             });
+            
+            // If no chats found
+            if (chats.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.cssText = 'text-align: center; padding: 40px 20px; color: rgba(255, 255, 255, 0.5);';
+                emptyMessage.innerHTML = `
+                    <span class="material-icons" style="font-size: 48px; color: rgba(255, 140, 66, 0.3); margin-bottom: 10px; display: block;">chat_bubble_outline</span>
+                    <p>Tidak ada percakapan</p>
+                `;
+                chatList.appendChild(emptyMessage);
+            }
         }
         
         // Select chat
@@ -897,8 +1011,14 @@
             document.getElementById('chatContent').style.display = 'flex';
             
             // Update header
-            document.getElementById('chatName').textContent = chat.name;
-            document.getElementById('chatStatus').textContent = chat.id.replace('@c.us', '');
+            document.getElementById('chatName').innerHTML = chat.name + (chat.isGroup ? ' <span style="color: #FFA726; font-size: 14px;">(Group)</span>' : '');
+            document.getElementById('chatStatus').textContent = chat.isGroup ? 'Group Chat' : chat.id.replace('@c.us', '').replace('@g.us', '');
+            
+            // Update avatar icon
+            const avatarIcon = document.querySelector('#chatContent .chat-avatar .material-icons');
+            if (avatarIcon) {
+                avatarIcon.textContent = chat.isGroup ? 'groups' : 'person';
+            }
             
             // Update active state
             document.querySelectorAll('.chat-item').forEach(item => {
@@ -910,7 +1030,12 @@
             chat.unread = 0;
             displayChats();
             
-            // Load messages
+            // Load messages - if we already have some from the conversations endpoint, display them first
+            if (chat.messages && chat.messages.length > 0) {
+                displayMessages(chat.messages);
+            }
+            
+            // Then load full message history
             await loadMessages(chat.id);
             
             // Focus input

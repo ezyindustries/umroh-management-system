@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Packages</title>
+</head>
+<body>
+    <h1>Debug Package Loading</h1>
+    <button onclick="testLoadPackages()">Test Load Packages</button>
+    <div id="debug"></div>
+
+    <script>
+        function getApiBaseUrl() {
+            return window.location.hostname === 'localhost' 
+                ? 'http://localhost:5000'
+                : 'http://103.181.143.223:5000';
+        }
+
+        async function testLoadPackages() {
+            const debug = document.getElementById('debug');
+            debug.innerHTML = '<p>Loading packages...</p>';
+            
+            try {
+                const url = getApiBaseUrl() + '/api/packages';
+                debug.innerHTML += `<p>Fetching from: ${url}</p>`;
+                
+                const response = await fetch(url);
+                debug.innerHTML += `<p>Response status: ${response.status}</p>`;
+                debug.innerHTML += `<p>Response OK: ${response.ok}</p>`;
+                
+                const result = await response.json();
+                debug.innerHTML += `<p>Response has success: ${result.success}</p>`;
+                debug.innerHTML += `<p>Data is array: ${Array.isArray(result.data)}</p>`;
+                debug.innerHTML += `<p>Data length: ${result.data ? result.data.length : 'No data'}</p>`;
+                
+                if (result.data && result.data.length > 0) {
+                    debug.innerHTML += '<h3>Packages found:</h3>';
+                    result.data.forEach(pkg => {
+                        debug.innerHTML += `<p>- ${pkg.name} (${pkg.code}) - Status: ${pkg.status}</p>`;
+                    });
+                    
+                    // Check active packages
+                    const activePackages = result.data.filter(p => p.status === 'active');
+                    debug.innerHTML += `<h3>Active packages: ${activePackages.length}</h3>`;
+                } else {
+                    debug.innerHTML += '<p style="color: red;">No packages found in response</p>';
+                }
+                
+                debug.innerHTML += '<h3>Full response:</h3>';
+                debug.innerHTML += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                
+            } catch (error) {
+                debug.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

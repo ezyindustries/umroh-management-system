@@ -90,6 +90,12 @@ router.patch('/:id/update-capacity',
   PackageController.updateCapacity
 );
 
+// Update flight information
+router.put('/:id/flight-info',
+  // checkPermission('packages', 'update'),
+  PackageController.updateFlightInfo
+);
+
 // Delete package
 router.delete('/:id', 
   // checkPermission('packages', 'delete'),

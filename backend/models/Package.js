@@ -539,6 +539,112 @@ class Package {
       }
     };
   }
+
+  // Update package
+  static async update(id, data) {
+    // Remove fields that shouldn't be updated
+    delete data.id;
+    delete data.created_at;
+    delete data.created_by;
+    
+    const fields = Object.keys(data);
+    const values = Object.values(data);
+    
+    if (fields.length === 0) {
+      return this.findById(id);
+    }
+    
+    const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
+    values.push(id);
+    
+    const updateQuery = `
+      UPDATE core.packages 
+      SET ${setClause}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $${values.length}
+      RETURNING *
+    `;
+    
+    const result = await query(updateQuery, values);
+    
+    if (result.rows.length === 0) {
+      throw new Error('Package not found');
+    }
+    
+    return result.rows[0];
+  }
+
+  // Update flight information
+  static async updateFlightInfo(id, flightData) {
+    const { 
+      pnr_code, 
+      ticket_vendor, 
+      ticket_number, 
+      flight_payment_status, 
+      flight_notes,
+      payment_due_date,
+      insert_name_deadline,
+      ticket_total_price,
+      ticket_paid_amount
+    } = flightData;
+    
+    const updateQuery = `
+      UPDATE core.packages 
+      SET 
+        pnr_code = $1,
+        ticket_vendor = $2,
+        ticket_number = $3,
+        flight_payment_status = $4,
+        flight_notes = $5,
+        payment_due_date = $6,
+        insert_name_deadline = $7,
+        ticket_total_price = $8,
+        ticket_paid_amount = $9,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = $10
+      RETURNING *
+    `;
+    
+    const result = await query(updateQuery, [
+      pnr_code,
+      ticket_vendor,
+      ticket_number,
+      flight_payment_status,
+      flight_notes,
+      payment_due_date || null,
+      insert_name_deadline || null,
+      ticket_total_price || null,
+      ticket_paid_amount || null,
+      id
+    ]);
+    
+    if (result.rows.length === 0) {
+      throw new Error('Package not found');
+    }
+    
+    return result.rows[0];
+  }
+
+  // Delete package
+  static async delete(id) {
+    // Check if package has jamaah
+    const jamaahCheck = await query(
+      'SELECT COUNT(*) as count FROM jamaah.jamaah_data WHERE package_id = $1',
+      [id]
+    );
+    
+    if (parseInt(jamaahCheck.rows[0].count) > 0) {
+      throw new Error('Cannot delete package with registered jamaah');
+    }
+    
+    const deleteQuery = 'DELETE FROM core.packages WHERE id = $1 RETURNING *';
+    const result = await query(deleteQuery, [id]);
+    
+    if (result.rows.length === 0) {
+      throw new Error('Package not found');
+    }
+    
+    return result.rows[0];
+  }
 }
 
 module.exports = Package;

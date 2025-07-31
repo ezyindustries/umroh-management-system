@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Package Save from UI</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: inline-block;
+            width: 200px;
+        }
+        input, select {
+            padding: 5px;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: lime;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Package Save from UI</h1>
+    
+    <div>
+        <div class="form-group">
+            <label>Nama Paket:</label>
+            <input type="text" id="nama_paket" value="Test UI Package">
+        </div>
+        <div class="form-group">
+            <label>Kode Paket:</label>
+            <input type="text" id="kode_paket" value="">
+        </div>
+        <div class="form-group">
+            <label>Harga:</label>
+            <input type="number" id="price" value="25000000">
+        </div>
+        <div class="form-group">
+            <label>Tanggal Berangkat:</label>
+            <input type="date" id="tanggal_berangkat" value="2025-06-01">
+        </div>
+        <div class="form-group">
+            <label>Tanggal Pulang:</label>
+            <input type="date" id="tanggal_pulang" value="2025-06-15">
+        </div>
+        <div class="form-group">
+            <label>Kuota:</label>
+            <input type="number" id="kuota" value="30">
+        </div>
+        <div class="form-group">
+            <label>Hotel Makkah:</label>
+            <input type="text" id="hotel_makkah" value="Test Hotel Makkah">
+        </div>
+        <div class="form-group">
+            <label>Hotel Madinah:</label>
+            <input type="text" id="hotel_madinah" value="Test Hotel Madinah">
+        </div>
+        <div class="form-group">
+            <label>Maskapai:</label>
+            <input type="text" id="maskapai" value="Test Airlines">
+        </div>
+        <div class="form-group">
+            <label>Malam Makkah:</label>
+            <input type="number" id="malam_makkah" value="7">
+        </div>
+        <div class="form-group">
+            <label>Malam Madinah:</label>
+            <input type="number" id="malam_madinah" value="7">
+        </div>
+    </div>
+    
+    <button onclick="testSavePackage()">Test Save Package</button>
+    <button onclick="loadPackages()">Load Packages</button>
+    
+    <div id="result"></div>
+
+    <script>
+        function getApiBaseUrl() {
+            return window.location.hostname === 'localhost' 
+                ? 'http://localhost:5000'
+                : 'http://103.181.143.223:5000';
+        }
+        
+        async function testSavePackage() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<p>Saving package...</p>';
+            
+            // Generate unique code if empty
+            const kodeField = document.getElementById('kode_paket');
+            if (!kodeField.value) {
+                kodeField.value = 'UI-TEST-' + Date.now();
+            }
+            
+            const formData = {
+                nama_paket: document.getElementById('nama_paket').value,
+                kode_paket: document.getElementById('kode_paket').value,
+                price: parseInt(document.getElementById('price').value),
+                tanggal_berangkat: document.getElementById('tanggal_berangkat').value,
+                tanggal_pulang: document.getElementById('tanggal_pulang').value,
+                kuota: parseInt(document.getElementById('kuota').value),
+                hotel_makkah: document.getElementById('hotel_makkah').value,
+                hotel_madinah: document.getElementById('hotel_madinah').value,
+                maskapai: document.getElementById('maskapai').value,
+                malam_makkah: parseInt(document.getElementById('malam_makkah').value),
+                malam_madinah: parseInt(document.getElementById('malam_madinah').value),
+                deskripsi_singkat: 'Test package from UI',
+                gambar_tambahan: []
+            };
+            
+            console.log('Sending data:', formData);
+            
+            try {
+                const url = getApiBaseUrl() + '/api/packages';
+                result.innerHTML += `<p>Sending to: ${url}</p>`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                result.innerHTML += `<p>Response status: ${response.status}</p>`;
+                result.innerHTML += `<p>Response OK: ${response.ok}</p>`;
+                
+                const responseData = await response.json();
+                console.log('Response:', responseData);
+                
+                if (response.ok && responseData.success) {
+                    result.innerHTML += `<div class="success">
+                        <h3>✓ Package saved successfully!</h3>
+                        <p>ID: ${responseData.data.id}</p>
+                        <p>Name: ${responseData.data.name}</p>
+                        <p>Code: ${responseData.data.code}</p>
+                        <p>Status: ${responseData.data.status}</p>
+                    </div>`;
+                    
+                    // Reload packages after 1 second
+                    setTimeout(loadPackages, 1000);
+                } else {
+                    result.innerHTML += `<div class="error">
+                        <h3>✗ Failed to save package</h3>
+                        <p>Error: ${responseData.error || 'Unknown error'}</p>
+                    </div>`;
+                }
+                
+                result.innerHTML += '<h4>Full Response:</h4>';
+                result.innerHTML += '<pre>' + JSON.stringify(responseData, null, 2) + '</pre>';
+                
+            } catch (error) {
+                result.innerHTML += `<div class="error">
+                    <h3>✗ Network Error</h3>
+                    <p>${error.message}</p>
+                </div>`;
+                console.error('Error:', error);
+            }
+        }
+        
+        async function loadPackages() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<p>Loading packages...</p>';
+            
+            try {
+                const response = await fetch(getApiBaseUrl() + '/api/packages');
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    result.innerHTML = `<h3>Packages loaded (${data.data.length} total)</h3>`;
+                    data.data.forEach(pkg => {
+                        result.innerHTML += `<p>- ${pkg.name} (${pkg.code}) - Status: ${pkg.status}</p>`;
+                    });
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">Failed to load packages: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

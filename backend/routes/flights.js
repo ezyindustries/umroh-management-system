@@ -6,18 +6,26 @@ const { authenticate } = require('../middleware/auth');
 // All routes require authentication
 router.use(authenticate);
 
-// PNR routes
+// PNR Management Routes
 router.get('/pnrs', flightController.getAllPNRs);
 router.get('/pnrs/:id', flightController.getPNRById);
 router.post('/pnrs', flightController.createPNR);
 router.put('/pnrs/:id', flightController.updatePNR);
+router.delete('/pnrs/:id', flightController.deletePNR);
 
-// Jamaah assignment routes
-router.post('/pnrs/:id/assign-jamaah', flightController.assignJamaah);
-router.delete('/pnrs/:id/jamaah/:jamaahId', flightController.removeJamaah);
-router.get('/packages/:packageId/available-jamaah', flightController.getAvailableJamaah);
+// Package Management Routes
+router.get('/packages/without-pnr', flightController.getPackagesWithoutPNR);
+router.post('/pnrs/:id/assign-package', flightController.assignPackageToPNR);
+router.delete('/pnrs/:id/package/:packageId', flightController.removePackageFromPNR);
 
-// Payment routes
-router.put('/pnrs/:id/payments/:paymentId', flightController.updatePayment);
+// Payment Management Routes
+router.get('/pnrs/:id/payments', flightController.getPNRPayments);
+router.get('/payments', flightController.getAllPayments);
+router.post('/payments', flightController.createPayment);
+router.put('/payments/:id', flightController.updatePayment);
+router.delete('/payments/:id', flightController.deletePayment);
+
+// Dashboard & Stats
+router.get('/dashboard/stats', flightController.getDashboardStats);
 
 module.exports = router;

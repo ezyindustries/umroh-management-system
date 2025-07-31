@@ -97,6 +97,56 @@ class PackageController {
     }
   }
 
+  // Update flight information
+  static async updateFlightInfo(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { 
+        pnr_code, 
+        ticket_vendor, 
+        ticket_number, 
+        flight_payment_status, 
+        flight_notes,
+        payment_due_date,
+        insert_name_deadline,
+        ticket_total_price,
+        ticket_paid_amount
+      } = req.body;
+      
+      // First check if package exists
+      const existingPackage = await Package.findById(id);
+      if (!existingPackage) {
+        return res.status(404).json({ 
+          success: false,
+          error: 'Package not found' 
+        });
+      }
+      
+      // Update only flight-related fields
+      const flightData = {
+        pnr_code,
+        ticket_vendor,
+        ticket_number,
+        flight_payment_status,
+        flight_notes,
+        payment_due_date,
+        insert_name_deadline,
+        ticket_total_price,
+        ticket_paid_amount
+      };
+      
+      const updatedPackage = await Package.updateFlightInfo(id, flightData);
+      
+      res.json({
+        success: true,
+        message: 'Flight information updated successfully',
+        data: updatedPackage
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // Delete package
   static async delete(req, res, next) {
     try {
