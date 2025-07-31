@@ -145,3 +145,21 @@ Aktor & Flow:
 - Self-evaluation kualitas hasil
 - fitur baru, perintah baru, desain baru, sistem baru selalu mengacu kepada sistem  http://103.181.143.223:8888/demo-complete-umroh-app.html
 - tampilkan hasilnya selalu di sistem  http://103.181.143.223:8888/demo-complete-umroh-app.html
+
+## 8. UI/UX Guidelines
+
+### Modal Behavior
+- **Data Persistence**: Semua modal harus menyimpan data inputan di localStorage saat user mengetik
+- **Accidental Close Protection**: Jika modal tertutup karena tidak sengaja (klik di luar modal), data tetap tersimpan dan akan dimuat kembali saat modal dibuka lagi
+- **Clear Button**: Setiap modal harus memiliki tombol "Hapus Semua" atau "Clear" untuk menghapus semua inputan secara manual
+- **Implementation Pattern**:
+  ```javascript
+  // Save to localStorage on input change
+  saveFormData(modalId, formData);
+  
+  // Load from localStorage when modal opens
+  loadFormData(modalId);
+  
+  // Clear data when user clicks clear button
+  clearFormData(modalId);
+  ```

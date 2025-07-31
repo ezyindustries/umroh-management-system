@@ -10838,7 +10838,13 @@
         <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header">
                 <h3 id="pnrEditTitle">Edit Data PNR Paket</h3>
-                <button class="close-btn" onclick="closeModal('pnrEditModal')">&times;</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-danger btn-sm" onclick="clearPNRForm()" title="Hapus semua inputan">
+                        <span class="material-icons">clear_all</span>
+                        Hapus Semua
+                    </button>
+                    <button class="close-btn" onclick="closeModal('pnrEditModal')">&times;</button>
+                </div>
             </div>
             
             <form id="pnrEditForm" onsubmit="savePNRData(event)">
@@ -11238,9 +11244,88 @@
             wrapper.appendChild(calendarBtn);
         }
         
+        // Save PNR form data to localStorage
+        function savePNRFormData() {
+            const formData = {
+                packageId: document.getElementById('pnr_package_id').value,
+                packageName: document.getElementById('pnr_package_name').value,
+                pnrCode: document.getElementById('pnr_number').value,
+                vendor: document.getElementById('pnr_vendor').value,
+                ticketNumber: document.getElementById('pnr_ticket_number').value,
+                paymentStatus: document.getElementById('pnr_payment_status').value,
+                paymentDate: document.getElementById('pnr_payment_date').value,
+                insertDate: document.getElementById('pnr_insert_date').value,
+                ticketPrice: document.getElementById('pnr_ticket_price').value,
+                paidAmount: document.getElementById('pnr_paid_amount').value,
+                notes: document.getElementById('pnr_notes').value
+            };
+            localStorage.setItem('pnrFormData', JSON.stringify(formData));
+        }
+
+        // Load PNR form data from localStorage
+        function loadPNRFormData() {
+            const savedData = localStorage.getItem('pnrFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                const currentPackageId = document.getElementById('pnr_package_id').value;
+                
+                // Only load if it's the same package or package ID is empty
+                if (!currentPackageId || currentPackageId === formData.packageId) {
+                    document.getElementById('pnr_package_id').value = formData.packageId || '';
+                    document.getElementById('pnr_package_name').value = formData.packageName || '';
+                    document.getElementById('pnr_number').value = formData.pnrCode || '';
+                    document.getElementById('pnr_vendor').value = formData.vendor || '';
+                    document.getElementById('pnr_ticket_number').value = formData.ticketNumber || '';
+                    document.getElementById('pnr_payment_status').value = formData.paymentStatus || '';
+                    document.getElementById('pnr_payment_date').value = formData.paymentDate || '';
+                    document.getElementById('pnr_insert_date').value = formData.insertDate || '';
+                    document.getElementById('pnr_ticket_price').value = formData.ticketPrice || '';
+                    document.getElementById('pnr_paid_amount').value = formData.paidAmount || '';
+                    document.getElementById('pnr_notes').value = formData.notes || '';
+                }
+            }
+        }
+
+        // Clear PNR form
+        function clearPNRForm() {
+            if (confirm('Yakin ingin menghapus semua inputan?')) {
+                document.getElementById('pnrEditForm').reset();
+                localStorage.removeItem('pnrFormData');
+                showNotification('Semua inputan telah dihapus', 'success');
+            }
+        }
+
+        // Setup auto-save for PNR form
+        function setupPNRFormAutoSave() {
+            const formElements = document.querySelectorAll('#pnrEditForm input, #pnrEditForm select, #pnrEditForm textarea');
+            formElements.forEach(element => {
+                element.addEventListener('input', savePNRFormData);
+                element.addEventListener('change', savePNRFormData);
+            });
+        }
+
         // Edit package PNR
         async function editPackagePNR(packageId) {
             try {
+                // Check if there's saved data first
+                const savedData = localStorage.getItem('pnrFormData');
+                if (savedData) {
+                    const formData = JSON.parse(savedData);
+                    if (formData.packageId === packageId.toString()) {
+                        // Load saved data
+                        loadPNRFormData();
+                        openModal('pnrEditModal');
+                        
+                        // Setup auto-save and date inputs
+                        setTimeout(() => {
+                            setupPNRFormAutoSave();
+                            setupDateInput('pnr_payment_date');
+                            setupDateInput('pnr_insert_date');
+                        }, 100);
+                        return;
+                    }
+                }
+
                 // Fetch package data
                 const response = await fetch(`${getApiBaseUrl()}/api/packages/${packageId}`);
                 if (response.ok) {
@@ -11263,19 +11348,20 @@
                     if (packageData.insert_name_deadline) {
                         document.getElementById('pnr_insert_date').value = formatDateToDDMMYYYY(packageData.insert_name_deadline);
                     }
-                    if (packageData.insert_name_deadline) {
-                        document.getElementById('pnr_insert_date').value = packageData.insert_name_deadline.split('T')[0];
-                    }
                     
                     // Set price fields if available
                     document.getElementById('pnr_ticket_price').value = packageData.ticket_total_price || '';
                     document.getElementById('pnr_paid_amount').value = packageData.ticket_paid_amount || '';
                     
+                    // Save initial data
+                    savePNRFormData();
+                    
                     // Show modal
                     openModal('pnrEditModal');
                     
-                    // Setup date inputs with formatting after modal is shown
+                    // Setup auto-save and date inputs after modal is shown
                     setTimeout(() => {
+                        setupPNRFormAutoSave();
                         setupDateInput('pnr_payment_date');
                         setupDateInput('pnr_insert_date');
                     }, 100);
@@ -11335,6 +11421,8 @@
                     console.log('Save successful:', result);
                     showNotification('Data PNR berhasil disimpan', 'success');
                     closeModal('pnrEditModal');
+                    // Clear saved data after successful save
+                    localStorage.removeItem('pnrFormData');
                     // Reload the flight packages list
                     loadSimpleFlightPackages();
                 } else {
