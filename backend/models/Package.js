@@ -134,7 +134,63 @@ class Package {
       ]
     );
 
-    return result.rows[0];
+    const newPackage = result.rows[0];
+
+    // Auto-create hotel bookings for Makkah and Madinah
+    try {
+      console.log('Creating hotel bookings for package:', newPackage.id);
+      
+      // Create Makkah hotel booking
+      if (value.hotel_makkah) {
+        await query(
+          `INSERT INTO hotel_bookings (
+            package_id, hotel_name, hotel_city, nights, 
+            check_in_date, check_out_date, booking_status, 
+            payment_status, created_by
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          [
+            newPackage.id,
+            value.hotel_makkah,
+            'makkah',
+            value.malam_makkah || 0,
+            value.tanggal_berangkat, // Initial check-in date
+            null, // To be calculated based on itinerary
+            'pending',
+            'unpaid',
+            createdBy
+          ]
+        );
+        console.log('✅ Created Makkah hotel booking');
+      }
+
+      // Create Madinah hotel booking
+      if (value.hotel_madinah || value.hotel_medina) {
+        await query(
+          `INSERT INTO hotel_bookings (
+            package_id, hotel_name, hotel_city, nights, 
+            check_in_date, check_out_date, booking_status, 
+            payment_status, created_by
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          [
+            newPackage.id,
+            value.hotel_madinah || value.hotel_medina,
+            'madinah',
+            value.malam_madinah || value.malam_medina || 0,
+            null, // To be calculated based on itinerary
+            null, // To be calculated based on itinerary
+            'pending',
+            'unpaid',
+            createdBy
+          ]
+        );
+        console.log('✅ Created Madinah hotel booking');
+      }
+    } catch (hotelError) {
+      console.error('Error creating hotel bookings:', hotelError);
+      // Don't throw error - package is created, hotel bookings are optional
+    }
+
+    return newPackage;
   }
 
   // Get package by ID
