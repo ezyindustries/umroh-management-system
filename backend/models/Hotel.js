@@ -38,7 +38,7 @@ class Hotel {
         hb.hotel_name ILIKE $${paramCount} OR 
         hb.booking_reference ILIKE $${paramCount} OR 
         hb.hotel_provider ILIKE $${paramCount} OR
-        p.name ILIKE $${paramCount}
+        p.nama_paket ILIKE $${paramCount}
       )`);
       params.push(`%${filters.search}%`);
       paramCount++;
@@ -50,7 +50,7 @@ class Hotel {
     const countQuery = `
       SELECT COUNT(*) 
       FROM hotel_bookings hb
-      LEFT JOIN packages p ON hb.package_id = p.id
+      LEFT JOIN core.packages p ON hb.package_id = p.id
       ${whereClause}
     `;
     const countResult = await query(countQuery, params);
@@ -61,22 +61,22 @@ class Hotel {
     const dataQuery = `
       SELECT 
         hb.*,
-        p.code as package_code,
-        p.name as package_name,
-        p.departure_date as package_departure_date,
-        p.return_date as package_return_date,
+        p.kode_paket as package_code,
+        p.nama_paket as package_name,
+        p.tanggal_berangkat as package_departure_date,
+        p.tanggal_pulang as package_return_date,
         CASE 
           WHEN hb.check_in_date IS NOT NULL THEN 
             hb.check_in_date - CURRENT_DATE
           ELSE NULL
         END as days_until_checkin
       FROM hotel_bookings hb
-      LEFT JOIN packages p ON hb.package_id = p.id
+      LEFT JOIN core.packages p ON hb.package_id = p.id
       ${whereClause}
       ORDER BY 
         CASE 
           WHEN hb.check_in_date IS NOT NULL THEN hb.check_in_date
-          ELSE p.departure_date
+          ELSE p.tanggal_berangkat
         END ASC
       LIMIT $${paramCount} OFFSET $${paramCount + 1}
     `;
@@ -99,12 +99,12 @@ class Hotel {
     const result = await query(
       `SELECT 
         hb.*,
-        p.code as package_code,
-        p.name as package_name,
-        p.departure_date as package_departure_date,
-        p.return_date as package_return_date
+        p.kode_paket as package_code,
+        p.nama_paket as package_name,
+        p.tanggal_berangkat as package_departure_date,
+        p.tanggal_pulang as package_return_date
       FROM hotel_bookings hb
-      LEFT JOIN packages p ON hb.package_id = p.id
+      LEFT JOIN core.packages p ON hb.package_id = p.id
       WHERE hb.id = $1`,
       [id]
     );
@@ -244,11 +244,11 @@ class Hotel {
     const result = await query(
       `SELECT 
         hb.*,
-        p.code as package_code,
-        p.name as package_name,
+        p.kode_paket as package_code,
+        p.nama_paket as package_name,
         hb.check_in_date - CURRENT_DATE as days_until_checkin
       FROM hotel_bookings hb
-      LEFT JOIN packages p ON hb.package_id = p.id
+      LEFT JOIN core.packages p ON hb.package_id = p.id
       WHERE hb.check_in_date >= CURRENT_DATE
         AND hb.check_in_date <= CURRENT_DATE + INTERVAL '${days} days'
         AND hb.booking_status != 'cancelled'

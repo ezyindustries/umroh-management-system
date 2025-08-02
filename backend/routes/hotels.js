@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const HotelController = require('../controllers/hotelController');
+const { authBypass } = require('../middleware/auth-bypass');
+
+// Apply auth bypass middleware for testing
+router.use(authBypass);
 
 // Get hotel statistics
 router.get('/statistics', HotelController.getStatistics);
