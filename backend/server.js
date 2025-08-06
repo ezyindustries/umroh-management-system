@@ -37,6 +37,7 @@ const inventoryRoutes = require('./routes/inventory');
 const equipmentDistributionRoutes = require('./routes/equipmentDistribution');
 const flightsRoutes = require('./routes/flights');
 const groundHandlingRoutes = require('./routes/groundHandling');
+const departureGroupsRoutes = require('./routes/departureGroups');
 
 const app = express();
 const server = http.createServer(app);
@@ -156,6 +157,7 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/equipment-distribution', equipmentDistributionRoutes);
 app.use('/api/flights', flightsRoutes);
 app.use('/api/ground-handling', groundHandlingRoutes);
+app.use('/api/departure-groups', departureGroupsRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
 
 // Serve React build files (MUST be after API routes)

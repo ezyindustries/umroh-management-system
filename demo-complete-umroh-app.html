@@ -3222,10 +3222,16 @@
                             <h2 style="margin: 0;"><span class="material-icons" style="vertical-align: middle; margin-right: 10px; background: linear-gradient(135deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">card_travel</span>Paket Umroh</h2>
                             <p style="color: rgba(255, 255, 255, 0.7); margin: 5px 0 0 0;">Kelola semua paket umroh yang tersedia</p>
                         </div>
-                        <button class="btn btn-primary" onclick="openPackageModal()" style="padding: 12px 24px;">
-                            <span class="material-icons">add</span>
-                            Tambah Paket
-                        </button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-danger" onclick="deleteAllPackages()" style="padding: 12px 24px; background: linear-gradient(135deg, #dc2626, #b91c1c);">
+                                <span class="material-icons">delete_forever</span>
+                                Hapus Semua Paket
+                            </button>
+                            <button class="btn btn-primary" onclick="openPackageModal()" style="padding: 12px 24px;">
+                                <span class="material-icons">add</span>
+                                Tambah Paket
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- Package Cards -->
@@ -3343,7 +3349,7 @@
                 <div class="glass-card">
                     <div class="header-section">
                         <h2><span class="material-icons" style="vertical-align: middle; margin-right: 10px;">group</span>Grup Keberangkatan</h2>
-                        <button class="btn btn-primary" onclick="openModal('groupModal')">
+                        <button class="btn btn-primary" onclick="openGroupModal()">
                             <span class="material-icons">add</span>
                             Buat Grup Baru
                         </button>
@@ -6599,21 +6605,38 @@
                 align-items: center;
                 border-radius: 0 0 24px 24px;
             ">
-                <button type="button" class="btn" onclick="clearPackageFormData()" style="
-                    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-                    color: white;
-                    border: none;
-                    padding: 10px 20px;
-                    border-radius: 8px;
-                    font-weight: 500;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                ">
-                    <i class="fas fa-trash-alt"></i>Hapus Semua Data
-                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn" onclick="generatePackageDummyData()" style="
+                        background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <i class="fas fa-magic"></i>Generate Data
+                    </button>
+                    <button type="button" class="btn" onclick="clearPackageFormData()" style="
+                        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <i class="fas fa-trash-alt"></i>Hapus Semua Data
+                    </button>
+                </div>
                 <div style="display: flex; gap: 10px;">
                     <button type="button" class="btn" onclick="closePackageModal()" style="
                         background: linear-gradient(135deg, rgba(108, 117, 125, 0.8) 0%, rgba(73, 80, 87, 0.8) 100%);
@@ -8125,7 +8148,10 @@
             }
         ];
 
-        let groupData = [
+        // Dummy data disabled - using real data from API
+        let groupData = [];
+        /* Original dummy data - commented out
+        let groupDataDummy = [
             {
                 id: 1,
                 name: "Grup Ramadhan A",
@@ -8297,6 +8323,7 @@
                 ]
             }
         ];
+        */
 
         // Room Management Data
         let roomData = [];
@@ -8762,10 +8789,28 @@
                     document.getElementById('jamaahPassportCity').value = jamaah.passport_city || '';
                 }
                 if (document.getElementById('jamaahPassportIssueDate')) {
-                    document.getElementById('jamaahPassportIssueDate').value = jamaah.passport_issue_date || '';
+                    // Convert date format if needed (from DDMMYYYY or other formats to YYYY-MM-DD)
+                    let issueDate = jamaah.passport_issue_date || '';
+                    if (issueDate && issueDate.length === 8 && !issueDate.includes('-')) {
+                        // Convert DDMMYYYY to YYYY-MM-DD
+                        const day = issueDate.substring(0, 2);
+                        const month = issueDate.substring(2, 4);
+                        const year = issueDate.substring(4, 8);
+                        issueDate = `${year}-${month}-${day}`;
+                    }
+                    document.getElementById('jamaahPassportIssueDate').value = issueDate;
                 }
                 if (document.getElementById('jamaahPassportExpireDate')) {
-                    document.getElementById('jamaahPassportExpireDate').value = jamaah.passport_expire_date || '';
+                    // Convert date format if needed (from DDMMYYYY or other formats to YYYY-MM-DD)
+                    let expireDate = jamaah.passport_expire_date || '';
+                    if (expireDate && expireDate.length === 8 && !expireDate.includes('-')) {
+                        // Convert DDMMYYYY to YYYY-MM-DD
+                        const day = expireDate.substring(0, 2);
+                        const month = expireDate.substring(2, 4);
+                        const year = expireDate.substring(4, 8);
+                        expireDate = `${year}-${month}-${day}`;
+                    }
+                    document.getElementById('jamaahPassportExpireDate').value = expireDate;
                 }
                 
                 // Check if passport name is same as KTP name
@@ -8973,9 +9018,11 @@
             
             // Generate passport data
             const passportNumber = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
-            const passportIssueDate = `${birthYear + 40}-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`;
+            const issueMonth = (Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0');
+            const issueDay = (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0');
+            const passportIssueDate = `${birthYear + 40}-${issueMonth}-${issueDay}`;
             const passportExpiryYear = parseInt(passportIssueDate.split('-')[0]) + 10;
-            const passportExpiryDate = passportIssueDate.replace(/^\d{4}/, passportExpiryYear);
+            const passportExpiryDate = `${passportExpiryYear}-${issueMonth}-${issueDay}`;
             
             // Fill the form
             document.getElementById('jamaahName').value = fullName;
@@ -9039,6 +9086,10 @@
                 province: document.getElementById('jamaahProvinsi').value || undefined,
                 city: document.getElementById('jamaahKabupaten').value || undefined,
                 passport_number: document.getElementById('jamaahPassportNumber').value || undefined,
+                passport_name: document.getElementById('jamaahPassportName').value || undefined,
+                passport_issue_date: document.getElementById('jamaahPassportIssueDate').value || undefined,
+                passport_expire_date: document.getElementById('jamaahPassportExpireDate').value || undefined,
+                passport_city: document.getElementById('jamaahPassportCity').value || undefined,
                 package_ids: document.getElementById('jamaahPackage').value ? [parseInt(document.getElementById('jamaahPackage').value)] : []
             };
             
@@ -9453,6 +9504,68 @@
                 }
             }
         }
+        
+        // Delete all packages
+        async function deleteAllPackages() {
+            const confirmMessage = 'PERHATIAN: Anda akan menghapus SEMUA paket yang ada!\n\n' +
+                                 'Tindakan ini tidak dapat dibatalkan.\n\n' +
+                                 'Ketik "HAPUS SEMUA" untuk melanjutkan:';
+            
+            const userInput = prompt(confirmMessage);
+            
+            if (userInput === 'HAPUS SEMUA') {
+                // Show instructions for manual deletion
+                const instructions = 'Karena ada masalah dengan server, silakan gunakan cara manual:\n\n' +
+                                   '1. Masuk ke database menggunakan command:\n' +
+                                   '   PGPASSWORD=ezyindustries_db_2025 psql -h localhost -U platform_admin -d umroh_management\n\n' +
+                                   '2. Hapus semua paket dengan query:\n' +
+                                   '   DELETE FROM core.packages;\n\n' +
+                                   '3. Atau hapus paket tertentu:\n' +
+                                   '   DELETE FROM core.packages WHERE id = [ID_PAKET];\n\n' +
+                                   '4. Keluar dari psql dengan: \\q';
+                
+                alert(instructions);
+                
+                // Also try the API method in case it works
+                try {
+                    const response = await fetch(getApiBaseUrl() + '/api/packages');
+                    const result = await response.json();
+                    const packages = result.data || [];
+                    
+                    showNotification(`Mencoba menghapus ${packages.length} paket via API...`, 'info');
+                    
+                    let deletedCount = 0;
+                    let failedCount = 0;
+                    
+                    for (const pkg of packages) {
+                        try {
+                            const deleteResponse = await fetch(getApiBaseUrl() + `/api/packages/${pkg.id}`, {
+                                method: 'DELETE'
+                            });
+                            
+                            if (deleteResponse.ok) {
+                                deletedCount++;
+                            } else {
+                                failedCount++;
+                            }
+                        } catch (error) {
+                            failedCount++;
+                        }
+                    }
+                    
+                    await loadPackageCards();
+                    
+                    if (deletedCount > 0) {
+                        showNotification(`Berhasil menghapus ${deletedCount} paket!`, 'success');
+                    } else {
+                        showNotification('Gunakan metode manual yang ditampilkan', 'warning');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        }
 
         // Save form data to localStorage
         function savePackageFormData() {
@@ -9552,6 +9665,152 @@
             localStorage.removeItem('packageFormData');
             
             showNotification('Semua field telah dikosongkan', 'success');
+        }
+        
+        // Generate dummy data for package form
+        function generatePackageDummyData() {
+            // Arrays of dummy data
+            const packageNames = [
+                'Umroh Reguler 9 Hari', 
+                'Umroh Plus Istanbul 12 Hari', 
+                'Umroh Ramadhan 14 Hari',
+                'Umroh Premium VIP 10 Hari',
+                'Umroh Hemat 7 Hari',
+                'Umroh Plus Dubai 11 Hari',
+                'Umroh Akhir Tahun 9 Hari',
+                'Umroh Musim Semi 10 Hari'
+            ];
+            
+            const hotels = {
+                makkah: [
+                    'Hilton Suites Makkah',
+                    'Anjum Hotel Makkah',
+                    'Swissotel Al Maqam',
+                    'Pullman ZamZam Makkah',
+                    'Conrad Makkah',
+                    'Le Meridien Makkah',
+                    'Movenpick Hajar Tower'
+                ],
+                madinah: [
+                    'Anwar Al Madinah Movenpick',
+                    'Hilton Madinah',
+                    'Pullman Zamzam Madinah',
+                    'Shaza Al Madinah',
+                    'Crowne Plaza Madinah',
+                    'Le Meridien Medina',
+                    'Dar Al Taqwa Hotel'
+                ]
+            };
+            
+            const airlines = [
+                'Saudi Airlines',
+                'Garuda Indonesia',
+                'Lion Air',
+                'Emirates',
+                'Qatar Airways',
+                'Turkish Airlines',
+                'Etihad Airways'
+            ];
+            
+            const cities = {
+                departure: ['Jakarta', 'Surabaya', 'Medan', 'Bandung', 'Makassar'],
+                arrival: ['Jeddah', 'Madinah'],
+                transit: ['', 'Istanbul', 'Dubai', 'Doha', 'Abu Dhabi', 'Singapore']
+            };
+            
+            // Generate random values
+            const selectedPackage = packageNames[Math.floor(Math.random() * packageNames.length)];
+            const days = parseInt(selectedPackage.match(/\d+/)[0]) || 9;
+            const year = new Date().getFullYear();
+            const month = Math.floor(Math.random() * 12) + 1;
+            const day = Math.floor(Math.random() * 15) + 1;
+            
+            // Calculate dates
+            const departureDate = new Date(year, month - 1, day);
+            const returnDate = new Date(departureDate);
+            returnDate.setDate(returnDate.getDate() + days - 1);
+            
+            // Generate package code
+            const cityCode = cities.departure[Math.floor(Math.random() * cities.departure.length)].substring(0, 3).toUpperCase();
+            const monthStr = month.toString().padStart(2, '0');
+            const dayStr = day.toString().padStart(2, '0');
+            const packageCode = `#${year}_${days}H_${cityCode}_${dayStr}${monthStr}`;
+            
+            // Calculate nights distribution
+            const totalNights = days - 2; // Minus travel days
+            const makkahNights = Math.ceil(totalNights * 0.6);
+            const madinahNights = totalNights - makkahNights;
+            
+            // Generate price (in millions)
+            const basePrice = 25000000;
+            const priceVariation = Math.floor(Math.random() * 20000000);
+            const price = basePrice + priceVariation;
+            
+            // Fill the form
+            document.getElementById('packageName').value = selectedPackage;
+            document.getElementById('packageCode').value = packageCode;
+            document.getElementById('packagePrice').value = price;
+            document.getElementById('packageDeparture').value = departureDate.toISOString().split('T')[0];
+            document.getElementById('packageReturn').value = returnDate.toISOString().split('T')[0];
+            document.getElementById('packageQuota').value = Math.floor(Math.random() * 30) + 20; // 20-50
+            
+            // Hotels
+            document.getElementById('packageMakkahHotel').value = hotels.makkah[Math.floor(Math.random() * hotels.makkah.length)];
+            document.getElementById('packageMadinahHotel').value = hotels.madinah[Math.floor(Math.random() * hotels.madinah.length)];
+            document.getElementById('packageMakkahNights').value = makkahNights;
+            document.getElementById('packageMadinahNights').value = madinahNights;
+            
+            // Airline
+            document.getElementById('packageAirline').value = airlines[Math.floor(Math.random() * airlines.length)];
+            
+            // Flight details
+            const departureCity = cities.departure[Math.floor(Math.random() * cities.departure.length)];
+            const arrivalCity = cities.arrival[Math.floor(Math.random() * cities.arrival.length)];
+            const transitDeparture = cities.transit[Math.floor(Math.random() * cities.transit.length)];
+            const transitReturn = cities.transit[Math.floor(Math.random() * cities.transit.length)];
+            
+            document.getElementById('packageDepartureCity').value = departureCity;
+            document.getElementById('packageTransitDeparture').value = transitDeparture;
+            document.getElementById('packageArrivalCity').value = arrivalCity;
+            document.getElementById('packageDepartureFlightNumber').value = transitDeparture ? 
+                `TK${Math.floor(Math.random() * 900) + 100}` : 
+                `SV${Math.floor(Math.random() * 900) + 100}`;
+            
+            document.getElementById('packageReturnDepartureCity').value = arrivalCity === 'Madinah' ? 'Jeddah' : 'Jeddah';
+            document.getElementById('packageTransitReturn').value = transitReturn;
+            document.getElementById('packageReturnArrivalCity').value = departureCity;
+            document.getElementById('packageReturnFlightNumber').value = transitReturn ? 
+                `TK${Math.floor(Math.random() * 900) + 100}` : 
+                `SV${Math.floor(Math.random() * 900) + 100}`;
+            
+            // Flight info
+            document.getElementById('packageFlightInfo').value = transitDeparture || transitReturn ? 
+                `Penerbangan dengan transit di ${transitDeparture || transitReturn}. Waktu transit sekitar 2-4 jam.` : 
+                'Penerbangan langsung tanpa transit.';
+            
+            // Description
+            const descriptions = [
+                `Paket ${selectedPackage} dengan akomodasi hotel bintang 5 dekat Masjidil Haram dan Masjid Nabawi.`,
+                `Nikmati kemudahan ibadah dengan ${selectedPackage} bersama pembimbing berpengalaman.`,
+                `${selectedPackage} dengan fasilitas terbaik dan pelayanan prima untuk kenyamanan ibadah Anda.`,
+                `Paket hemat ${selectedPackage} dengan kualitas pelayanan terjamin dan hotel strategis.`
+            ];
+            
+            document.getElementById('packageDescription').value = descriptions[Math.floor(Math.random() * descriptions.length)];
+            
+            // Package info
+            const facilities = [
+                '• Visa Umroh\n• Tiket Pesawat PP\n• Hotel sesuai program\n• Makan 3x sehari prasmanan\n• Transport AC di Arab Saudi\n• Ziarah Makkah & Madinah\n• Pembimbing dari Indonesia\n• Handling bandara',
+                '• Visa Umroh\n• Tiket Pesawat PP kelas ekonomi\n• Hotel bintang 5\n• Makan 3x sehari (box/prasmanan)\n• Bus AC untuk ziarah\n• Air Zamzam 5 liter\n• Perlengkapan ibadah\n• Asuransi perjalanan',
+                '• Visa dan paspor Umroh\n• Tiket pesawat direct/transit\n• Akomodasi hotel premium\n• Konsumsi fullboard\n• Transportasi private\n• City tour tambahan\n• Muthawif berpengalaman\n• Free bagasi 30kg'
+            ];
+            
+            document.getElementById('packageInfo').value = facilities[Math.floor(Math.random() * facilities.length)];
+            
+            // Save to localStorage
+            savePackageFormData();
+            
+            showNotification('Data dummy berhasil digenerate!', 'success');
         }
 
         // Handle brochure file change
@@ -9943,9 +10202,26 @@
         // Group Management
         function loadGroupCards() {
             const container = document.getElementById('groupGrid');
-            container.innerHTML = '';
+            container.innerHTML = '<div class="text-center p-4">Loading...</div>';
             
-            groupData.forEach(group => {
+            // Fetch real data from API
+            fetch(getApiBaseUrl() + '/api/departure-groups')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        groupData = result.data || [];
+                        container.innerHTML = '';
+                        
+                        if (groupData.length === 0) {
+                            container.innerHTML = `
+                                <div class="col-12 text-center py-5">
+                                    <p style="color: rgba(255, 255, 255, 0.6);">Belum ada grup keberangkatan. Buat paket umroh untuk membuat grup otomatis.</p>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        groupData.forEach(group => {
                 const card = document.createElement('div');
                 card.className = 'group-card';
                 
@@ -9957,7 +10233,7 @@
                     <div class="group-header">
                         <div class="group-title">
                             <h3>${group.name}</h3>
-                            <div class="group-package">${group.package}</div>
+                            <div class="group-package">${group.package_name || group.package || 'Package'}</div>
                         </div>
                         <div class="group-status-badge">
                             <span class="status-badge status-${group.status}">${getGroupStatusText(group.status)}</span>
@@ -9986,11 +10262,11 @@
                         </div>
                         <div class="group-info-item">
                             <div class="group-info-label">Bus</div>
-                            <div class="group-info-value">${group.bus_number}</div>
+                            <div class="group-info-value">${group.bus_number || 'Belum ditentukan'}</div>
                         </div>
                         <div class="group-info-item">
                             <div class="group-info-label">Kumpul</div>
-                            <div class="group-info-value">${group.meeting_time}</div>
+                            <div class="group-info-value">${group.meeting_time || 'Belum ditentukan'}</div>
                         </div>
                     </div>
 
@@ -10002,19 +10278,19 @@
                         </div>
                         <div class="group-logistics-item">
                             <div class="group-logistics-icon">🚌</div>
-                            <div>Bus: ${group.bus_number}</div>
+                            <div>Bus: ${group.bus_number || 'Belum ditentukan'}</div>
                         </div>
                         <div class="group-logistics-item">
                             <div class="group-logistics-icon">⏰</div>
-                            <div>Waktu Kumpul: ${group.meeting_time}</div>
+                            <div>Waktu Kumpul: ${group.meeting_time || 'Belum ditentukan'}</div>
                         </div>
                         <div class="group-logistics-item">
                             <div class="group-logistics-icon">📍</div>
-                            <div>Lokasi: ${group.meeting_point}</div>
+                            <div>Lokasi: ${group.meeting_point || 'Belum ditentukan'}</div>
                         </div>
                         <div class="group-logistics-item">
                             <div class="group-logistics-icon">👤</div>
-                            <div>Tour Leader: ${group.tour_leader || 'Ustadz Ahmad Fauzi'}</div>
+                            <div>Tour Leader: ${group.tour_leader || 'Belum ditentukan'}</div>
                         </div>
                     </div>
 
@@ -10098,6 +10374,16 @@
                 `;
                 container.appendChild(card);
             });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading groups:', error);
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <p style="color: rgba(255, 255, 255, 0.6);">Error loading groups. Please try again.</p>
+                        </div>
+                    `;
+                });
         }
 
         function getGroupStatusText(status) {
@@ -10114,27 +10400,73 @@
             event.preventDefault();
             
             const packageSelect = document.getElementById('groupPackage');
-            const packageName = packageSelect.options[packageSelect.selectedIndex].text;
+            const packageId = packageSelect.value;
             
-            const newGroup = {
-                id: Math.max(...groupData.map(g => g.id)) + 1,
+            if (!packageId) {
+                showNotification('Silakan pilih paket umroh', 'error');
+                return;
+            }
+            
+            const groupData = {
+                package_id: parseInt(packageId),
                 name: document.getElementById('groupName').value,
-                package: packageName,
-                departure_date: document.getElementById('groupDeparture').value,
                 max_members: parseInt(document.getElementById('groupMaxMembers').value),
-                current_members: 0,
-                bus_number: document.getElementById('groupBusNumber').value,
-                meeting_time: document.getElementById('groupMeetingTime').value,
-                meeting_point: document.getElementById('groupMeetingPoint').value,
-                tour_leader: document.getElementById('groupTourLeader').value || 'Belum ditentukan',
+                departure_date: document.getElementById('groupDeparture').value,
+                bus_number: document.getElementById('groupBusNumber').value || null,
+                meeting_time: document.getElementById('groupMeetingTime').value || null,
+                meeting_point: document.getElementById('groupMeetingPoint').value || null,
+                tour_leader: document.getElementById('groupTourLeader').value || null,
                 status: 'planning'
             };
             
-            groupData.push(newGroup);
-            closeModal('groupModal');
-            loadGroupCards();
-            showNotification('Grup berhasil dibuat!');
-            event.target.reset();
+            // Save to API
+            fetch(getApiBaseUrl() + '/api/departure-groups', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(groupData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    closeModal('groupModal');
+                    loadGroupCards();
+                    showNotification('Grup berhasil dibuat!', 'success');
+                    event.target.reset();
+                } else {
+                    showNotification(result.error || 'Gagal membuat grup', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving group:', error);
+                showNotification('Error saving group', 'error');
+            });
+        }
+
+        function openGroupModal() {
+            // Load packages for dropdown
+            fetch(getApiBaseUrl() + '/api/packages')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success || result.data) {
+                        const select = document.getElementById('groupPackage');
+                        select.innerHTML = '<option value="">-- Pilih Paket --</option>';
+                        
+                        const packages = result.data || result;
+                        packages.forEach(pkg => {
+                            const option = document.createElement('option');
+                            option.value = pkg.id;
+                            option.textContent = `${pkg.name || pkg.nama_paket} (${pkg.code || pkg.kode_paket})`;
+                            select.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading packages:', error);
+                });
+            
+            openModal('groupModal');
         }
 
         function manageGroupMembers(id) {
@@ -13730,7 +14062,7 @@
           loader.style.display = 'block';
           container.innerHTML = '';
           
-          fetch('http://103.181.143.223:5000/api/hotels')
+          fetch(getApiBaseUrl() + '/api/hotels')
             .then(response => response.json())
             .then(result => {
               if (result.success) {
@@ -13985,7 +14317,7 @@
         }
         
         function updateHotelStatistics() {
-          fetch('http://103.181.143.223:5000/api/hotels/statistics')
+          fetch(getApiBaseUrl() + '/api/hotels/statistics')
             .then(response => response.json())
             .then(result => {
               if (result.success) {
@@ -14047,7 +14379,7 @@
             notes: document.getElementById('editHotelNotes').value
           };
           
-          fetch(`http://103.181.143.223:5000/api/hotels/${id}`, {
+          fetch(getApiBaseUrl() + `/api/hotels/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
@@ -14058,7 +14390,7 @@
           .then(result => {
             if (result.success) {
               showNotification('Hotel booking updated successfully', 'success');
-              bootstrap.Modal.getInstance(document.getElementById('editHotelModal')).hide();
+              closeModal('editHotelModal');
               loadHotelBookings();
             } else {
               showNotification(result.error || 'Failed to update hotel booking', 'error');
@@ -14073,7 +14405,7 @@
         function deleteHotelBooking(id) {
           if (!confirm('Are you sure you want to delete this hotel booking?')) return;
           
-          fetch(`http://103.181.143.223:5000/api/hotels/${id}`, {
+          fetch(getApiBaseUrl() + `/api/hotels/${id}`, {
             method: 'DELETE'
           })
           .then(response => response.json())
@@ -14242,7 +14574,7 @@
             notes: document.getElementById('addHotelNotes').value || null
           };
           
-          fetch('http://103.181.143.223:5000/api/hotels', {
+          fetch(getApiBaseUrl() + '/api/hotels', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -14366,16 +14698,26 @@
                 formatDateInput(birthDateInput);
             }
 
-            // Add input formatting for passport dates
+            // Passport date inputs use native HTML5 date picker
+            // No additional formatting needed for type="date" inputs
             const passportIssueInput = document.getElementById('jamaahPassportIssueDate');
             const passportExpireInput = document.getElementById('jamaahPassportExpireDate');
             
+            // Set min and max dates for passport dates if needed
             if (passportIssueInput) {
-                formatDateInput(passportIssueInput);
+                // Passport issue date can be up to 10 years ago
+                const tenYearsAgo = new Date();
+                tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+                passportIssueInput.min = tenYearsAgo.toISOString().split('T')[0];
+                passportIssueInput.max = new Date().toISOString().split('T')[0]; // Today
             }
             
             if (passportExpireInput) {
-                formatDateInput(passportExpireInput);
+                // Passport expiry should be at least today and max 10 years from now
+                const tenYearsFromNow = new Date();
+                tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
+                passportExpireInput.min = new Date().toISOString().split('T')[0]; // Today
+                passportExpireInput.max = tenYearsFromNow.toISOString().split('T')[0];
             }
 
             // Sync passport name with KTP name
